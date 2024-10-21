@@ -67,7 +67,7 @@ class HomeController
 
     public function showAdminProduits()
     {
-        $title = 'Pixel Plush - Détails';
+        $title = 'Pixel Plush - Admin Produits';
         $myView = new View('admin-produits');
         $myView->setVars(['title' => $title]);
         $myView->render();

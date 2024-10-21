@@ -12,12 +12,12 @@ error_reporting(E_ALL);
 <head>
     <meta charset="UTF-8">
     <script src="../../assets/js/admin.js"></script>
-    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css"> <!-- Link to the external CSS file -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion</title>
 </head>
 <body>
-    <form action="../controllers/admin-treatments.php" method="post" enctype="multipart/form-data">
+    <form action="../controllers/admin-treatments.php" method="post" onsubmit="return HandleSubmit()" enctype="multipart/form-data">
         <section class="container">
             <section class="section">
                 <img class="logo" src="../../assets/images/logo.png" alt="" srcset="">
@@ -27,7 +27,7 @@ error_reporting(E_ALL);
             <section class="section">
                 <textarea name="desc" id="desc" rows="4" placeholder="Description"></textarea>
             </section>
-            <input type="submit" class="btn btn-ajouter" value="valid">
+            <input type="submit" class="btn btn-ajouter" value="Valider">
         </section>
     </form>
 </body>

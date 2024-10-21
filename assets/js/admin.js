@@ -1,54 +1,47 @@
-window.onload = function(){
-    console.log('test')
-    document.querySelector('form').addEventListener('submit', function (event) {
-        const nom = document.getElementById('categories').value.trim();
-        if (nom.length === 0) {
-            alert('Category name is required');
-            event.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle file selection
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const productId = this.id.split('-')[1]; 
+            if (file) {
+                console.log(`File selected for product ${productId}:`, file.name);
+            }
+        });
+    });
+
+    async function getData() {
+        try {
+            const response = await fetch('./src/controllers/admin-treatement.php');
+
+            if (response.ok) {
+                const data = await response.text(); 
+                console.log('Data received:', data);
+                
+                const messageElement = document.createElement('div');
+                if (data === "Category Added") {
+                    messageElement.textContent = "Added Successfully";
+                } else {
+                    messageElement.textContent = "Something went wrong";
+                }
+                document.body.appendChild(messageElement);
+            } else {
+                console.error('Error fetching page:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
+    }
+
+    document.querySelector('.btn-ajouter').addEventListener('click', function(e) {
+        e.preventDefault();
+        let name = document.querySelector('#categories').value;
+        let desc = document.querySelector('#desc').value;
+
+        if (name.length > 0 && desc.length > 0) {
+            getData();
+        } else {
+            console.error('Name and description must be filled out.');
         }
     });
-    
-    
-    // document.getElementById('clickable-image').addEventListener('click', function () {
-    //     document.getElementById('image-upload').click();
-    // });
-
-    // document.getElementById('image-upload').addEventListener('change', function (event) {
-    //     const file = event.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = function (e) {
-    //             document.getElementById('clickable-image').src = e.target.result;
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // });
-
-
-    // document.getElementById('btn-ajouter').addEventListener('click', async function() {
-    //     AddImg()
-    //     console.log("Upload Incoming")
-    // })
-
-    // async function AddImg() {
-    //     const fileInput = document.getElementById('image-upload');
-    //     const formData = new FormData();
-        
-    //     if (fileInput.files.length > 0) {
-    //         formData.append('image', fileInput.files[0]); // Append the image file
-    //     }
-    
-    //     try {
-    //         const response = await fetch('process_image.php', {
-    //             method: 'POST',
-    //             body: formData,
-    //         });
-    
-    //         const result = await response.text(); // Get the response as text
-    //         console.log('Success:', result); // Log the result from PHP
-    //     } catch (error) {
-    //         console.error('Error:', error); // Log any errors
-    //     }
-    // }
-
-}
+});

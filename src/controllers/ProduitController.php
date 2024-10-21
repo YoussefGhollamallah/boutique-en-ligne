@@ -25,5 +25,11 @@ class ProduitController
 
         return $products;
     }
+    public function getProductById($id)
+{
+    $requete = $this->connexion->prepare("SELECT * FROM Produit WHERE id = ?");
+    $requete->execute([$id]);
+    return $requete->fetch(PDO::FETCH_ASSOC);
 }
-?>
+
+}

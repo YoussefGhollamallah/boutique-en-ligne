@@ -31,7 +31,7 @@ $products = $produitController->getAllProducts();
                 <td><?php echo htmlspecialchars($product['id']); ?></td>
                 <td class="editable" data-field="nom" data-type="varchar"><?php echo htmlspecialchars($product['nom']); ?></td>
                 <td class="editable" data-field="description" data-type="text"><?php echo htmlspecialchars($product['description']); ?></td>
-                <td><img src="../../assets/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50"></td>
+                <td><img src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50"></td>
                 <td class="editable" data-field="prix" data-type="decimal"><?php echo htmlspecialchars($product['prix']); ?> €</td>
                 <td class="editable" data-field="quantite" data-type="integer"><?php echo htmlspecialchars($product['quantite']); ?></td>
                 <td><?php echo htmlspecialchars($product['nom_sc']); ?></td>

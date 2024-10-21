@@ -32,7 +32,7 @@ class HomeController
     // Pour afficher la page categories
     public function showCategories()
     {
-        $title = 'Pixel Plush - Categories';
+        $title = 'Pixel Plush - Catégories';
         $myView = new View('categories');
         $myView->setVars(['title' => $title]);
         $myView->render();

@@ -1,19 +1,12 @@
 <?php
-// Définition du chemin correct vers le dossier 'include'
-$includePath = __DIR__ . '/../../include/';
+require_once __DIR__ . '/../controllers/ProduitController.php';
 
-include '../controllers/ProduitController.php';
-
+// Crée une instance de ProduitController
 $produitController = new ProduitController();
 $products = $produitController->getAllProducts();
-
-
-// Inclusion des fichiers
-include $includePath . '_head.php';
-include $includePath . '_header.php';
-
-// Ajout du main avec la section
 ?>
+
+<!-- Ajout du main avec la section -->
 <main>
     <section class="section">
         <h1 class="section-title">Gestion des Produits</h1>
@@ -34,17 +27,19 @@ include $includePath . '_header.php';
                 <td>Actions</td>
             </tr>
             <?php foreach ($products as $product): ?>
-            <tr>
+            <tr data-product-id="<?php echo $product['id']; ?>">
                 <td><?php echo htmlspecialchars($product['id']); ?></td>
-                <td><?php echo htmlspecialchars($product['nom']); ?></td>
-                <td><?php echo htmlspecialchars($product['description']); ?></td>
+                <td class="editable" data-field="nom" data-type="varchar"><?php echo htmlspecialchars($product['nom']); ?></td>
+                <td class="editable" data-field="description" data-type="text"><?php echo htmlspecialchars($product['description']); ?></td>
                 <td><img src="../../assets/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50"></td>
-                <td><?php echo htmlspecialchars($product['prix']); ?> €</td>
-                <td><?php echo htmlspecialchars($product['quantite']); ?></td>
+                <td class="editable" data-field="prix" data-type="decimal"><?php echo htmlspecialchars($product['prix']); ?> €</td>
+                <td class="editable" data-field="quantite" data-type="integer"><?php echo htmlspecialchars($product['quantite']); ?></td>
                 <td><?php echo htmlspecialchars($product['nom_sc']); ?></td>
                 <td><?php echo htmlspecialchars($product['nom_p']); ?></td>
                 <td>
-                    <a href="edit-produit.php?id=<?php echo $product['id']; ?>" class="btn btn-edit">Modifier</a>
+                    <button class="btn btn-edit">Modifier</button>
+                    <button class="btn btn-save" style="display: none;">Valider</button>
+                    <button class="btn btn-cancel" style="display: none;">Annuler</button>
                     <a href="delete-produit.php?id=<?php echo $product['id']; ?>" class="btn btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">Supprimer</a>
                 </td>
             </tr>
@@ -55,10 +50,26 @@ include $includePath . '_header.php';
         <?php endif; ?>
     </section>
 </main>
-<script src="/assets/js/admin-produits.js"></script>
-<?php
+<script>
+var categories = <?php echo json_encode($categories); ?>;
+var sousCategories = <?php echo json_encode($sousCategories); ?>;
+</script>
+<script src="../../assets/js/admin-produits.js"></script>
 
-// Inclusion du footer
-include $includePath . '_footer.php';
-?>
+
+
+<style>
+.product-table .editable input,
+.product-table .editable textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.product-table .editable textarea {
+    resize: vertical;
+}
+</style>
 

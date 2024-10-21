@@ -64,5 +64,12 @@ class HomeController
         $myView->setVars(['title' => $title]);
         $myView->render();
     }
+
+    public function showAdminProduits()
+    {
+        $title = 'Pixel Plush - Détails';
+        $myView = new View('admin-produits');
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
 }
-?>

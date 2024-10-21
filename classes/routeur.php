@@ -12,7 +12,8 @@ class Routeur
         "categories" => ["controller" => 'HomeController', "method" => 'showCategories'],
         "profil"     => ["controller" => 'HomeController', "method" => 'showProfil'],
         "connexion"  => ["controller" => 'HomeController', "method" => 'showConnexion'],
-        "detail"     => ["controller" => 'HomeController', "method" => 'showDetail']
+        "detail"     => ["controller" => 'HomeController', "method" => 'showDetail'],
+        "admin-produits"     => ["controller" => 'HomeController', "method" => 'showAdminProduits']
     ];
 
     public function __construct($request)
@@ -61,4 +62,4 @@ class Routeur
         $currentController->$method();
     }
 }
-?>
+

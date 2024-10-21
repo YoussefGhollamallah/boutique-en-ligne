@@ -1,5 +1,4 @@
 <?php
-include 'src/controllers/ProduitController.php';
 
 $produitController = new ProduitController();
 $products = $produitController->getAllProducts();

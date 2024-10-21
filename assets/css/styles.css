@@ -536,6 +536,18 @@ input[type="text"]:focus {
     background-color: var(--white);
 }
 
+/* PAGE404 */
+
+.error-img{
+    width: 750px;
+    height: 400px;
+    border-radius: 20px;
+}
+
+.error-p{
+    justify-content: center;
+}
+
 /* Media queries */
 
 @media screen and (max-width: 768px) {
@@ -645,4 +657,10 @@ input[type="text"]:focus {
     .article_phare{
         border-radius: 0;
     }
+
+    /* PAGE404 */
+     .error-img{
+        width: 300px;
+        height: 200px;
+     }
 }

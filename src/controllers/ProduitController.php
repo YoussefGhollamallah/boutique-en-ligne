@@ -16,9 +16,13 @@ class ProduitController
 
     public function getAllProducts()
     {
-        $produitController = new ProduitController();
-        $products = $produitController->getAllProducts();
-        return $this->modelProduit->getAllProducts();
+        // Appeler la méthode getAllProducts de ModelProduit
+        $products = $this->modelProduit->getAllProducts();
+
+        // Ferme la connexion après la requête
+        $this->connexion = null;
+
+        return $products;
     }
 }
 ?>

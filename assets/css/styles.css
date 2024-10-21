@@ -14,13 +14,13 @@ body {
     font-family: 'Afaacad', sans-serif;
     background-color: var(--background);
     color: #333;
-    display: flex; /* Utilisation de flexbox */
-    flex-direction: column; /* Empilement des éléments verticalement */
-    min-height: 100vh; /* Assure que le body occupe toute la hauteur de la fenêtre */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 main {
-    flex: 1; /* Permet au main d'occuper l'espace restant */
+    flex: 1;
 }
 
 /* Typographie */
@@ -51,6 +51,14 @@ h3 {
     font-size: 1.3rem;
     margin: 0;
     padding: 1em 0;
+}
+
+#title_categorie {
+    background-color: var(--yellow);
+}
+
+#title_produits {
+    background-color: var(--blue);
 }
 
 h4,
@@ -102,18 +110,15 @@ p {
     background-color: #e1664d;
 }
 
-/* Conteneurs */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-.section_categorie{
+
+
+.section_categorie {
     padding: 20px 0;
     border-radius: 10px;
 }
-.article_categorie{
-    margin: 0 10px;
+
+.article_categorie {
+    margin: 20px 10px;
     gap: 20px;
 }
 
@@ -133,33 +138,33 @@ footer {
     background-color: var(--blue);
     padding: 20px 0;
     text-align: center;
-    width: 100%; /* Assure que le footer prend toute la largeur */
+    width: 100%;
 }
 
 /* Ancre */
 .ancre {
-    position: fixed; /* Fixe la position de l'icône */
-    bottom: 20px; /* Espace depuis le bas */
-    right: 20px; /* Espace depuis la droite */
-    background-color: var(--blue); /* Couleur de fond (modifiable) */
-    color: var(--background); /* Couleur de texte */
-    border-radius: 50%; /* Arrondir les coins */
-    width: 50px; /* Largeur de l'icône */
-    height: 50px; /* Hauteur de l'icône */
-    display: flex; /* Utilisation de flexbox pour centrer le contenu */
-    align-items: center; /* Centrer verticalement */
-    justify-content: center; /* Centrer horizontalement */
-    text-align: center; /* Centrer le texte */
-    text-decoration: none; /* Supprime le soulignement */
-    font-size: 1.5rem; /* Taille de la police */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre pour un effet d'élévation */
-    transition: background-color 0.3s; /* Transition de couleur */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--blue);
+    color: var(--background);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
     border-color: white;
     border-style: solid;
 }
 
 .ancre:hover {
-    background-color: var(--yellow); /* Changement de couleur au survol */
+    background-color: var(--yellow);
 }
 
 /* sections */
@@ -174,12 +179,14 @@ footer {
 .section_phare {
     background-color: var(--yellow);
 }
-.section_products{
+
+.section_products {
     padding: 20px 0;
     text-align: center;
 
 
 }
+
 .section h2,
 .section h3 {
     color: var(--background);
@@ -214,7 +221,8 @@ a {
     height: 250px;
     object-fit: contain;
 }
-.card_produit{
+
+.card_produit {
     background-color: var(--blue);
     width: 300px;
     border-radius: 10px;
@@ -226,11 +234,13 @@ a {
     padding: 20px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
-.card_produit_img{
+
+.card_produit_img {
     width: 100%;
     height: 200px;
     object-fit: contain;
 }
+
 /* Flexbox */
 .flex {
     display: flex;
@@ -258,6 +268,10 @@ a {
 
 .vertical-center {
     align-items: center;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .gap {
@@ -449,8 +463,9 @@ input[type="text"]:focus {
     text-align: center;
     background-color: #FFFFFF80;
     border-radius: 10px;
-    padding: 5px ;
+    padding: 5px;
 }
+
 .carousel-caption p {
     margin: 0;
 }
@@ -491,6 +506,7 @@ input[type="text"]:focus {
     align-items: center;
     text-align: center;
 }
+
 .article_phare img,
 .articles img {
     width: 100%;
@@ -510,8 +526,7 @@ input[type="text"]:focus {
     list-style-type: none;
 }
 
-.article_produit{
-    background-color: var(--yellow);
+.article_produit {
     padding: 20px;
     align-items: center;
     gap: 10px;
@@ -641,20 +656,22 @@ input[type="text"]:focus {
         background-color: var(--blue);
 
     }
+
     /* Phares */
-    .section_phare{
+    .section_phare {
         padding: 0;
     }
+
     /* Carousel */
 
-    .carousel-caption{
+    .carousel-caption {
         width: 80%;
         right: 0;
         left: 0;
         background-color: #FFFFFF80;
     }
 
-    .article_phare{
+    .article_phare {
         border-radius: 0;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../models/connexion.php';
+require_once __DIR__ . '/../../config/connexion.php';
 require_once __DIR__ . '/../models/ModelProduit.php';
 
 class ProduitController

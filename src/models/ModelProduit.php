@@ -3,7 +3,6 @@
 require_once __DIR__ . '/../../config/connexion.php';
 
 class ModelProduit
-
 {
     private $connexion;
 
@@ -18,21 +17,33 @@ class ModelProduit
     {
         $requete = $this->connexion->prepare("SELECT * FROM Produit INNER JOIN Categorie ON Produit.id_categorie = Categorie.id_categorie INNER JOIN SousCategorie ON Produit.id_sousCategorie = SousCategorie.id_sousCategorie");
         $requete->execute();
-        return $requete->fetchAll(PDO::FETCH_ASSOC);
+        $result = $requete->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Ferme la connexion après la requête
+        $this->connexion = null;
+
+        return $result;
     }
 
     public function getProductById($id)
     {
         $requete = $this->connexion->prepare("SELECT * FROM Produit WHERE id = :id");
         $requete->execute(['id' => $id]);
-        return $requete->fetch(PDO::FETCH_ASSOC);
+        $result = $requete->fetch(PDO::FETCH_ASSOC);
+        
+        // Ferme la connexion après la requête
+        $this->connexion = null;
+
+        return $result;
     }
 
     public function addProduct($nom, $description, $prix, $quantite, $image, $categorie, $sous_categorie)
     {
-        $date_ajout = date('Y-m-d h:i:s');
-        $requete = $this->connexion->prepare("INSERT INTO Produit (id,nom, description, prix, quantite, image, date_ajout, categorie, sous_categorie) VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $requete->execute([$nom, $description, $prix, $quantite, $image, $date_ajout, $categorie, $sous_categorie]);
+        $requete = $this->connexion->prepare("INSERT INTO Produit (nom, description, prix, quantite, image, date_ajout, id_categorie, id_sousCategorie) VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)");
+        $requete->execute([$nom, $description, $prix, $quantite, $image, $categorie, $sous_categorie]);
+        
+        // Ferme la connexion après la requête
+        $this->connexion = null;
     }
 
     public function updateProduct($id, $data)
@@ -65,6 +76,9 @@ class ModelProduit
         if (!$result) {
             error_log("Error executing query: " . print_r($stmt->errorInfo(), true));
         }
+        
+        // Ferme la connexion après la requête
+        $this->connexion = null;
 
         return $result;
     }

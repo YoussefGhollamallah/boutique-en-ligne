@@ -12,7 +12,7 @@ class CategoryModel
     }
 
     public function AddCat($nom, $description) {
-        $stmt = $this->connexion->prepare('INSERT INTO SousCategorie (id, nom_sc, description_sc) VALUES (null, ?, ?)');
+        $stmt = $this->connexion->prepare('INSERT INTO SousCategorie (id_sousCategorie, nom_sc, description_sc) VALUES (null, ?, ?)');
         $stmt->execute([$nom, $description]);
     }
 

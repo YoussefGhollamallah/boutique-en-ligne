@@ -19,7 +19,7 @@ body {
     color: #333;
     /* background: rgb(30,242,234);
     background: linear-gradient(90deg, rgba(30,242,234,1) 27%, rgba(255,253,0,1) 92%);  */
-    background-color: var(-blue);
+    background-color: var(--blue);
 }
 
 .container {

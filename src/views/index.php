@@ -72,7 +72,6 @@ $products = $produitController->getAllProducts();
             <div class="card_produit">
                 <img class="card_produit_img" src="assets/images/<?php echo $produit['image']; ?>" alt="Produit">
                 <h4><?php echo $produit['nom']; ?></h4>
-                <p><?php echo $produit['description']; ?></p>
                 <p><?php echo $produit['prix']; ?> €</p>
                 <a href="#" class="btn btn-ajouter">Ajouter au panier</a>
             </div>

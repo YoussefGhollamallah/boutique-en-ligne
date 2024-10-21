@@ -1,90 +1,102 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM fully loaded');
-    const table = document.querySelector('.product-table');
+    const editButtons = document.querySelectorAll('.btn-edit');
+    const saveButtons = document.querySelectorAll('.btn-save');
+    const cancelButtons = document.querySelectorAll('.btn-cancel');
 
-    table.addEventListener('click', function(e) {
-        const target = e.target;
-        const row = target.closest('tr');
-
-        if (target.classList.contains('btn-edit')) {
-            enableEditing(row);
-        } else if (target.classList.contains('btn-save')) {
-            saveChanges(row);
-        } else if (target.classList.contains('btn-cancel')) {
-            cancelEditing(row);
-        }
+    editButtons.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            const row = button.closest('tr');
+            toggleEditMode(row, true);
+        });
     });
 
-    function enableEditing(row) {
-        row.querySelectorAll('.editable').forEach(cell => {
-            const value = cell.textContent.trim();
-            const type = cell.dataset.type;
+    saveButtons.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            const row = button.closest('tr');
+            saveChanges(row);
+        });
+    });
 
-            switch(type) {
-                case 'varchar':
-                    cell.innerHTML = `<input type="text" value="${value}" maxlength="255">`;
-                    break;
-                case 'text':
-                    cell.innerHTML = `<textarea>${value}</textarea>`;
-                    break;
-                case 'decimal':
-                    cell.innerHTML = `<input type="number" value="${value}" step="0.01" min="0">`;
-                    break;
-                case 'integer':
-                    cell.innerHTML = `<input type="number" value="${value}" step="1" min="0">`;
-                    break;
+    cancelButtons.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            const row = button.closest('tr');
+            toggleEditMode(row, false);
+        });
+    });
+    
+    function toggleEditMode(row, isEditing) {
+        const fields = row.querySelectorAll('.editable');
+        fields.forEach(field => {
+            const fieldType = field.getAttribute('data-type');
+            const fieldName = field.getAttribute('data-field');
+            
+            if (isEditing) {
+                if (fieldType === 'varchar' || fieldType === 'text') {
+                    const input = document.createElement(fieldType === 'text' ? 'textarea' : 'input');
+                    input.type = 'text';
+                    input.value = field.textContent.trim();
+                    input.name = fieldName;
+                    field.innerHTML = '';
+                    field.appendChild(input);
+                } else if (fieldType === 'decimal' || fieldType === 'integer') {
+                    const input = document.createElement('input');
+                    input.type = fieldType === 'decimal' ? 'number' : 'number';
+                    input.step = fieldType === 'decimal' ? '0.01' : '1';
+                    input.value = field.textContent.trim();
+                    input.name = fieldName;
+                    field.innerHTML = '';
+                    field.appendChild(input);
+                }
+            } else {
+                field.innerHTML = field.querySelector('input, textarea').value;
             }
         });
-        row.querySelector('.btn-edit').style.display = 'none';
-        row.querySelector('.btn-save').style.display = 'inline-block';
-        row.querySelector('.btn-cancel').style.display = 'inline-block';
-    }
 
-    function cancelEditing(row) {
-        row.querySelectorAll('.editable').forEach(cell => {
-            const input = cell.querySelector('input, textarea');
-            cell.textContent = input.defaultValue;
-        });
-        row.querySelector('.btn-edit').style.display = 'inline-block';
-        row.querySelector('.btn-save').style.display = 'none';
-        row.querySelector('.btn-cancel').style.display = 'none';
+        // Pour l'image, on va ajouter un bouton "Parcourir"
+        const imageField = row.querySelector('td img');
+        if (isEditing) {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/png, image/jpeg';
+            fileInput.name = 'image';
+            imageField.closest('td').innerHTML = '';
+            imageField.closest('td').appendChild(fileInput);
+        } else {
+            const imageName = imageField.closest('td').querySelector('input').value;
+            imageField.closest('td').innerHTML = `<img src="../../images/${imageName}" width="50" />`;
+        }
+
+        // Toggle visibility des boutons
+        row.querySelector('.btn-edit').style.display = isEditing ? 'none' : 'inline-block';
+        row.querySelector('.btn-save').style.display = isEditing ? 'inline-block' : 'none';
+        row.querySelector('.btn-cancel').style.display = isEditing ? 'inline-block' : 'none';
     }
 
     function saveChanges(row) {
-        const productId = row.dataset.productId;
-        const updatedData = {};
+        const productId = row.getAttribute('data-product-id');
+        const formData = new FormData();
 
-        row.querySelectorAll('.editable').forEach(cell => {
-            const field = cell.dataset.field;
-            const input = cell.querySelector('input, textarea');
-            updatedData[field] = input.value;
-            cell.textContent = input.value;
+        row.querySelectorAll('.editable input, .editable textarea').forEach(input => {
+            formData.append(input.name, input.value);
         });
 
-        fetch('/update-product.php', {
+        const fileInput = row.querySelector('input[type="file"]');
+        if (fileInput && fileInput.files.length > 0) {
+            formData.append('image', fileInput.files[0]);
+        }
+
+        fetch(`update-product.php?id=${productId}`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id: productId, ...updatedData }),
+            body: formData
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Produit mis à jour avec succès !');
+                toggleEditMode(row, false);
             } else {
-                alert('Erreur lors de la mise à jour du produit.');
-                cancelEditing(row);
+                alert('Erreur lors de la sauvegarde');
             }
         })
-        .catch(error => {
-            console.error('Erreur:', error);
-            alert('Une erreur est survenue lors de la mise à jour du produit.');
-            cancelEditing(row);
-        });
-
-        row.querySelector('.btn-edit').style.display = 'inline-block';
-        row.querySelector('.btn-save').style.display = 'none';
-        row.querySelector('.btn-cancel').style.display = 'none';
+        .catch(error => console.error('Erreur:', error));
     }
 });

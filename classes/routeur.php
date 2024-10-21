@@ -62,4 +62,4 @@ class Routeur
         $currentController->$method();
     }
 }
-?>
+

@@ -1,6 +1,9 @@
 <?php
 
-function connexionBDD() {
+class Connexion{
+
+function connexionBDD() 
+{
     $host = '193.203.168.103';
     $dbname = 'u126908064_pixel_plush';
     $user  = 'u126908064_pixel_plush';
@@ -13,4 +16,5 @@ function connexionBDD() {
     } catch (Exception $e) {
         die('Erreur : ' . $e->getMessage());
     }
+}
 }

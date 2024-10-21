@@ -15,7 +15,8 @@ class ModelProduit
 
     public function getAllProducts()
     {
-        try {
+        try 
+        {
             $requete = $this->connexion->prepare("SELECT * FROM Produit 
                 INNER JOIN Categorie ON Produit.id_categorie = Categorie.id_categorie 
                 INNER JOIN SousCategorie ON Produit.id_sousCategorie = SousCategorie.id_sousCategorie");

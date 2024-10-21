@@ -23,7 +23,7 @@ class HomeController
     // Pour afficher la page404
     public function show404()
     {
-        $title = 'Erreur 404';
+        $title = 'Pixel Plush - Erreur 404';
         $myView = new View('page404');
         $myView->setVars(['title' => $title]);
         $myView->render();

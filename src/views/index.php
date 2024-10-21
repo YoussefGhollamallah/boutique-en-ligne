@@ -12,7 +12,7 @@ $products = $produitController->getAllProducts();
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="product-details">
-                    <img src="<?php echo ASSETS;?>/images/peluche.png" alt="Produit 1">
+                    <img src="<?php echo ASSETS; ?>/images/peluche.png" alt="Produit 1">
                     <div class="carousel-caption">
                         <h5>
                             Produit 1
@@ -68,10 +68,11 @@ $products = $produitController->getAllProducts();
     <article class="article_produit flex space-around flex-wrap">
         <?php
         foreach ($products as $produit) {
+            $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
         ?>
             <div class="card_produit">
-                <img class="card_produit_img" src="assets/images/<?php echo $produit['image']; ?>" alt="Produit">
-                <h4><?php echo $produit['nom']; ?></h4>
+                <img class="card_produit_img" src="assets/images/<?php echo $produit['image']; ?>" alt="Peluche de <?php echo $nomProduit ?> ">
+                <h4><?php echo $nomProduit ?></h4>
                 <p><?php echo $produit['prix']; ?> €</p>
                 <a href="#" class="btn btn-ajouter">Ajouter au panier</a>
             </div>

@@ -53,6 +53,14 @@ h3 {
     padding: 1em 0;
 }
 
+#title_categorie {
+    background-color: var(--yellow);
+}
+
+#title_produits {
+    background-color: var(--blue);
+}
+
 h4,
 h5 {
     font-family: 'Peralta', serif;
@@ -110,7 +118,7 @@ p {
 }
 
 .article_categorie {
-    margin: 0 10px;
+    margin: 20px 10px;
     gap: 20px;
 }
 
@@ -260,6 +268,10 @@ a {
 
 .vertical-center {
     align-items: center;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .gap {
@@ -515,7 +527,6 @@ input[type="text"]:focus {
 }
 
 .article_produit {
-    background-color: var(--yellow);
     padding: 20px;
     align-items: center;
     gap: 10px;

@@ -1,14 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM chargé');
+
     const editButtons = document.querySelectorAll('.btn-edit');
-    const saveButtons = document.querySelectorAll('.btn-save');
-    const cancelButtons = document.querySelectorAll('.btn-cancel');
+    console.log('Nombre de boutons Modifier:', editButtons.length);
 
     editButtons.forEach((button) => {
         button.addEventListener('click', function() {
+            console.log('Bouton Modifier cliqué');
             const row = button.closest('tr');
             toggleEditMode(row, true);
         });
     });
+
+    const saveButtons = document.querySelectorAll('.btn-save');
+    const cancelButtons = document.querySelectorAll('.btn-cancel');
 
     saveButtons.forEach((button) => {
         button.addEventListener('click', function() {
@@ -25,13 +30,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     function toggleEditMode(row, isEditing) {
+        console.log('toggleEditMode appelé, isEditing:', isEditing);
         const fields = row.querySelectorAll('.editable');
+        console.log('Nombre de champs éditables:', fields.length);
+
         fields.forEach(field => {
             const fieldName = field.getAttribute('data-field');
+            console.log('Champ en cours de modification:', fieldName);
             
             if (isEditing) {
                 const input = document.createElement('input');
-                input.type = fieldName === 'prix' ? 'number' : 'text';
+                if (fieldName === 'prix') {
+                    input.type = 'number';
+                    input.step = '0.01';
+                    input.min = '0.01';
+                } else if (fieldName === 'quantite') {
+                    input.type = 'number';
+                    input.min = '0';
+                } else {
+                    input.type = 'text';
+                }
                 input.value = field.textContent.trim();
                 input.name = fieldName;
                 field.innerHTML = '';
@@ -40,17 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 field.innerHTML = field.querySelector('input').value;
             }
         });
-
-        // Pour l'image
-        const imageField = row.querySelector('td img');
-        const fileInput = row.querySelector('td input[type="file"]');
-        if (isEditing) {
-            imageField.style.display = 'none';
-            fileInput.style.display = 'block';
-        } else {
-            imageField.style.display = 'block';
-            fileInput.style.display = 'none';
-        }
 
         // Toggle visibility des boutons
         row.querySelector('.btn-edit').style.display = isEditing ? 'none' : 'inline-block';
@@ -66,12 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append(input.name, input.value);
         });
 
-        const fileInput = row.querySelector('input[type="file"]');
-        if (fileInput.files.length > 0) {
-            formData.append('image', fileInput.files[0]);
-        }
+        formData.append('id', productId);
 
-        fetch(`update-product.php?id=${productId}`, {
+        fetch('src/models/update-product.php', {
             method: 'POST',
             body: formData
         })
@@ -79,12 +83,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 toggleEditMode(row, false);
-                // Mettre à jour l'image si une nouvelle a été téléchargée
-                if (data.newImage) {
-                    row.querySelector('td img').src = `<?php echo ASSETS; ?>/images/${data.newImage}`;
-                }
+                alert('Produit mis à jour avec succès');
             } else {
-                alert('Erreur lors de la sauvegarde');
+                alert('Erreur lors de la sauvegarde : ' + data.message);
             }
         })
         .catch(error => console.error('Erreur:', error));

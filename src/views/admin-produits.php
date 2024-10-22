@@ -40,9 +40,9 @@ $products = $produitController->getAllProducts();
                 <td><?php echo htmlspecialchars($product['nom_p']); ?></td>
                 <td><?php echo htmlspecialchars($product['nom_sc']); ?></td>
                 <td>
-                    <button class="btn btn-edit">Modifier</button>
-                    <button class="btn btn-save" style="display: none;">Valider</button>
-                    <button class="btn btn-cancel" style="display: none;">Annuler</button>
+                    <button class="btn-edit">Modifier</button>
+                    <button class="btn-save" style="display: none;">Valider</button>
+                    <button class="btn-cancel" style="display: none;">Annuler</button>
                     <a href="delete-produit.php?id=<?php echo $product['id']; ?>" class="btn btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">Supprimer</a>
                 </td>
             </tr>
@@ -57,4 +57,4 @@ $products = $produitController->getAllProducts();
 var categories = <?php echo json_encode($categories); ?>;
 var sousCategories = <?php echo json_encode($sousCategories); ?>;
 </script>
-<script src="../../assets/js/admin-produits.js"></script>
+<script src="<?php echo ASSETS; ?>/js/admin-produits.js"></script>

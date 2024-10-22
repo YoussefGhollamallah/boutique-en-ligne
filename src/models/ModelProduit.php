@@ -96,11 +96,7 @@ class ModelProduit
 
             return $result;
         } catch (Exception $e) {
-            // Gérer l'erreur ou la journaliser
             throw new Exception("Erreur lors de l'exécution de la requête : " . $e->getMessage());
-        } finally {
-            // Ferme la connexion après la requête
-            $this->connexion = null;
         }
     }
 }

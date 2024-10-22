@@ -74,32 +74,10 @@ $products = $produitController->getAllProducts();
                 <img class="card_produit_img" src="assets/images/<?php echo $produit['image']; ?>" alt="Peluche de <?php echo $nomProduit ?> ">
                 <h4><?php echo $nomProduit ?></h4>
                 <p><?php echo $produit['prix']; ?> €</p>
-                <button class="btn-ajouter-panier" data-id="<?= $produit['id']; ?>">Ajouter au panier</button>
+                <a href="#" class="btn btn-ajouter">Ajouter au panier</a>
             </div>
         <?php
         }
         ?>
     </article>
 </section>
-
-<script>
-document.querySelectorAll('.btn-ajouter-panier').forEach(button => {
-    button.addEventListener('click', function() {
-        const idProduit = this.getAttribute('data-id');
-        const quantite = this.previousElementSibling.value;
-
-        fetch('index.php?action=ajouterProduitAuPanier', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: idProduit, quantite: quantite })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert('Produit ajouté au panier');
-            }
-        })
-        .catch(error => console.error('Erreur:', error));
-    });
-});
-</script>

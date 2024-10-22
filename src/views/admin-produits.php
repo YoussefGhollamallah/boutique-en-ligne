@@ -4,6 +4,11 @@ require_once __DIR__ . '/../controllers/ProduitController.php';
 // Crée une instance de ProduitController
 $produitController = new ProduitController();
 $products = $produitController->getAllProducts();
+
+// Trier les produits par ID en ordre croissant
+usort($products, function($a, $b) {
+    return $a['id'] - $b['id'];
+});
 ?>
 
 <!-- Ajout dans le main avec la section -->

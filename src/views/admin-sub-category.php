@@ -7,7 +7,7 @@
     <title>Gestion</title>
 </head>
 <body>
-    <form class="HiddenForm" id="categoryForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data">
+    <form class="Form" id="categoryForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data">
         <section class="container">
             <section class="section">
                 <button id="modify" type="button">Modifier</button>
@@ -22,35 +22,22 @@
         </section>
     </form>
 
-    <form class="HiddenForm" id="HiddenForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data">
+    <!-- Hidden form -->
+    <form class="HiddenForm" id="hiddenForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data" style="display: none;">
         <section class="container2">
-                <section class="section">
-                    <button id="modify" type="button">Modifier</button>
-                    <img class="logo" src="../../assets/images/logo.png" alt="">
-                    <label for="categories">Nom de Categories</label>
-                    <input type="text" id="categories" placeholder="Name" name="nom">
-                </section>
-                <section class="section">
-                    <textarea name="desc" id="desc" rows="4" placeholder="Description"></textarea>
-                </section>
-                <input type="submit" class="btn btn-ajouter" value="Valider">
-            </section>
-    </form>
-
-    <form class="HiddenForm" id="HiddenForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data">
-        <section class="container3">
             <section class="section">
-                <button id="modify" type="button">Modifier</button>
+                <button id="Add" type="button">Ajouter</button>
                 <img class="logo" src="../../assets/images/logo.png" alt="">
-                <label for="categories">Nom de Categories</label>
-                <input type="text" id="categories" placeholder="Name" name="nom">
+                <label for="categoriesHidden">Modifier le Nom</label>
+                <input type="text" id="categoriesHidden" placeholder="Name" name="nomHidden">
             </section>
             <section class="section">
-                <textarea name="desc" id="desc" rows="4" placeholder="Description"></textarea>
+                <textarea name="descHidden" id="descHidden" rows="4" placeholder="Description"></textarea>
             </section>
             <input type="submit" class="btn btn-ajouter" value="Valider">
         </section>
     </form>
 
-    <script src="<?php echo ASSETS ?>/js/admin.js"></script>
-
+    <script src="../../assets/js/admin.js"></script>
+</body>
+</html>

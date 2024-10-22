@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const fileInput = row.querySelector('input[type="file"]');
         if (fileInput.files.length > 0) {
-            formData.append('file', fileInput.files[0]);
+            formData.append('image', fileInput.files[0]);
         }
 
         formData.append('id', productId);
@@ -129,6 +129,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Erreur lors de la sauvegarde : ' + data.message);
             }
         })
-        .catch(error => console.error('Erreur:', error));
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert('Une erreur est survenue lors de la mise à jour du produit');
+        });
     }
 });

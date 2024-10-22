@@ -5,13 +5,14 @@ function validation($file)
 {
     $error = false;
     $errorMessage = '';
+    $filename = '';
     
     if (!empty($file["name"])) {
-        $nom_du_fichier = $file['name'];
+        $filename = $file['name'];
         $dossier_temporaire = $file['tmp_name'];
-        $dossier_upload = "assets/images/".$nom_du_fichier;
+        $dossier_upload = "../../assets/images/".$filename;
 
-        $extension_du_fichier = strtolower(pathinfo($nom_du_fichier, PATHINFO_EXTENSION));
+        $extension_du_fichier = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         $extensions_autorisees = array("jpg", "jpeg", "png");
 
         if (!in_array($extension_du_fichier, $extensions_autorisees)) {
@@ -25,7 +26,7 @@ function validation($file)
         }
     }
 
-    return ['success' => !$error, 'message' => $errorMessage, 'filename' => $error ? '' : $nom_du_fichier];
+    return ['success' => !$error, 'message' => $errorMessage, 'filename' => $filename];
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -38,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     $imageResult = ['success' => true];
-    if (isset($_FILES['file'])) {
-        $imageResult = validation($_FILES['file']);
-        if ($imageResult['success']) {
+    if (isset($_FILES['image'])) {
+        $imageResult = validation($_FILES['image']);
+        if ($imageResult['success'] && !empty($imageResult['filename'])) {
             $data['image'] = $imageResult['filename'];
         }
     }

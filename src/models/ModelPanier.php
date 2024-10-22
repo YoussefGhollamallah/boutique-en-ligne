@@ -17,6 +17,33 @@ class ModelPanier
         return $_SESSION['panier'];
     }
 
+    public function ajouterProduit($idProduit, $quantite = 1)
+{
+    if (!isset($_SESSION['panier'])) {
+        $_SESSION['panier'] = [];
+    }
+
+    // Si le produit est déjà dans le panier, augmenter la quantité
+    if (isset($_SESSION['panier'][$idProduit])) {
+        $_SESSION['panier'][$idProduit]['quantite'] += $quantite;
+    } else {
+        // Sinon, ajouter un nouveau produit avec la quantité
+        $requete = $this->connexion->prepare("SELECT * FROM Produit WHERE id = :id");
+        $requete->execute(['id' => $idProduit]);
+        $produit = $requete->fetch(PDO::FETCH_ASSOC);
+
+        if ($produit) {
+            $_SESSION['panier'][$idProduit] = [
+                'nom' => $produit['nom'],
+                'prix' => $produit['prix'],
+                'image' => $produit['image'],
+                'quantite' => $quantite
+            ];
+        }
+    }
+}
+
+
     public function updateQuantite($idProduit, $quantite)
     {
         if (isset($_SESSION['panier'][$idProduit])) {

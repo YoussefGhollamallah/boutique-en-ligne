@@ -38,6 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'quantite' => $_POST['quantite']
     ];
 
+    // Validation du prix
+    if (!is_numeric($data['prix']) || floatval($data['prix']) < 0.01) {
+        echo json_encode(['success' => false, 'message' => 'Le prix doit être au minimum de 0,01 €']);
+        exit;
+    }
+
     $imageResult = ['success' => true];
     if (isset($_FILES['image'])) {
         $imageResult = validation($_FILES['image']);

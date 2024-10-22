@@ -112,9 +112,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const productId = row.getAttribute('data-product-id');
         const formData = new FormData();
 
+        let isValid = true;
+        let errorMessage = '';
+
         row.querySelectorAll('.editable input').forEach(input => {
+            if (input.name === 'prix') {
+                const price = parseFloat(input.value);
+                if (isNaN(price) || price < 0.01) {
+                    isValid = false;
+                    errorMessage = 'Le prix doit être au minimum de 0,01 €';
+                    return;
+                }
+            }
             formData.append(input.name, input.value);
         });
+
+        if (!isValid) {
+            alert(errorMessage);
+            return;
+        }
 
         const fileInput = row.querySelector('input[type="file"]');
         if (fileInput.files.length > 0) {

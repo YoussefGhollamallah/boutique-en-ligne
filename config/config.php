@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 class myAutoload
 {
@@ -17,6 +17,7 @@ class myAutoload
         define('VIEW', ROOT . 'src/views/');
         define('MODEL', ROOT . 'src/models/');
         define('CLASSES', ROOT . 'classes/');
+        define ('CONFIG', ROOT . 'config/');
 
         define('ASSETS', HOST . 'assets/');
     }
@@ -36,6 +37,10 @@ class myAutoload
         elseif (file_exists(CONTROLLER . $class . '.php'))
         {
             include_once CONTROLLER . $class . '.php';
+        }
+        elseif (file_exists(CONFIG . $class . '.php'))
+        {
+            include_once CONFIG . $class . '.php';
         }
         else 
         {

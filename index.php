@@ -7,10 +7,8 @@ myAutoload::start();
 // Récupération de la route (paramètre 'r' dans l'URL)
 $request = $_GET['r'] ?? 'index';  // index.php?r...
 
-?>
-<main>
-    <?php
+    // Objet Routeur
     $routeur = new Routeur($request);
     $routeur->renderController();
     ?>
-</main>
+

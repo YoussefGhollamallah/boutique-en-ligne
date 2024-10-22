@@ -1,0 +1,1 @@
+<p>Détails d'un produit</p>

@@ -1,6 +1,6 @@
 <?php
 require_once('../models/db.php');
-require_once('../models/model-category.php'); 
+require_once('../models/ModelCategory.php'); 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -14,7 +14,6 @@ if (!empty($_POST)) {
     if (strlen($nom) > 0) {
         $categoryModel = new CategoryModel();
 
-        // Check if the category already exists
         $query = "SELECT COUNT(*) as count FROM SousCategorie WHERE nom_sc = :nom";
         $stmt = $bdd->prepare($query);
         $stmt->bindParam(':nom', $nom);

@@ -61,24 +61,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Gestion de l'image
         const imageCell = row.querySelector('td:nth-child(4)'); // Ajustez l'index si nécessaire
-        const img = imageCell.querySelector('img');
-        const fileInput = imageCell.querySelector('input[type="file"]');
-        const chooseImageBtn = imageCell.querySelector('.btn-choose-image');
-        const selectedFileName = imageCell.querySelector('.selected-file-name');
+        const currentImage = imageCell.querySelector('.current-image');
+        const imageEditContainer = imageCell.querySelector('.image-edit-container');
+        const fileInput = imageEditContainer.querySelector('input[type="file"]');
+        const chooseImageBtn = imageEditContainer.querySelector('.btn-choose-image');
+        const selectedFileName = imageEditContainer.querySelector('.selected-file-name');
+        const imagePreview = imageEditContainer.querySelector('.image-preview');
 
         if (isEditing) {
-            img.style.display = 'none';
-            chooseImageBtn.style.display = 'inline-block';
-            selectedFileName.style.display = 'inline-block';
+            currentImage.style.display = 'none';
+            imageEditContainer.style.display = 'block';
+            imagePreview.src = currentImage.src;
+            imagePreview.style.display = 'block';
         } else {
-            img.style.display = 'inline-block';
-            chooseImageBtn.style.display = 'none';
-            selectedFileName.style.display = 'none';
+            currentImage.style.display = 'block';
+            imageEditContainer.style.display = 'none';
             fileInput.value = ''; // Réinitialiser l'input file
             selectedFileName.textContent = ''; // Effacer le nom du fichier affiché
+            imagePreview.style.display = 'none';
         }
 
-        // Ajouter un gestionnaire d'événements pour le bouton "Choisir un fichier"
+        // Ajouter un gestionnaire d'événements pour le bouton "Choisir une image"
         chooseImageBtn.onclick = function() {
             fileInput.click();
         };
@@ -86,9 +89,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Ajouter un gestionnaire d'événements pour l'input file
         fileInput.onchange = function() {
             if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(this.files[0]);
                 selectedFileName.textContent = this.files[0].name;
             } else {
                 selectedFileName.textContent = '';
+                imagePreview.style.display = 'none';
             }
         };
 
@@ -122,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 toggleEditMode(row, false);
                 if (data.newImage) {
-                    row.querySelector('img').src = `assets/images/${data.newImage}`;
+                    row.querySelector('.current-image').src = `assets/images/${data.newImage}`;
                 }
                 alert('Produit mis à jour avec succès');
             } else {

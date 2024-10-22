@@ -32,10 +32,13 @@ $products = $produitController->getAllProducts();
                 <td class="editable" data-field="nom"><?php echo htmlspecialchars($product['nom']); ?></td>
                 <td class="editable" data-field="description"><?php echo htmlspecialchars($product['description']); ?></td>
                 <td>
-                    <img src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50">
-                    <input type="file" name="image" style="display: none;" accept=".jpg,.jpeg,.png">
-                    <button class="btn-choose-image" style="display: none;">Choisir un fichier</button>
-                    <span class="selected-file-name" style="display: none;"></span>
+                    <img src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50" class="current-image">
+                    <div class="image-edit-container" style="display: none;">
+                        <input type="file" name="image" style="display: none;" accept=".jpg,.jpeg,.png">
+                        <button class="btn-choose-image">Choisir une image</button>
+                        <span class="selected-file-name"></span>
+                        <img src="" alt="Aperçu de l'image" class="image-preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                    </div>
                 </td>
                 <td class="editable" data-field="prix"><?php echo htmlspecialchars($product['prix']); ?> €</td>
                 <td class="editable" data-field="quantite"><?php echo htmlspecialchars($product['quantite']); ?></td>

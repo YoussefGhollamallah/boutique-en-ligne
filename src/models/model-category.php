@@ -4,6 +4,8 @@ require_once('db.php');
 class CategoryModel
 {
     private $connexion;
+    public string $description;
+
 
     public function __construct()
     {
@@ -16,8 +18,8 @@ class CategoryModel
         $stmt->execute([$nom, $description]);
     }
 
-    public function Search($description) {
-        $stmt = $this->connexion->prepare('SELECT * FROM SousCategorie WHERE description_sc = ?'); // Ensure column name matches
+    public function Search($finder) {
+        $stmt = $this->connexion->prepare('SELECT * FROM SousCategorie WHERE description_sc = ?');
         $stmt->execute([$description]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

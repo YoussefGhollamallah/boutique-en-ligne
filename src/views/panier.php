@@ -1,31 +1,23 @@
-<main id="panier">
-    <section class="section">
-        <h2>Panier :</h2>
-            <section>
-                <input type="checkbox">
-                <img src="creeper.png" alt="Peluche creeper">
-                <p>Peluche creeper 1 : 13.50€</p>
-                <input type="number" value="1" min="1">
-                <button class="btn-supprimer">Supprimer</button>
-            </section><br>
-            <section>
-                <input type="checkbox">
-                <img src="creeper.png" alt="Peluche creeper">
-                <p>Peluche creeper 2 : 13.50€</p>
-                <input type="number" value="1" min="1">
-                <button class="btn-supprimer">Supprimer</button>
-            </section><br>
-            <section>
-                <input type="checkbox">
-                <img src="creeper.png" alt="Peluche creeper">
-                <p>Peluche creeper 3 : 13.50€</p>
-                <input type="number" value="1" min="1">
-                <button class="btn-supprimer">Supprimer</button>
-            </section><br>
-            <section>
-                <p>3 articles dans le panier</p>
-                <p>Total de la commande : 27€ (2 articles)</p>
-                <button class="btn-ajouter">Valider la commande</button>
-            </section>
-    </section>
-</main>
+<?php
+
+$panierController = new PanierController();
+$panier = $panierController->afficherPanier();
+?>
+
+<h3>Votre Panier</h3>
+<section class="section">
+    <?php if (!empty($panier)) { ?>
+        <?php foreach ($panier as $idProduit => $produit) { ?>
+            <div class="card_produit">
+                <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($produit['nom']); ?>">
+                <h4><input type="checkbox"><?php echo htmlspecialchars($produit['nom']); ?></h4>
+                <p><?php echo htmlspecialchars($produit['description']); ?></p>
+                <p>Prix unitaire : <?php echo htmlspecialchars($produit['prix']); ?> €</p>
+                <p>Quantité : <input type="number"<?php echo htmlspecialchars($produit['quantite']); ?>></p>
+                <p>Total : <?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</p>
+            </div>
+        <?php } ?>
+    <?php } else { ?>
+        <p>Votre panier est vide.</p>
+    <?php } ?>
+</section>

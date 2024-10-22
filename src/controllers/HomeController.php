@@ -72,4 +72,12 @@ class HomeController
         $myView->setVars(['title' => $title]);
         $myView->render();
     }
+
+    public function showAdminCategory()
+    {
+        $title = 'Pixel Plush - Admin Catégories';
+        $myView = new View('admin-sub-category');
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
 }

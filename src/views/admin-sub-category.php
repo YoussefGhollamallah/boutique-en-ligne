@@ -52,6 +52,5 @@
         </section>
     </form>
 
-    <script src="../../assets/js/admin.js"></script>
-</body>
-</html>
+    <script src="<?php echo ASSETS ?>/js/admin.js"></script>
+

@@ -33,8 +33,9 @@ $products = $produitController->getAllProducts();
                 <td class="editable" data-field="description"><?php echo htmlspecialchars($product['description']); ?></td>
                 <td>
                     <img src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50">
-                    <input type="file" name="image" style="display: none;">
-                    <button class="btn-change-image" style="display: none;">Changer l'image</button>
+                    <input type="file" name="image" style="display: none;" accept=".jpg,.jpeg,.png">
+                    <button class="btn-choose-image" style="display: none;">Choisir un fichier</button>
+                    <span class="selected-file-name" style="display: none;"></span>
                 </td>
                 <td class="editable" data-field="prix"><?php echo htmlspecialchars($product['prix']); ?> €</td>
                 <td class="editable" data-field="quantite"><?php echo htmlspecialchars($product['quantite']); ?></td>

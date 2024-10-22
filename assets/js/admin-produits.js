@@ -63,17 +63,34 @@ document.addEventListener('DOMContentLoaded', function() {
         const imageCell = row.querySelector('td:nth-child(4)'); // Ajustez l'index si nécessaire
         const img = imageCell.querySelector('img');
         const fileInput = imageCell.querySelector('input[type="file"]');
-        const changeImageBtn = imageCell.querySelector('.btn-change-image');
+        const chooseImageBtn = imageCell.querySelector('.btn-choose-image');
+        const selectedFileName = imageCell.querySelector('.selected-file-name');
 
         if (isEditing) {
             img.style.display = 'none';
-            fileInput.style.display = 'inline-block';
-            changeImageBtn.style.display = 'inline-block';
+            chooseImageBtn.style.display = 'inline-block';
+            selectedFileName.style.display = 'inline-block';
         } else {
             img.style.display = 'inline-block';
-            fileInput.style.display = 'none';
-            changeImageBtn.style.display = 'none';
+            chooseImageBtn.style.display = 'none';
+            selectedFileName.style.display = 'none';
+            fileInput.value = ''; // Réinitialiser l'input file
+            selectedFileName.textContent = ''; // Effacer le nom du fichier affiché
         }
+
+        // Ajouter un gestionnaire d'événements pour le bouton "Choisir un fichier"
+        chooseImageBtn.onclick = function() {
+            fileInput.click();
+        };
+
+        // Ajouter un gestionnaire d'événements pour l'input file
+        fileInput.onchange = function() {
+            if (this.files && this.files[0]) {
+                selectedFileName.textContent = this.files[0].name;
+            } else {
+                selectedFileName.textContent = '';
+            }
+        };
 
         // Toggle visibility des boutons
         row.querySelector('.btn-edit').style.display = isEditing ? 'none' : 'inline-block';

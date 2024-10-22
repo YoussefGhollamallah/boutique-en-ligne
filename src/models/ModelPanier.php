@@ -46,4 +46,13 @@ class ModelPanier
             $this->connexion = null;
         }
     }
+
+    public function supprimerProduitDuPanier($idProduit)
+    {
+        if (isset($_SESSION['panier'][$idProduit])) {
+            unset($_SESSION['panier'][$idProduit]);
+            return true;
+        }
+        return false;
+    }
 }

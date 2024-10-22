@@ -70,12 +70,14 @@ $products = $produitController->getAllProducts();
         foreach ($products as $produit) {
             $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
         ?>
-            <div class="card_produit box-shadow">
-                <img class="card_produit_img" src="assets/images/<?php echo $produit['image']; ?>" alt="Peluche de <?php echo $nomProduit ?> ">
-                <h4><?php echo $nomProduit ?></h4>
-                <p><?php echo $produit['prix']; ?> €</p>
-                <a href="#" class="btn btn-ajouter">Ajouter au panier</a>
-            </div>
+            <a href="./detail/<?php echo $produit['id'] ?>">
+                <div class="card_produit box-shadow">
+                    <img class="card_produit_img" src="assets/images/<?php echo $produit['image']; ?>" alt="Peluche de <?php echo $nomProduit ?> ">
+                    <h4><?php echo $nomProduit ?></h4>
+                    <p><?php echo $produit['prix']; ?> €</p>
+                    <a href="" class="btn btn-ajouter">Ajouter au panier</a>
+                </div>
+            </a>
         <?php
         }
         ?>

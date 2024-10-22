@@ -6,7 +6,7 @@ $produitController = new ProduitController();
 $products = $produitController->getAllProducts();
 ?>
 
-<!-- Ajout du main avec la section -->
+<!-- Ajout dans le main avec la section -->
 <main>
     <section class="section">
         <h1 class="section-title">Gestion des Produits</h1>

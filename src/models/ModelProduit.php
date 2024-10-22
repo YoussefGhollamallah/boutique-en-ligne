@@ -8,29 +8,62 @@ class ModelProduit
 
     public function __construct()
     {
-        $this->connexion = connexionBDD();
+        $conn = new Connexion();
+        $this->connexion = $conn->connexionBDD();
         $this->connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
     public function getAllProducts()
     {
-        $requete = $this->connexion->prepare("SELECT * FROM Produit INNER JOIN Categorie ON Produit.id_categorie = Categorie.id_categorie INNER JOIN SousCategorie ON Produit.id_sousCategorie = SousCategorie.id_sousCategorie order by id asc");
-        $requete->execute();
-        return $requete->fetchAll(PDO::FETCH_ASSOC);
+        try 
+        {
+            $requete = $this->connexion->prepare("SELECT * FROM Produit 
+                INNER JOIN Categorie ON Produit.id_categorie = Categorie.id_categorie 
+                INNER JOIN SousCategorie ON Produit.id_sousCategorie = SousCategorie.id_sousCategorie");
+            $requete->execute();
+            $result = $requete->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+        } catch (Exception $e) {
+            // Gérer l'erreur ou la journaliser
+            throw new Exception("Erreur lors de la récupération des produits : " . $e->getMessage());
+        } finally {
+            // Ferme la connexion après la requête
+            $this->connexion = null;
+        }
     }
 
     public function getProductById($id)
     {
-        $requete = $this->connexion->prepare("SELECT * FROM Produit WHERE id = :id");
-        $requete->execute(['id' => $id]);
-        return $requete->fetch(PDO::FETCH_ASSOC);
+        try {
+            $requete = $this->connexion->prepare("SELECT * FROM Produit WHERE id = :id");
+            $requete->execute(['id' => $id]);
+            $result = $requete->fetch(PDO::FETCH_ASSOC);
+
+            return $result;
+        } catch (Exception $e) {
+            // Gérer l'erreur ou la journaliser
+            throw new Exception("Erreur lors de la récupération du produit : " . $e->getMessage());
+        } finally {
+            // Ferme la connexion après la requête
+            $this->connexion = null;
+        }
     }
 
     public function addProduct($nom, $description, $prix, $quantite, $image, $categorie, $sous_categorie)
     {
-        $date_ajout = date('Y-m-d h:i:s');
-        $requete = $this->connexion->prepare("INSERT INTO Produit (id,nom, description, prix, quantite, image, date_ajout, categorie, sous_categorie) VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $requete->execute([$nom, $description, $prix, $quantite, $image, $date_ajout, $categorie, $sous_categorie]);
+        try {
+            $requete = $this->connexion->prepare("INSERT INTO Produit 
+                (nom, description, prix, quantite, image, date_ajout, id_categorie, id_sousCategorie) 
+                VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)");
+            $requete->execute([$nom, $description, $prix, $quantite, $image, $categorie, $sous_categorie]);
+        } catch (Exception $e) {
+            // Gérer l'erreur ou la journaliser
+            throw new Exception("Erreur lors de l'ajout du produit : " . $e->getMessage());
+        } finally {
+            // Ferme la connexion après la requête
+            $this->connexion = null;
+        }
     }
 
     public function updateProduct($id, $data)
@@ -47,24 +80,27 @@ class ModelProduit
         }
 
         if (empty($updates)) {
-            error_log("No updates to perform");
-            return false;
+            throw new Exception("Aucune mise à jour à effectuer.");
         }
 
         $query = "UPDATE Produit SET " . implode(', ', $updates) . " WHERE id = :id";
         $params['id'] = $id;
 
-        error_log("Query: " . $query);
-        error_log("Params: " . print_r($params, true));
+        try {
+            $stmt = $this->connexion->prepare($query);
+            $result = $stmt->execute($params);
 
-        $stmt = $this->connexion->prepare($query);
-        $result = $stmt->execute($params);
+            if (!$result) {
+                throw new Exception("Erreur lors de la mise à jour du produit.");
+            }
 
-        if (!$result) {
-            error_log("Error executing query: " . print_r($stmt->errorInfo(), true));
+            return $result;
+        } catch (Exception $e) {
+            // Gérer l'erreur ou la journaliser
+            throw new Exception("Erreur lors de l'exécution de la requête : " . $e->getMessage());
+        } finally {
+            // Ferme la connexion après la requête
+            $this->connexion = null;
         }
-
-        return $result;
     }
-
 }

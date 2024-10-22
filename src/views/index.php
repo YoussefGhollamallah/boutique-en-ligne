@@ -1,5 +1,4 @@
 <?php
-include 'src/controllers/ProduitController.php';
 
 $produitController = new ProduitController();
 $products = $produitController->getAllProducts();
@@ -12,7 +11,7 @@ $products = $produitController->getAllProducts();
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="product-details">
-                    <img src="<?php echo ASSETS;?>/images/peluche.png" alt="Produit 1">
+                    <img src="<?php echo ASSETS; ?>/images/placeholder.png" alt="Produit 1">
                     <div class="carousel-caption">
                         <h5>
                             Produit 1
@@ -53,26 +52,27 @@ $products = $produitController->getAllProducts();
                 <a href="#carouselPhareDetail" class="carousel-control-product"></a>
     </article>
 </section>
-<section class="section_categorie article_categorie flex space-around flex-wrap">
-    <a href="#" class="card_categorie flex-column">
-        <h3>Catégorie</h3>
-        <img src="assets/images/jeux_videos.png" class="" alt="Catégorie jeux video">
-    </a>
-    <a href="#" class="card_categorie flex-column">
-        <h3>Catégorie</h3>
-        <img src="assets/images/films_&_series.png" class="" alt="Catégorie Films et Séries">
-    </a>
+<section class="section_categorie   flex column ">
+    <h3 id="title_categorie" class="text-center">Catégorie</h3>
+    <article class="flex flex-wrap article_categorie space-around">
+        <a href="#" class="card_categorie flex-column">
+            <img src="assets/images/jeux_videos.png" class="" alt="Catégorie jeux video">
+        </a>
+        <a href="#" class="card_categorie flex-column">
+            <img src="assets/images/films_&_series.png" class="" alt="Catégorie Films et Séries">
+        </a>
+    </article>
 </section>
 <section class="section_products">
-    <h3>Produits</h3>
+    <h3 id="title_produits">Produits</h3>
     <article class="article_produit flex space-around flex-wrap">
         <?php
         foreach ($products as $produit) {
+            $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
         ?>
             <div class="card_produit">
-                <img class="card_produit_img" src="assets/images/<?php echo $produit['image']; ?>" alt="Produit">
-                <h4><?php echo $produit['nom']; ?></h4>
-                <p><?php echo $produit['description']; ?></p>
+                <img class="card_produit_img" src="assets/images/<?php echo $produit['image']; ?>" alt="Peluche de <?php echo $nomProduit ?> ">
+                <h4><?php echo $nomProduit ?></h4>
                 <p><?php echo $produit['prix']; ?> €</p>
                 <a href="#" class="btn btn-ajouter">Ajouter au panier</a>
             </div>

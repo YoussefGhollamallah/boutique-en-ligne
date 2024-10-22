@@ -125,3 +125,11 @@ textarea {
 .upload:hover {
     filter: brightness(0.9); /* Slightly dim on hover */
 }
+
+
+@media screen and (max-width: 600px) {
+    body {
+      padding: 10px;
+      margin: 10px;
+    }
+  }

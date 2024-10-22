@@ -1,5 +1,4 @@
 <?php
-
 class ModelPanier
 {
     private $connexion;
@@ -11,26 +10,31 @@ class ModelPanier
     }
 
     public function getPanier()
-{
-    // Récupérer les produits dans le panier
-    $requete = $this->connexion->prepare("SELECT * FROM Panier INNER JOIN Produit ON Panier.id_produit = Produit.id");
-    $requete->execute();
-    
-    // Retourne un tableau vide si aucun produit n'est trouvé
-    return $requete->fetchAll(PDO::FETCH_ASSOC) ?: [];
-}
-
+    {
+        if (!isset($_SESSION['panier'])) {
+            $_SESSION['panier'] = [];
+        }
+        return $_SESSION['panier'];
+    }
 
     public function updateQuantite($idProduit, $quantite)
     {
-        $requete = $this->connexion->prepare("UPDATE Panier SET quantite = :quantite WHERE id_produit = :id");
-        $requete->execute(['quantite' => $quantite, 'id' => $idProduit]);
+        if (isset($_SESSION['panier'][$idProduit])) {
+            $_SESSION['panier'][$idProduit]['quantite'] = $quantite;
+        }
     }
 
     public function supprimerProduit($idProduit)
     {
-        $requete = $this->connexion->prepare("DELETE FROM Panier WHERE id_produit = :id");
-        $requete->execute(['id' => $idProduit]);
+        if (isset($_SESSION['panier'][$idProduit])) {
+            unset($_SESSION['panier'][$idProduit]);
+        }
+    }
+
+    public function validerCommande()
+    {
+        // Code pour gérer la validation de la commande, par exemple enregistrer dans la base de données
+        $_SESSION['panier'] = [];  // Vider le panier après validation
     }
 }
 ?>

@@ -1,28 +1,41 @@
 <?php
-
 class PanierController
 {
     private $modelPanier;
 
     public function __construct()
     {
+        session_start();  // Démarrer la session ici
         $this->modelPanier = new ModelPanier();
     }
 
     public function afficherPanier()
     {
         $produits = $this->modelPanier->getPanier();
-        include 'views/panier.php'; // Charger la vue avec les produits du panier
+        include 'views/panier.php';  // Charger la vue avec les produits du panier
     }
 
-    public function updateQuantite($idProduit, $quantite)
+    public function updateQuantite()
     {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $idProduit = $data['id'];
+        $quantite = $data['quantite'];
         $this->modelPanier->updateQuantite($idProduit, $quantite);
+        echo json_encode(['status' => 'success']);
     }
 
-    public function supprimerProduit($idProduit)
+    public function supprimerProduit()
     {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $idProduit = $data['id'];
         $this->modelPanier->supprimerProduit($idProduit);
+        echo json_encode(['status' => 'success']);
+    }
+
+    public function validerCommande()
+    {
+        $this->modelPanier->validerCommande();
+        echo json_encode(['status' => 'commande_validee']);
     }
 }
 ?>

@@ -29,42 +29,16 @@ $products = $produitController->getAllProducts();
             <?php foreach ($products as $product): ?>
             <tr data-product-id="<?php echo $product['id']; ?>">
                 <td><?php echo htmlspecialchars($product['id']); ?></td>
-                <td class="editable" data-field="nom" data-type="varchar"><?php echo htmlspecialchars($product['nom']); ?></td>
-                <td class="editable" data-field="description" data-type="text"><?php echo htmlspecialchars($product['description']); ?></td>
+                <td class="editable" data-field="nom"><?php echo htmlspecialchars($product['nom']); ?></td>
+                <td class="editable" data-field="description"><?php echo htmlspecialchars($product['description']); ?></td>
                 <td>
-                    <input type="file" accept="image/png, image/jpeg" name="image" />
-                    <!-- Ou si non en édition, afficher l'image -->
                     <img src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50">
+                    <input type="file" name="image" style="display: none;">
                 </td>
-                <td class="editable" data-field="prix" data-type="decimal"><?php echo htmlspecialchars($product['prix']); ?> €</td>
-                <td class="editable" data-field="quantite" data-type="integer"><?php echo htmlspecialchars($product['quantite']); ?></td>
-                <td>
-                    <?php if ($isEditing): ?>
-                    <select name="categorie">
-                        <?php foreach ($categories as $categorie): ?>
-                            <option value="<?php echo $categorie['id']; ?>" <?php echo $categorie['id'] == $product['categorie_id'] ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($categorie['nom']); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <?php else: ?>
-                        <?php echo htmlspecialchars($product['nom_p']); ?>
-                    <?php endif; ?>
-                </td>
-                <td>
-                    <?php if ($isEditing): ?>
-                        <select name="sous_categorie">
-                            <?php foreach ($sousCategories as $sousCategorie): ?>
-                                <option value="<?php echo $sousCategorie['id']; ?>" <?php echo $sousCategorie['id'] == $product['sous_categorie_id'] ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($sousCategorie['nom']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    <?php else: ?>
-                        <?php echo htmlspecialchars($product['nom_sc']); ?>
-                    <?php endif; ?>
-                </td>
-
+                <td class="editable" data-field="prix"><?php echo htmlspecialchars($product['prix']); ?> €</td>
+                <td class="editable" data-field="quantite"><?php echo htmlspecialchars($product['quantite']); ?></td>
+                <td><?php echo htmlspecialchars($product['nom_p']); ?></td>
+                <td><?php echo htmlspecialchars($product['nom_sc']); ?></td>
                 <td>
                     <button class="btn btn-edit">Modifier</button>
                     <button class="btn btn-save" style="display: none;">Valider</button>
@@ -84,4 +58,3 @@ var categories = <?php echo json_encode($categories); ?>;
 var sousCategories = <?php echo json_encode($sousCategories); ?>;
 </script>
 <script src="../../assets/js/admin-produits.js"></script>
-

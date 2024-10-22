@@ -33,14 +33,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         console.log('Sending data:', { nom, desc }) 
 
-        // Prepare the form data for the POST request
         const formData = new URLSearchParams()
         formData.append('nom', nom)
         formData.append('desc', desc)
 
         try {
-            // Send the form data using fetch
-            const response = await fetch('../../src/controllers/admin-treatments.php', {
+            const response = await fetch('../../src/controllers/AdminTreatments.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -48,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: formData.toString(),
             })
 
-            // Handle the response
             if (response.ok) {
                 const data = await response.text()
                 const trimmedData = data.trim()
@@ -76,9 +73,28 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Add event listener to the button
     document.querySelector('.btn-ajouter').addEventListener('click', function (e) {
-        e.preventDefault(); // Prevent default form submission
-        sendData(); // Call the function to send data
+        e.preventDefault()
+        sendData()
     });
-});
+
+    // Get all elements with the class 'HiddenForm'
+    let hiddenForms = document.getElementsByClassName('HiddenForm');
+
+    // Loop through the collection to hide all forms initially
+    for (let i = 1; i < hiddenForms.length; i++) {
+        hiddenForms[i].style.display = 'none';
+    }
+
+    // Log a message for testing purposes
+    console.log('testing');
+
+    // Add an event listener to the modify button
+    let modify = document.querySelector('#modify');
+    modify.addEventListener('click', function () {
+        // Loop through the collection again to show the hidden forms when the button is clicked
+        for (let i = 0; i < hiddenForms.length; i++) {
+            hiddenForms[i].style.display = 'block';
+        }
+    });
+})

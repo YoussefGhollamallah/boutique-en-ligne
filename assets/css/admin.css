@@ -1,9 +1,9 @@
 :root {
-    --yellow: #f2c94c; /* Updated yellow for better contrast */
-    --blue: #8fc4f7; /* Retained original blue */
-    --grey: #b3b3b3; /* Retained original grey */
-    --red: #e97e69; /* Retained original red */
-    --light-grey: #ffffff; /* Changed light grey to white for a cleaner look */
+    --yellow: #f2c94c; 
+    --blue: #8fc4f7; 
+    --grey: #b3b3b3; 
+    --red: #e97e69; 
+    --light-grey: #ffffff; 
 }
 
 body {
@@ -123,7 +123,7 @@ textarea {
 }
 
 .upload:hover {
-    filter: brightness(0.9); /* Slightly dim on hover */
+    filter: brightness(0.9); 
 }
 
 

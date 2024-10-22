@@ -34,6 +34,7 @@ $products = $produitController->getAllProducts();
                 <td>
                     <img src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50">
                     <input type="file" name="image" style="display: none;">
+                    <button class="btn-change-image" style="display: none;">Changer l'image</button>
                 </td>
                 <td class="editable" data-field="prix"><?php echo htmlspecialchars($product['prix']); ?> €</td>
                 <td class="editable" data-field="quantite"><?php echo htmlspecialchars($product['quantite']); ?></td>

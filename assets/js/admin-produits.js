@@ -59,6 +59,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        // Gestion de l'image
+        const imageCell = row.querySelector('td:nth-child(4)'); // Ajustez l'index si nécessaire
+        const img = imageCell.querySelector('img');
+        const fileInput = imageCell.querySelector('input[type="file"]');
+        const changeImageBtn = imageCell.querySelector('.btn-change-image');
+
+        if (isEditing) {
+            img.style.display = 'none';
+            fileInput.style.display = 'inline-block';
+            changeImageBtn.style.display = 'inline-block';
+        } else {
+            img.style.display = 'inline-block';
+            fileInput.style.display = 'none';
+            changeImageBtn.style.display = 'none';
+        }
+
         // Toggle visibility des boutons
         row.querySelector('.btn-edit').style.display = isEditing ? 'none' : 'inline-block';
         row.querySelector('.btn-save').style.display = isEditing ? 'inline-block' : 'none';
@@ -73,6 +89,11 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append(input.name, input.value);
         });
 
+        const fileInput = row.querySelector('input[type="file"]');
+        if (fileInput.files.length > 0) {
+            formData.append('file', fileInput.files[0]);
+        }
+
         formData.append('id', productId);
 
         fetch('src/models/update-product.php', {
@@ -83,6 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 toggleEditMode(row, false);
+                if (data.newImage) {
+                    row.querySelector('img').src = `assets/images/${data.newImage}`;
+                }
                 alert('Produit mis à jour avec succès');
             } else {
                 alert('Erreur lors de la sauvegarde : ' + data.message);

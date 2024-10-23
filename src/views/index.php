@@ -19,15 +19,17 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
                 $activeClass = $isActive ? 'active' : '';
                 $isActive = false;
             ?>
-                <div class="carousel-item <?php echo $activeClass; ?>">
-                    <div class="product-details">
-                        <img src="assets/images/<?php echo $produit['image']; ?>" alt="Produit <?php echo $nomProduit; ?>">
-                        <div class="carousel-caption">
-                            <h5><?php echo $nomProduit; ?></h5>
-                            <p><?php echo $produit['description']; ?></p>
+                <a href="./detail/<?php echo $produit['id'] ?>">
+                    <div class="carousel-item <?php echo $activeClass; ?>">
+                        <div class="product-details">
+                            <img src="assets/images/<?php echo $produit['image']; ?>" alt="Peluche de <?php echo $nomProduit; ?>">
+                            <div class="carousel-caption">
+                                <h5><?php echo $nomProduit; ?></h5>
+                                <p><?php echo $produit['description']; ?></p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             <?php
             }
             ?>

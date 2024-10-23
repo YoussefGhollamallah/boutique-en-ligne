@@ -4,32 +4,24 @@
 class ProduitController
 {
     private $modelProduit;
-    private $connexion;
 
     public function __construct()
     {
-        // Instancier la classe Connexion
-        $conn = new Connexion();
-        $this->connexion = $conn->connexionBDD(); // Appeler la méthode connexionBDD()
-
         $this->modelProduit = new ModelProduit();
     }
 
     public function getAllProducts()
     {
-        // Appeler la méthode getAllProducts de ModelProduit
-        $products = $this->modelProduit->getAllProducts();
-
-        // Ferme la connexion après la requête
-        $this->connexion = null;
-
-        return $products;
+        return $this->modelProduit->getAllProducts();
     }
-    public function getProductById($id)
-{
-    $requete = $this->connexion->prepare("SELECT * FROM Produit WHERE id = ?");
-    $requete->execute([$id]);
-    return $requete->fetch(PDO::FETCH_ASSOC);
-}
 
+    public function getProductById($id)
+    {
+        return $this->modelProduit->getProductById($id);
+    }
+
+    public function getLastThreeProducts()
+    {
+        return $this->modelProduit->getLastThreeProducts();
+    }
 }

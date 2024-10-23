@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 class ModelPanier
 {
@@ -12,7 +11,7 @@ class ModelPanier
         $this->connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function ajouterProduit($idProduit, $quantite = 1)
+    public function ajouterProduit($idProduit, $quantite = 1, $checked = false)
     {
         if (!isset($_SESSION['panier'])) {
             $_SESSION['panier'] = [];
@@ -28,10 +27,21 @@ class ModelPanier
                     'description' => $produit['description'],
                     'prix' => $produit['prix'],
                     'image' => $produit['image'],
-                    'quantite' => $quantite
+                    'quantite' => $quantite,
+                    'checked' => $checked,
+                    'id' => $produit['id'] // Assurez-vous d'ajouter l'id du produit ici
                 ];
             }
         }
+    }
+
+    public function mettreAJourChecked($idProduit, $checked)
+    {
+        if (isset($_SESSION['panier'][$idProduit])) {
+            $_SESSION['panier'][$idProduit]['checked'] = $checked;
+            return true;
+        }
+        return false;
     }
 
     public function getProduct($id)
@@ -42,8 +52,6 @@ class ModelPanier
             return $requete->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             throw new Exception("Erreur lors de la récupération du produit : " . $e->getMessage());
-        } finally {
-            $this->connexion = null;
         }
     }
 
@@ -54,5 +62,17 @@ class ModelPanier
             return true;
         }
         return false;
+    }
+
+    public function mettreAJourQuantite($idProduit, $quantite)
+    {
+        if (isset($_SESSION['panier'][$idProduit]) && $quantite > 0) {
+            $_SESSION['panier'][$idProduit]['quantite'] = $quantite;
+        }
+    }
+
+    public function getPanier()
+    {
+        return isset($_SESSION['panier']) ? $_SESSION['panier'] : [];
     }
 }

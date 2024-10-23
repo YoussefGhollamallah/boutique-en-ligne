@@ -9,30 +9,30 @@ class PanierController
         $this->modelPanier = new ModelPanier();
     }
 
-    public function ajouterProduitAuPanier($idProduit, $quantite)
+    public function ajouterProduitAuPanier($idProduit, $quantite, $checked = false)
     {
-        $this->modelPanier->ajouterProduit($idProduit, $quantite);
+        $this->modelPanier->ajouterProduit($idProduit, $quantite, $checked);
         header("Location: index.php");
         exit();
     }
 
     public function afficherPanier()
     {
-        return isset($_SESSION['panier']) ? $_SESSION['panier'] : [];
+        return $this->modelPanier->getPanier();
     }
 
-    public function supprimerProduit()
+    public function mettreAJourChecked($idProduit, $checked)
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = json_decode(file_get_contents('php://input'), true);
-            $idProduit = $data['idProduit'];
-            
-            // Appel au modèle pour supprimer le produit
-            $result = $this->modelPanier->supprimerProduitDuPanier($idProduit);
-            
-            // Renvoi d'une réponse JSON
-            echo json_encode(['success' => $result]);
-            exit(); // Assurez-vous d'arrêter le script après la réponse
-        }
+        $this->modelPanier->mettreAJourChecked($idProduit, $checked);
+    }
+
+    public function supprimerProduit($idProduit)
+    {
+        $this->modelPanier->supprimerProduitDuPanier($idProduit);
+    }
+
+    public function mettreAJourQuantite($idProduit, $quantite)
+    {
+        $this->modelPanier->mettreAJourQuantite($idProduit, $quantite);
     }
 }

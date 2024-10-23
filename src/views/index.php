@@ -6,11 +6,42 @@ $produitController = new ProduitController();
 $products = $produitController->getAllProducts();
 
 // Vérifie si un produit doit être ajouté au panier
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'ajouterProduitAuPanier') {
-    $panierController = new PanierController();
-    $idProduit = intval($_POST['id']);
-    $quantite = intval($_POST['quantite']);
-    $panierController->ajouterProduitAuPanier($idProduit, $quantite);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['action']) && $_POST['action'] == 'ajouterProduitAuPanier') {
+        $panierController = new PanierController();
+        $idProduit = intval($_POST['id']);
+        $quantite = intval($_POST['quantite']);
+        $panierController->ajouterProduitAuPanier($idProduit, $quantite);
+    }
+
+    if (isset($_POST['action']) && $_POST['action'] == 'supprimerProduit') {
+        $panierController = new PanierController();
+        $idProduit = intval($_POST['id']);
+        $panierController->supprimerProduit($idProduit);
+        // Vous pouvez envoyer une réponse ici si nécessaire
+        exit; // Sortir pour ne pas exécuter le reste du code
+    }
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (isset($data['action'])) {
+        $panierController = new PanierController();
+
+        if ($data['action'] === 'supprimerProduit' && isset($data['id'])) {
+            $idProduit = intval($data['id']);
+            $result = $panierController->supprimerProduit($idProduit);
+
+            if ($result) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Le produit n\'a pas pu être supprimé.']);
+            }
+            exit;
+        }
+    }
 }
 ?>
 

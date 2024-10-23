@@ -56,13 +56,13 @@ class ModelPanier
     }
 
     public function supprimerProduitDuPanier($idProduit)
-    {
-        if (isset($_SESSION['panier'][$idProduit])) {
-            unset($_SESSION['panier'][$idProduit]);
-            return true;
-        }
-        return false;
+{
+    if (isset($_SESSION['panier'][$idProduit])) {
+        unset($_SESSION['panier'][$idProduit]);
+        return true; // Assure que le produit est bien supprimé
     }
+    return false;
+}
 
     public function mettreAJourQuantite($idProduit, $quantite)
     {

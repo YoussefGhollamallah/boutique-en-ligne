@@ -31,7 +31,7 @@ if (!empty($panier)) {
                 <p>Quantité :</p>
                 <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" class="quantite-input" data-id="<?php echo htmlspecialchars($idProduit); ?>">
                 <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
-                <button class="btn-supprimer" data-id="<?php echo htmlspecialchars($idProduit); ?>">Supprimer</button>
+                <button class="btn-supprimer" data-id="<?= $produit['id']; ?>">Supprimer</button>
             </div>
         <?php } ?>
         <h4>Total du panier : <span id="total-panier"><?php echo number_format($totalPanier, 2, ',', ' '); ?> €</span></h4>
@@ -112,4 +112,32 @@ if (!empty($panier)) {
         loadCheckboxState();
         updateTotalPanier(); // Mettez également à jour le total du panier
     });
+
+    // Fonction pour supprimer un produit du panier
+    document.querySelectorAll('.btn-supprimer').forEach(button => {
+    button.addEventListener('click', function() {
+        const idProduit = this.dataset.id;
+        fetch('index.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'supprimerProduit',
+                id: idProduit,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const produitElement = document.getElementById('produit_' + idProduit);
+                produitElement.remove(); // Retire le produit du DOM
+                updateTotalPanier(); // Mettez à jour le total après suppression
+            } else {
+                console.error('Erreur lors de la suppression du produit:', data.message);
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+    });
+});
 </script>

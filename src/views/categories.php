@@ -1,6 +1,6 @@
     <section class="dropdown">
         <span>🔎</span>
-        <section class="dropdown-content">
+        <section class="dropdown-content box_shadow">
             <a href="http://">License 🎟</a>
             <a href="http://">Prix 💰</a>
         </section>

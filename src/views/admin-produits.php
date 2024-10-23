@@ -4,6 +4,11 @@ require_once __DIR__ . '/../controllers/ProduitController.php';
 // Crée une instance de ProduitController
 $produitController = new ProduitController();
 $products = $produitController->getAllProducts();
+
+// Trier les produits par ID en ordre croissant
+usort($products, function($a, $b) {
+    return $a['id'] - $b['id'];
+});
 ?>
 
 <!-- Ajout dans le main avec la section -->
@@ -29,17 +34,25 @@ $products = $produitController->getAllProducts();
             <?php foreach ($products as $product): ?>
             <tr data-product-id="<?php echo $product['id']; ?>">
                 <td><?php echo htmlspecialchars($product['id']); ?></td>
-                <td class="editable" data-field="nom" data-type="varchar"><?php echo htmlspecialchars($product['nom']); ?></td>
-                <td class="editable" data-field="description" data-type="text"><?php echo htmlspecialchars($product['description']); ?></td>
-                <td><img src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50"></td>
-                <td class="editable" data-field="prix" data-type="decimal"><?php echo htmlspecialchars($product['prix']); ?> €</td>
-                <td class="editable" data-field="quantite" data-type="integer"><?php echo htmlspecialchars($product['quantite']); ?></td>
-                <td><?php echo htmlspecialchars($product['nom_sc']); ?></td>
-                <td><?php echo htmlspecialchars($product['nom_p']); ?></td>
+                <td class="editable" data-field="nom"><?php echo htmlspecialchars($product['nom']); ?></td>
+                <td class="editable" data-field="description"><?php echo htmlspecialchars($product['description']); ?></td>
                 <td>
-                    <button class="btn btn-edit">Modifier</button>
-                    <button class="btn btn-save" style="display: none;">Valider</button>
-                    <button class="btn btn-cancel" style="display: none;">Annuler</button>
+                    <img src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" width="50" class="current-image">
+                    <div class="image-edit-container" style="display: none;">
+                        <input type="file" name="image" style="display: none;" accept=".jpg,.jpeg,.png">
+                        <button class="btn-choose-image">Choisir une image</button>
+                        <span class="selected-file-name"></span>
+                        <img src="" alt="Aperçu de l'image" class="image-preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                    </div>
+                </td>
+                <td class="editable" data-field="prix"><?php echo htmlspecialchars($product['prix']); ?> €</td>
+                <td class="editable" data-field="quantite"><?php echo htmlspecialchars($product['quantite']); ?></td>
+                <td><?php echo htmlspecialchars($product['nom_p']); ?></td>
+                <td><?php echo htmlspecialchars($product['nom_sc']); ?></td>
+                <td>
+                    <button class="btn-edit">Modifier</button>
+                    <button class="btn-save" style="display: none;">Valider</button>
+                    <button class="btn-cancel" style="display: none;">Annuler</button>
                     <a href="delete-produit.php?id=<?php echo $product['id']; ?>" class="btn btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">Supprimer</a>
                 </td>
             </tr>
@@ -54,22 +67,4 @@ $products = $produitController->getAllProducts();
 var categories = <?php echo json_encode($categories); ?>;
 var sousCategories = <?php echo json_encode($sousCategories); ?>;
 </script>
-<script src="../../assets/js/admin-produits.js"></script>
-
-
-
-<style>
-.product-table .editable input,
-.product-table .editable textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.product-table .editable textarea {
-    resize: vertical;
-}
-</style>
-
+<script src="<?php echo ASSETS; ?>/js/admin-produits.js"></script>

@@ -55,7 +55,7 @@ class ModelProduit
 
     public function updateProduct($id, $data)
     {
-        $allowedFields = ['nom', 'description', 'prix', 'quantite'];
+        $allowedFields = ['nom', 'description', 'prix', 'quantite', 'image'];
         $updates = [];
         $params = [];
 

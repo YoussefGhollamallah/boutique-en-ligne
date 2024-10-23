@@ -9,7 +9,7 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
 
 
 <section class="section_phare">
-    <h3>Produits phares</h3>
+    <h3>Nos Nouveautés</h3>
     <article class="article_phare flex space-around carousel slide" data-ride="carousel">
         <div class="carousel-inner">
             <?php

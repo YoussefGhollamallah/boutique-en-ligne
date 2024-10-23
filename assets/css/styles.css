@@ -207,7 +207,6 @@ footer {
 a {
     text-decoration: none;
     color: #333;
-    width: 100%;
 }
 
 .card_categorie {
@@ -666,7 +665,9 @@ input[type="text"]:focus {
 /* Media queries */
 
 @media screen and (max-width: 768px) {
-
+    a {
+        width: 100%;
+    }
 
     .hide_mobile {
         display: none;
@@ -774,11 +775,13 @@ input[type="text"]:focus {
     .article_phare {
         border-radius: 0;
     }
-    .article_produit{
+
+    .article_produit {
         padding: 10px 0;
         gap: 0;
     }
-    .card_produit{
+
+    .card_produit {
         margin: 15px 0;
         padding: 20px 0;
         width: 100%;

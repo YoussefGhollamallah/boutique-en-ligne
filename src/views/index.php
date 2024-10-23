@@ -7,6 +7,7 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
 
 ?>
 
+
 <section class="section_phare">
     <h3>Produits phares</h3>
     <article class="article_phare flex space-around carousel slide" data-ride="carousel">
@@ -70,3 +71,4 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
         ?>
     </article>
 </section>
+<script src="assets/js/carousel.js"></script>

@@ -24,9 +24,9 @@ class CategoryModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function ModifyCat($nom, $description){
-        $stmt = $this->connexion->prepare('UPDATE SousCategory SET nom_sc = ?, description_sc = ?');
-        $stmt->execute([$nom, $description]);
-    }
+    public function ModifyCat($nom, $description, $id) {
+        $stmt = $this->connexion->prepare('UPDATE SousCategorie SET nom_sc = ?, desc_sc = ? WHERE id_SousCategorie = ?');
+        $stmt->execute([$nom, $description, $id]);
+    }    
 }
 ?>

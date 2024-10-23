@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = new URLSearchParams();
         formData.append('nom', nom);
         formData.append('desc', desc);
+        console.log('Data being sent to PHP:', formData.toString());
 
         try {
             const response = await fetch('../../src/controllers/AdminTreatments.php', {
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.text();
                 const trimmedData = data.trim();
                 console.log('Response received:', trimmedData);
-
+            
                 if (trimmedData === "Category added successfully!") {
                     displayMessage('Category added successfully!', true);
                     setTimeout(function () {

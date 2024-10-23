@@ -16,7 +16,7 @@ class ModelUtilisateur
     {
         try{
             $requete = $this->connexion->prepare("SELECT * FROM Utilisateur 
-            INNER JOIN Role ON Utilisateur.role_id = Role.id");
+            INNER JOIN Role ON Utilisateur.role_id = Role.id_role");
         $requete->execute();
         $result = $requete->fetchAll(PDO::FETCH_ASSOC);
         return $result;

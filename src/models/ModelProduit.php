@@ -17,11 +17,11 @@ class ModelProduit
     {
         try {
             $requete = $this->connexion->prepare("SELECT * FROM Produit 
+
                 INNER JOIN Categorie ON Produit.id_categorie = Categorie.id_categorie 
-                INNER JOIN SousCategorie ON Produit.id_sousCategorie = SousCategorie.id_sousCategorie");
+                INNER JOIN SousCategorie ON Produit.id_sousCategorie = SousCategorie.id_sousCategorie order by Produit.id asc");
             $requete->execute();
             $result = $requete->fetchAll(PDO::FETCH_ASSOC);
-
             return $result;
         } catch (Exception $e) {
             throw new Exception("Erreur lors de la récupération des produits : " . $e->getMessage());

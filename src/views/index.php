@@ -46,10 +46,10 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
     <h3 id="title_categorie" class="text-center">Catégorie</h3>
     <article class="flex flex-wrap article_categorie space-around">
         <a href="#" class="card_categorie box_shadow flex-column">
-            <img src="assets/images/jeux_videos.png" class="" alt="Catégorie jeux video">
+            <img src="assets/images/jeux_videos.png" alt="Catégorie jeux video">
         </a>
         <a href="#" class="card_categorie box_shadow flex-column">
-            <img src="assets/images/films_&_series.png" class="" alt="Catégorie Films et Séries">
+            <img src="assets/images/films_&_series.png" alt="Catégorie Films et Séries">
         </a>
     </article>
 </section>

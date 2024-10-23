@@ -5,53 +5,48 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Database connection
+// Connexion à la base de données
 $bdd = connexionBDD();
 
-$query = "SELECT id_SousCategorie, nom_sc FROM SousCategorie";
-$stmt = $bdd->prepare($query);
-$stmt->execute();
-$categories = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+$categoryModel = new CategoryModel();
+$categories = $categoryModel->getCategories();
 
-// echo $categories;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['nom'], $_POST['desc'])) {
+        $nom = trim($_POST['nom']);
+        $desc = trim($_POST['desc']);
 
-if (!empty($_POST['Form'])) {
-    $nom = trim($_POST['nom']);
-    $desc = trim($_POST['desc']);
-    if (strlen($nom) > 0) {
-        $categoryModel = new CategoryModel();
+        if (!empty($nom)) {
+            // Vérification de l'existence de la catégorie
+            $query = "SELECT COUNT(*) as count FROM SousCategorie WHERE nom_sc = :nom";
+            $stmt = $bdd->prepare($query);
+            $stmt->bindParam(':nom', $nom);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $query = "SELECT COUNT(*) as count FROM SousCategorie WHERE nom_sc = :nom";
-        $stmt = $bdd->prepare($query);
-        $stmt->bindParam(':nom', $nom);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo $row['count'];
-        if ($row['count'] > 0) {
-            echo "This category already exists!";
+            if ($row['count'] > 0) {
+                echo "Cette catégorie existe déjà !";
+            } else {
+                $categoryModel->AddCat($nom, $desc);
+                echo "Catégorie ajoutée avec succès !";
+            }
         } else {
-            $categoryModel->AddCat($nom, $desc);
-            echo "Category added successfully!";
+            echo "Veuillez fournir un nom de catégorie.";
         }
-    } else {
-        echo "Please provide a category name.";
     }
-} else {
-    echo "No POST data received.";
-}
 
-// Hidden form processing
-if (!empty($_POST['HiddenForm'])) {
-    $hiddenName = trim($_POST['newName']);
-    $hiddenDesc = trim($_POST['descHidden']);
-    $dropdown = $_POST['cible'];
-    // echo $dropdown;
-    if (strlen($hiddenName) > 0) {
-        $cat = new CategoryModel();
+    if (isset($_POST['newName'], $_POST['descHidden'], $_POST['cible'])) {
+        $hiddenName = trim($_POST['newName']);
+        $hiddenDesc = trim($_POST['descHidden']);
+        $dropdown = $_POST['cible'];
 
-        foreach ($dropdown as $selectedCible) {
-            // Modify the category with the selected cible (category ID)
-            $cat->ModifyCat($hiddenName, $hiddenDesc, $selectedCible);
+        if (!empty($hiddenName) && !empty($dropdown)) {
+            foreach ($dropdown as $selectedCible) {
+                $categoryModel->ModifyCat($hiddenName, $hiddenDesc, $selectedCible);
+            }
+            echo "Modification réussie.";
+        } else {
+            echo "Veuillez sélectionner une catégorie et fournir un nouveau nom.";
         }
     }
 }

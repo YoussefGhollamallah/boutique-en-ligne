@@ -23,7 +23,7 @@
         </section>
     </form>
 
-   <!-- Hidden form for modifying category -->
+   <!-- Formulaire caché pour la modification -->
 <form class="HiddenForm" id="hiddenForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data" style="display: none;">
     <section class="container">
         <section class="section">
@@ -36,39 +36,38 @@
             <textarea name="descHidden" id="descHidden" rows="4" placeholder="Description"></textarea>
         </section>
 
-        <!-- Select for modifying categories -->
+        <!-- Sélection pour la modification des catégories -->
         <label for="cible">Cible</label>
         <select id="cible" name="cible[]" multiple size="5">
             <?php
-            // Check if $categories is not empty and use correct column names
+            // Affichage des catégories
             if (!empty($categories)) {
                 foreach ($categories as $category) {
                     echo '<option value="' . htmlspecialchars($category['id_sousCategorie']) . '">' . htmlspecialchars($category['nom_sc']) . '</option>';
                 }
             } else {
-                echo '<option disabled>No categories available</option>';
+                echo '<option disabled>Aucune catégorie disponible</option>';
             }
             ?>
         </select>
         <input type="submit" class="btn-Modifier" value="Modifier">
 
-        <!-- Select for deleting categories -->
+        <!-- Sélection pour la suppression des catégories -->
         <label for="sup">Supprimer</label>
         <select id="sup" name="sup[]" multiple size="5">
             <?php
-            // Use the same $categories for deletion
+            // Réutilisation des mêmes catégories pour la suppression
             if (!empty($categories)) {
                 foreach ($categories as $category) {
                     echo '<option value="' . htmlspecialchars($category['id_sousCategorie']) . '">' . htmlspecialchars($category['nom_sc']) . '</option>';
                 }
             } else {
-                echo '<option disabled>No categories available</option>';
+                echo '<option disabled>Aucune catégorie disponible</option>';
             }
             ?>
         </select>
     </section>
 </form>
-
 
     <script src="../../assets/js/admin.js"></script>
 </body>

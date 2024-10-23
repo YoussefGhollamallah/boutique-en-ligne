@@ -28,16 +28,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const desc = document.querySelector('#desc').value.trim();
 
         if (nom.length === 0 || desc.length === 0) {
-            displayMessage('Please provide both a name and description.', false);
+            displayMessage('Veuillez fournir un nom et une description.', false);
             return;
         }
 
-        console.log('Sending data:', { nom, desc });
+        console.log('Envoi des données:', { nom, desc });
 
         const formData = new URLSearchParams();
         formData.append('nom', nom);
         formData.append('desc', desc);
-        console.log('Data being sent to PHP:', formData.toString());
+        console.log('Données envoyées à PHP:', formData.toString());
 
         try {
             const response = await fetch('../../src/controllers/AdminTreatments.php', {
@@ -51,24 +51,24 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.ok) {
                 const data = await response.text();
                 const trimmedData = data.trim();
-                console.log('Response received:', trimmedData);
+                console.log('Réponse reçue:', trimmedData);
             
-                if (trimmedData === "Category added successfully!") {
-                    displayMessage('Category added successfully!', true);
+                if (trimmedData === "Catégorie ajoutée avec succès !") {
+                    displayMessage('Catégorie ajoutée avec succès !', true);
                     setTimeout(function () {
                         window.location.href = '../views/admin-sub-category.php';
                     }, 4000);
-                } else if (trimmedData === "This category already exists!") {
-                    displayMessage('This category already exists!', false);
+                } else if (trimmedData === "Cette catégorie existe déjà !") {
+                    displayMessage('Cette catégorie existe déjà !', false);
                 } else {
-                    displayMessage(`Unexpected response: ${trimmedData}`, false);
+                    displayMessage(`Réponse inattendue : ${trimmedData}`, false);
                 }
             } else {
-                displayMessage(`Server error: ${response.statusText}`, false);
+                displayMessage(`Erreur serveur : ${response.statusText}`, false);
             }
         } catch (error) {
-            console.error('Fetch error:', error);
-            displayMessage(`Network error: ${error.message}`, false);
+            console.error('Erreur de fetch :', error);
+            displayMessage(`Erreur réseau : ${error.message}`, false);
         }
     }
 
@@ -82,17 +82,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let modify = document.querySelector('#modify');
     modify.addEventListener('click', function () {
-        console.log('Clicked');
+        console.log('Modification clique');
         
         form.style.display = 'none';
-        
         hiddenForm.style.display = 'block';
     });
 
-    let add = document.querySelector('#Add')
-
-    add.addEventListener('click', function(){
-        form.style.display = 'block'
-        hiddenForm.style.display = 'none'
-    })
+    let add = document.querySelector('#Add');
+    add.addEventListener('click', function () {
+        form.style.display = 'block';
+        hiddenForm.style.display = 'none';
+    });
 });

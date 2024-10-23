@@ -207,6 +207,7 @@ footer {
 a {
     text-decoration: none;
     color: #333;
+    width: 100%;
 }
 
 .card_categorie {
@@ -761,7 +762,7 @@ input[type="text"]:focus {
         padding: 0;
     }
 
-    /* Carousel */
+    /* Index */
 
     .carousel-caption {
         width: 80%;
@@ -771,6 +772,16 @@ input[type="text"]:focus {
     }
 
     .article_phare {
+        border-radius: 0;
+    }
+    .article_produit{
+        padding: 10px 0;
+        gap: 0;
+    }
+    .card_produit{
+        margin: 15px 0;
+        padding: 20px 0;
+        width: 100%;
         border-radius: 0;
     }
 

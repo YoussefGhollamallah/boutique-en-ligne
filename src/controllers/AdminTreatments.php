@@ -13,20 +13,20 @@ $stmt = $bdd->prepare($query);
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC); 
 
+// echo $categories;
+
 if (!empty($_POST['Form'])) {
     $nom = trim($_POST['nom']);
     $desc = trim($_POST['desc']);
-
     if (strlen($nom) > 0) {
         $categoryModel = new CategoryModel();
 
-        // Check if category already exists
         $query = "SELECT COUNT(*) as count FROM SousCategorie WHERE nom_sc = :nom";
         $stmt = $bdd->prepare($query);
         $stmt->bindParam(':nom', $nom);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        echo $row['count'];
         if ($row['count'] > 0) {
             echo "This category already exists!";
         } else {
@@ -45,7 +45,7 @@ if (!empty($_POST['HiddenForm'])) {
     $hiddenName = trim($_POST['newName']);
     $hiddenDesc = trim($_POST['descHidden']);
     $dropdown = $_POST['cible'];
-
+    // echo $dropdown;
     if (strlen($hiddenName) > 0) {
         $cat = new CategoryModel();
 

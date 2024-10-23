@@ -14,7 +14,7 @@
                 <button id="modify" type="button">Modifier</button>
                 <img class="logo" src="../../assets/images/logo.png" alt="">
                 <label for="categories">Nom de Categories</label>
-                <input type="text" id="categories" placeholder="Name" name="nom">
+                <input type="text" id="nom" placeholder="Name" name="nom">
             </section>
             <section class="section">
                 <textarea name="desc" id="desc" rows="4" placeholder="Description"></textarea>

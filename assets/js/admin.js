@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function sendData() {
-        const nom = document.querySelector('#categories').value.trim();
+        const nom = document.querySelector('#nom').value.trim();
         const desc = document.querySelector('#desc').value.trim();
 
         if (nom.length === 0 || desc.length === 0) {

@@ -25,8 +25,8 @@ class CategoryModel
     }
 
     public function ModifyCat($nom, $description, $id) {
-        $stmt = $this->connexion->prepare('UPDATE SousCategorie SET nom_sc = ?, desc_sc = ? WHERE id_SousCategorie = ?');
+        $stmt = $this->connexion->prepare('UPDATE SousCategorie SET nom_sc = ?, description_sc = ? WHERE id_sousCategorie = ?');
         $stmt->execute([$nom, $description, $id]);
-    }    
+    }       
 }
 ?>

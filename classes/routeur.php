@@ -13,7 +13,8 @@ class Routeur
         "profil"     => ["controller" => 'HomeController', "method" => 'showProfil'],
         "connexion"  => ["controller" => 'HomeController', "method" => 'showConnexion'],
         "detail"     => ["controller" => 'HomeController', "method" => 'showDetail'],
-        "admin-produits"     => ["controller" => 'HomeController', "method" => 'showAdminProduits']
+        "admin-produits"     => ["controller" => 'HomeController', "method" => 'showAdminProduits'],
+        "admin-users" => ["controller" => 'HomeController', "method" => 'showAdminUsers']
     ];
 
     public function __construct($request)

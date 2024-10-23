@@ -7,9 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Peralta&display=swap" rel="stylesheet">
-    <link rel="icon" type="favicon" href="<?php echo ASSETS; ?>/images/favicon.ico">
-    <link rel="stylesheet" href="<?php echo ASSETS; ?>/css/styles.css">
-    <link rel="stylesheet" href="<?php echo ASSETS; ?>/css/admin-produits.css">
+    <link rel="icon" type="favicon" href="<?php echo ASSETS; ?>images/favicon.ico">
+    <link rel="stylesheet" href="<?php echo ASSETS; ?>css/styles.css">
+    <link rel="stylesheet" href="<?php echo ASSETS; ?>css/admin-users.css">
+    <link rel="stylesheet" href="<?php echo ASSETS; ?>css/admin-produits.css">
     <title><?php echo $title ?? 'Pixel Plush'; ?></title>
 </head>
 

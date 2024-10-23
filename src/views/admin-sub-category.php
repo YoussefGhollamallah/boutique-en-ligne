@@ -24,17 +24,22 @@
 
     <!-- Hidden form -->
     <form class="HiddenForm" id="hiddenForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data" style="display: none;">
-        <section class="container2">
+        <section class="container">
             <section class="section">
                 <button id="Add" type="button">Ajouter</button>
                 <img class="logo" src="../../assets/images/logo.png" alt="">
-                <label for="categoriesHidden">Modifier le Nom</label>
-                <input type="text" id="categoriesHidden" placeholder="Name" name="nomHidden">
+                <label for="newName">Modifier le Nom</label>
+                <input type="text" id="newName" placeholder="Name" name="newName">
             </section>
             <section class="section">
                 <textarea name="descHidden" id="descHidden" rows="4" placeholder="Description"></textarea>
             </section>
-            <input type="submit" class="btn btn-ajouter" value="Valider">
+            <input type="submit" class="btn-Modifier" value="Modifier">
+            <label for="cible">Cible</label>
+            <select id="cible" name="cible" multiple size="5"></select>
+            <input type="submit" class="btn-Supprimer" value="Supprimer">
+            <label for="sup">Supprimer</label>
+            <select id="sup" name="sup" multiple size="5"></select>
         </section>
     </form>
 

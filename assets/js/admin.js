@@ -76,19 +76,22 @@ document.addEventListener('DOMContentLoaded', function () {
         sendData();
     });
 
-    // Get the visible form and hidden form
     let form = document.getElementById('categoryForm');
     let hiddenForm = document.getElementById('hiddenForm');
 
-    // Add an event listener to the modify button
     let modify = document.querySelector('#modify');
     modify.addEventListener('click', function () {
         console.log('Clicked');
         
-        // Hide the current form
         form.style.display = 'none';
         
-        // Show the hidden form
         hiddenForm.style.display = 'block';
     });
+
+    let add = document.querySelector('#Add')
+
+    add.addEventListener('click', function(){
+        form.style.display = 'block'
+        hiddenForm.style.display = 'none'
+    })
 });

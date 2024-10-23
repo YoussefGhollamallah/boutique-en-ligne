@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 
 $bdd = connexionBDD();
 
-if (!empty($_POST)) {
+if (!empty($_POST['Form'])) {
     $nom = trim($_POST['nom']); 
     $desc = trim($_POST['desc']);
 
@@ -31,5 +31,25 @@ if (!empty($_POST)) {
     }
 } else {
     echo "No POST data received.";
+}
+
+if(!empty($_POST['HiddenForm'])){
+    $hiddenName = $_POST['newName'];
+    $hiddenDesc = $_POST['descHidden'];
+
+    if(strlen($hiddenName) > 0){
+        $cat = new CategoryModel();
+
+        $query = "SELECT COUNT(*) as count FROM SousCategorie WHERE nom_sc = :nom";
+        $stmt = $bdd->prepare($query);
+        $stmt->bindParam(':nom', $nom);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+        if($row['count'] > 0){
+            echo "This category is already like this !";
+        }
+    }
 }
 ?>

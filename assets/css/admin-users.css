@@ -1,0 +1,68 @@
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+/* Style des cellules */
+.user-table th,
+.user-table td {
+    border: 1px solid black;
+    padding: 10px;
+    font-family: 'Afaacad', sans-serif;
+}
+
+/* Ligne 1 */
+.line-1 {
+    background-color: var(--grey);
+    color: var(--background);
+}
+
+/* Autres lignes */
+.other-lines {
+    background-color: var(--background);
+}
+
+/* Version Mobile - 3 colonnes */
+@media (max-width: 768px) {
+    /* Cache toutes les colonnes sauf ID, Nom et Email */
+    .user-table tr th:nth-child(4),
+    .user-table tr td:nth-child(4),
+    .user-table tr th:nth-child(5),
+    .user-table tr td:nth-child(5),
+    .user-table tr th:nth-child(6),
+    .user-table tr td:nth-child(6) {
+        display: none;
+    }
+}
+
+/* Style pour les boutons d'action */
+.user-table button {
+    background-color: var(--blue);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.user-table button:hover {
+    background-color: var(--yellow);
+}
+
+.user-table .editable input,
+.user-table .editable textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+@media screen and (max-width: 600px) {
+    body {
+      padding: 10px;
+      margin: 10px;
+    }
+}

@@ -116,7 +116,6 @@ p {
 
 
 .section_categorie {
-    padding: 20px 0;
     border-radius: 10px;
 }
 
@@ -130,6 +129,7 @@ p {
     margin: 0 auto;
     padding: 20px;
     border-radius: 10px;
+    min-height: 400px;
     background-color: var(--blue);
 }
 
@@ -188,10 +188,7 @@ footer {
 }
 
 .section_products {
-    padding: 20px 0;
     text-align: center;
-
-
 }
 
 .section h2,
@@ -487,6 +484,14 @@ input[type="text"]:focus {
     margin: 0;
 }
 
+.carousel-item {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
 
 .dropdown {
     position: relative;
@@ -661,6 +666,9 @@ input[type="text"]:focus {
 
 @media screen and (max-width: 768px) {
 
+    .section_products a {
+        width: 100%;
+    }
 
     .hide_mobile {
         display: none;
@@ -751,12 +759,10 @@ input[type="text"]:focus {
 
     }
 
-    /* Phares */
+    /* Index */
     .section_phare {
         padding: 0;
     }
-
-    /* Carousel */
 
     .carousel-caption {
         width: 80%;
@@ -767,6 +773,26 @@ input[type="text"]:focus {
 
     .article_phare {
         border-radius: 0;
+    }
+
+    .article_produit {
+        padding: 10px 0;
+        gap: 0;
+    }
+
+    .card_produit {
+        margin: 15px 0;
+        padding: 20px 0;
+        width: 100%;
+        border-radius: 0;
+    }
+    .article_categorie {
+        margin: 20px 5px;
+        gap: 10px;
+    }
+    .card_categorie img {
+        height: 110px;
+        width: 110px;
     }
 
     /* PAGE404 */

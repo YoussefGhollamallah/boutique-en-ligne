@@ -68,7 +68,7 @@
 
     <!-- BANDEAU -->
     <section class="section">
-        <h2>Retrouve tes personnages préférés à câliner</h2>
+        <h2>Retrouve tes personnages préférés à câliner !</h2>
     </section>
 
     <main>
@@ -82,7 +82,6 @@
     <footer>
         <p>&copy; Pixel Plush 2024</p>
     </footer>
-
     <script src="<?php echo ASSETS; ?>/js/burger.js"></script>
     <script src="<?php echo ASSETS; ?>/js/ancre.js"></script>
 

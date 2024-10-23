@@ -7,8 +7,9 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
 
 ?>
 
+
 <section class="section_phare">
-    <h3>Produits phares</h3>
+    <h3>Nos Nouveautés</h3>
     <article class="article_phare flex space-around carousel slide" data-ride="carousel">
         <div class="carousel-inner">
             <?php
@@ -18,15 +19,17 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
                 $activeClass = $isActive ? 'active' : '';
                 $isActive = false;
             ?>
-                <div class="carousel-item <?php echo $activeClass; ?>">
-                    <div class="product-details">
-                        <img src="assets/images/<?php echo $produit['image']; ?>" alt="Produit <?php echo $nomProduit; ?>">
-                        <div class="carousel-caption">
-                            <h5><?php echo $nomProduit; ?></h5>
-                            <p><?php echo $produit['description']; ?></p>
+                <a href="./detail/<?php echo $produit['id'] ?>">
+                    <div class="carousel-item <?php echo $activeClass; ?>">
+                        <div class="product-details">
+                            <img src="assets/images/<?php echo $produit['image']; ?>" alt="Peluche de <?php echo $nomProduit; ?>">
+                            <div class="carousel-caption">
+                                <h5><?php echo $nomProduit; ?></h5>
+                                <p><?php echo $produit['description']; ?></p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             <?php
             }
             ?>
@@ -43,10 +46,10 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
     <h3 id="title_categorie" class="text-center">Catégorie</h3>
     <article class="flex flex-wrap article_categorie space-around">
         <a href="#" class="card_categorie box_shadow flex-column">
-            <img src="assets/images/jeux_videos.png" class="" alt="Catégorie jeux video">
+            <img src="assets/images/jeux_videos.png" alt="Catégorie jeux video">
         </a>
         <a href="#" class="card_categorie box_shadow flex-column">
-            <img src="assets/images/films_&_series.png" class="" alt="Catégorie Films et Séries">
+            <img src="assets/images/films_&_series.png" alt="Catégorie Films et Séries">
         </a>
     </article>
 </section>
@@ -70,3 +73,4 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
         ?>
     </article>
 </section>
+<script src="assets/js/carousel.js"></script>

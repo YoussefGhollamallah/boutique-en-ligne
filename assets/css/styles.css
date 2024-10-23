@@ -665,7 +665,8 @@ input[type="text"]:focus {
 /* Media queries */
 
 @media screen and (max-width: 768px) {
-    a {
+
+    .section_products a {
         width: 100%;
     }
 
@@ -758,12 +759,10 @@ input[type="text"]:focus {
 
     }
 
-    /* Phares */
+    /* Index */
     .section_phare {
         padding: 0;
     }
-
-    /* Index */
 
     .carousel-caption {
         width: 80%;
@@ -786,6 +785,14 @@ input[type="text"]:focus {
         padding: 20px 0;
         width: 100%;
         border-radius: 0;
+    }
+    .article_categorie {
+        margin: 20px 5px;
+        gap: 10px;
+    }
+    .card_categorie img {
+        height: 110px;
+        width: 110px;
     }
 
     /* PAGE404 */

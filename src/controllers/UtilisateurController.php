@@ -16,4 +16,8 @@ class UtilisateurController{
     {
         return $this->modelUtilisateur->getRoles();
     }
+    public function updateUser($userId, $nom, $prenom, $email, $role_id)
+    {
+        return $this->modelUtilisateur->updateUser($userId, $nom, $prenom, $email, $role_id);
+    }
 }

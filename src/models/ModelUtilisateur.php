@@ -25,5 +25,16 @@ class ModelUtilisateur
         }
     }
 
+    public function getRoles()
+    {
+        try{
+            $requete = $this->connexion->prepare("SELECT * FROM Role");
+            $requete->execute();
+            $result = $requete->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la récupération des rôles : " . $e->getMessage());
+        }
+    }
 
 }

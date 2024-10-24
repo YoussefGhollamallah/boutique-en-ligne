@@ -12,4 +12,8 @@ class UtilisateurController{
         return $this->modelUtilisateur->getAllUsers();
     }
 
+    public function getRoles()
+    {
+        return $this->modelUtilisateur->getRoles();
+    }
 }

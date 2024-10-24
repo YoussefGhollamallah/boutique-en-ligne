@@ -304,7 +304,9 @@ a {
 }
 
 /* Formulaire */
-input[type="text"] {
+input[type="text"],
+input[type="email"],
+select {
     padding: 10px;
     border-radius: 10px;
     border: 2px solid #33333350;
@@ -312,7 +314,9 @@ input[type="text"] {
     height: min-content;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus {
     border: 2px solid #333;
 }
 

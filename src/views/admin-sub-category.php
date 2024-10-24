@@ -28,7 +28,7 @@
     <section class="container">
         <section class="section">
             <button id="Add" type="button">Ajouter</button>
-            <img class="logo" src="../../assets/images/logo.png" alt="">
+            <img class="logo" src="../../assets/images/logo_etabli.png" alt="">
             <label for="newName">Modifier le Nom</label>
             <input type="text" id="newName" placeholder="Name" name="newName">
         </section>
@@ -55,7 +55,6 @@
         <label for="sup">Supprimer</label>
         <select id="sup" name="sup[]" multiple size="5">
             <?php
-            // Réutilisation des mêmes catégories pour la suppression
             if (!empty($categories)) {
                 foreach ($categories as $category) {
                     echo '<option value="' . htmlspecialchars($category['id_sousCategorie']) . '">' . htmlspecialchars($category['nom_sc']) . '</option>';

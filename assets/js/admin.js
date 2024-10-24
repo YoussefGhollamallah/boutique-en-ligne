@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Handle the submission of the main form
     document.querySelector('.btn-ajouter').addEventListener('click', function (e) {
         e.preventDefault();
         const form = document.getElementById('categoryForm');
@@ -66,20 +67,27 @@ document.addEventListener('DOMContentLoaded', function () {
         sendData(formData);
     });
 
+    // Toggling between the forms
     let form = document.getElementById('categoryForm');
     let hiddenForm = document.getElementById('hiddenForm');
 
     let modify = document.querySelector('#modify');
     modify.addEventListener('click', function () {
         console.log('Modification clique');
-        
         form.style.display = 'none';
-        hiddenForm.style.display = 'block';
+        hiddenForm.style.display = 'block';  // Make sure this is set to 'block'
     });
 
     let add = document.querySelector('#Add');
     add.addEventListener('click', function () {
         form.style.display = 'block';
-        hiddenForm.style.display = 'none';
+        hiddenForm.style.display = 'none';  // Make sure this is set to 'none'
+    });
+
+    document.querySelector('#delete').addEventListener('click', function (e) {
+        e.preventDefault();
+        const form = document.getElementById('hiddenForm');
+        const formData = new FormData(form);
+        sendData(formData);
     });
 });

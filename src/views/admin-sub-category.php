@@ -1,3 +1,10 @@
+<?php 
+// include('CatchThis.php');
+include('../controllers/AdminTreatments.php');
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +32,8 @@
 
    <!-- Formulaire caché pour la modification -->
 <form class="HiddenForm" id="hiddenForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data" style="display: none;">
-    <section class="container">
+   
+<section class="container">
         <section class="section">
             <button id="Add" type="button">Ajouter</button>
             <img class="logo" src="../../assets/images/logo_etabli.png" alt="">
@@ -35,10 +43,10 @@
         <section class="section">
             <textarea name="descHidden" id="descHidden" rows="4" placeholder="Description"></textarea>
         </section>
-
         <label for="cible">Cible</label>
         <select id="cible" name="cible[]" multiple size="5">
             <?php
+                var_dump($categories);
             // Affichage des catégories
             if (!empty($categories)) {
                 foreach ($categories as $category) {
@@ -53,7 +61,7 @@
 
         <!-- Sélection pour la suppression des catégories -->
         <label for="sup">Supprimer</label>
-        <select id="sup" name="sup[]" multiple size="5">
+        <select id="sup" name="sup" multiple size="5">
             <?php
             if (!empty($categories)) {
                 foreach ($categories as $category) {
@@ -64,6 +72,7 @@
             }
             ?>
         </select>
+        <button id='delete' name='delete' type="submit">Supprimer</button>
     </section>
 </form>
 

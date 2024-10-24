@@ -11,13 +11,19 @@ $bdd = connexionBDD();
 $categoryModel = new CategoryModel();
 $categories = $categoryModel->getCategories();
 
+
+
+// var_dump($categories);
+
+// if (empty($categories)) {
+//     error_log("No categories fetched from the database.");
+// }
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['nom'], $_POST['desc'])) {
         $nom = trim($_POST['nom']);
         $desc = trim($_POST['desc']);
-
         if (!empty($nom)) {
-            // Vérification de l'existence de la catégorie
             $query = "SELECT COUNT(*) as count FROM SousCategorie WHERE nom_sc = :nom";
             $stmt = $bdd->prepare($query);
             $stmt->bindParam(':nom', $nom);
@@ -48,13 +54,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($dropdown as $selectedCible) {
                 try {
                     $categoryModel->ModifyCat($hiddenName, $hiddenDesc, $selectedCible);
-                } catch (Exception $e) {
-                    echo "Erreur lors de la modification de la catégorie : " . $e->getMessage();
+                } catch (Exception $error) {
+                    echo "Erreur lors de la modification de la catégorie : " . $error->getMessage();
                 }
             }
             echo "Modification réussie.";
         } else {
             echo "Veuillez sélectionner une catégorie et fournir un nouveau nom.";
+        }
+    }
+
+    if(isset($_POST['sup'])){
+        try{
+            $categoryModel->Delete($_POST['sup']);
+            echo "succès";
+        } catch(Exception $e){
+            echo "Erreur de suspression" . $e;
         }
     }
 }

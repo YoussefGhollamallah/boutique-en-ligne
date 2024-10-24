@@ -25,5 +25,10 @@ class CategoryModel
         $stmt = $this->connexion->query('SELECT * FROM SousCategorie');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function Delete($id) {
+        $stmt = $this->connexion->prepare('DELETE FROM SousCategorie WHERE id_sousCategorie = ?');
+        $stmt->execute([$id]);
+    }
 }
 ?>

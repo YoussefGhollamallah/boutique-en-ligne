@@ -15,21 +15,16 @@ class ModelProduit
 
     public function getAllProducts()
     {
-        try 
-        {
+        try {
             $requete = $this->connexion->prepare("SELECT * FROM Produit 
+
                 INNER JOIN Categorie ON Produit.id_categorie = Categorie.id_categorie 
-                INNER JOIN SousCategorie ON Produit.id_sousCategorie = SousCategorie.id_sousCategorie");
+                INNER JOIN SousCategorie ON Produit.id_sousCategorie = SousCategorie.id_sousCategorie order by Produit.id asc");
             $requete->execute();
             $result = $requete->fetchAll(PDO::FETCH_ASSOC);
-
             return $result;
         } catch (Exception $e) {
-            // Gérer l'erreur ou la journaliser
             throw new Exception("Erreur lors de la récupération des produits : " . $e->getMessage());
-        } finally {
-            // Ferme la connexion après la requête
-            $this->connexion = null;
         }
     }
 
@@ -42,11 +37,7 @@ class ModelProduit
 
             return $result;
         } catch (Exception $e) {
-            // Gérer l'erreur ou la journaliser
             throw new Exception("Erreur lors de la récupération du produit : " . $e->getMessage());
-        } finally {
-            // Ferme la connexion après la requête
-            $this->connexion = null;
         }
     }
 
@@ -58,17 +49,13 @@ class ModelProduit
                 VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)");
             $requete->execute([$nom, $description, $prix, $quantite, $image, $categorie, $sous_categorie]);
         } catch (Exception $e) {
-            // Gérer l'erreur ou la journaliser
             throw new Exception("Erreur lors de l'ajout du produit : " . $e->getMessage());
-        } finally {
-            // Ferme la connexion après la requête
-            $this->connexion = null;
         }
     }
 
     public function updateProduct($id, $data)
     {
-        $allowedFields = ['nom', 'description', 'prix', 'quantite'];
+        $allowedFields = ['nom', 'description', 'prix', 'quantite', 'image'];
         $updates = [];
         $params = [];
 
@@ -96,11 +83,18 @@ class ModelProduit
 
             return $result;
         } catch (Exception $e) {
-            // Gérer l'erreur ou la journaliser
             throw new Exception("Erreur lors de l'exécution de la requête : " . $e->getMessage());
-        } finally {
-            // Ferme la connexion après la requête
-            $this->connexion = null;
+        }
+    }
+
+    public function getLastThreeProducts()
+    {
+        try {
+            $requete = $this->connexion->prepare("SELECT * FROM Produit ORDER BY date_ajout DESC LIMIT 3");
+            $requete->execute();
+            return $requete->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la récupération des derniers produits : " . $e->getMessage());
         }
     }
 }

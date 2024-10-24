@@ -27,8 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($row['count'] > 0) {
                 echo "Cette catégorie existe déjà !";
             } else {
-                $categoryModel->AddCat($nom, $desc);
-                echo "Catégorie ajoutée avec succès !";
+                try {
+                    $categoryModel->AddCat($nom, $desc);
+                    echo "Catégorie ajoutée avec succès !";
+                } catch (Exception $e) {
+                    echo "Erreur lors de l'ajout de la catégorie : " . $e->getMessage();
+                }
             }
         } else {
             echo "Veuillez fournir un nom de catégorie.";
@@ -42,7 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!empty($hiddenName) && !empty($dropdown)) {
             foreach ($dropdown as $selectedCible) {
-                $categoryModel->ModifyCat($hiddenName, $hiddenDesc, $selectedCible);
+                try {
+                    $categoryModel->ModifyCat($hiddenName, $hiddenDesc, $selectedCible);
+                } catch (Exception $e) {
+                    echo "Erreur lors de la modification de la catégorie : " . $e->getMessage();
+                }
             }
             echo "Modification réussie.";
         } else {

@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <form class="Form" id="categoryForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data">
+<form class="Form" id="categoryForm" action="../controllers/AdminTreatments.php" method="post" enctype="multipart/form-data">
         <section class="container">
             <section class="section">
                 <button id="modify" type="button">Modifier</button>
@@ -36,7 +36,6 @@
             <textarea name="descHidden" id="descHidden" rows="4" placeholder="Description"></textarea>
         </section>
 
-        <!-- Sélection pour la modification des catégories -->
         <label for="cible">Cible</label>
         <select id="cible" name="cible[]" multiple size="5">
             <?php

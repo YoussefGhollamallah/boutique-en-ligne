@@ -22,7 +22,7 @@ class CategoryModel
     }
 
     public function getCategories() {
-        $stmt = $this->connexion->query('SELECT id_sousCategorie, nom_sc FROM SousCategorie');
+        $stmt = $this->connexion->query('SELECT * FROM SousCategorie');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

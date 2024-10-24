@@ -23,29 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.appendChild(messageElement);
     }
 
-    async function sendData() {
-        const nom = document.querySelector('#nom').value.trim();
-        const desc = document.querySelector('#desc').value.trim();
-
-        if (nom.length === 0 || desc.length === 0) {
-            displayMessage('Veuillez fournir un nom et une description.', false);
-            return;
-        }
-
-        console.log('Envoi des données:', { nom, desc });
-
-        const formData = new URLSearchParams();
-        formData.append('nom', nom);
-        formData.append('desc', desc);
-        console.log('Données envoyées à PHP:', formData.toString());
-
+    async function sendData(formData) {
         try {
-            const response = await fetch('../../src/controllers/AdminTreatments.php', {
+            const response = await fetch('../controllers/AdminTreatments.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: formData.toString(),
+                body: formData
             });
 
             if (response.ok) {
@@ -53,15 +35,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 const trimmedData = data.trim();
                 console.log('Réponse reçue:', trimmedData);
             
-                if (trimmedData === "Catégorie ajoutée avec succès !") {
-                    displayMessage('Catégorie ajoutée avec succès !', true);
+                if (trimmedData.includes("succès") || trimmedData.includes("réussie")) {
+                    displayMessage(trimmedData, true);
                     setTimeout(function () {
-                        window.location.href = '../views/admin-sub-category.php';
+                        window.location.reload();
                     }, 4000);
-                } else if (trimmedData === "Cette catégorie existe déjà !") {
-                    displayMessage('Cette catégorie existe déjà !', false);
                 } else {
-                    displayMessage(`Réponse inattendue : ${trimmedData}`, false);
+                    displayMessage(trimmedData, false);
                 }
             } else {
                 displayMessage(`Erreur serveur : ${response.statusText}`, false);
@@ -74,7 +54,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector('.btn-ajouter').addEventListener('click', function (e) {
         e.preventDefault();
-        sendData();
+        const form = document.getElementById('categoryForm');
+        const formData = new FormData(form);
+        sendData(formData);
+    });
+
+    document.querySelector('.btn-Modifier').addEventListener('click', function (e) {
+        e.preventDefault();
+        const form = document.getElementById('hiddenForm');
+        const formData = new FormData(form);
+        sendData(formData);
     });
 
     let form = document.getElementById('categoryForm');

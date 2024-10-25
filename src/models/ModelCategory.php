@@ -4,8 +4,6 @@ require_once('db.php');
 class CategoryModel
 {
     private $connexion;
-    public string $description;
-
 
     public function __construct()
     {
@@ -18,10 +16,19 @@ class CategoryModel
         $stmt->execute([$nom, $description]);
     }
 
-    public function Search($finder) {
-        $stmt = $this->connexion->prepare('SELECT * FROM SousCategorie WHERE description_sc = ?');
-        $stmt->execute([$description]);
+    public function ModifyCat($nom, $description, $id) {
+        $stmt = $this->connexion->prepare('UPDATE SousCategorie SET nom_sc = ?, description_sc = ? WHERE id_sousCategorie = ?');
+        $stmt->execute([$nom, $description, $id]);
+    }
+
+    public function getCategories() {
+        $stmt = $this->connexion->query('SELECT * FROM SousCategorie');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function Delete($id) {
+        $stmt = $this->connexion->prepare('DELETE FROM SousCategorie WHERE id_sousCategorie = ?');
+        $stmt->execute([$id]);
     }
 }
 ?>

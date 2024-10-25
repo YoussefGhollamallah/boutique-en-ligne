@@ -25,3 +25,4 @@ class ProduitController
         return $this->modelProduit->getLastThreeProducts();
     }
 }
+?>

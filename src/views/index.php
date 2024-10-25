@@ -6,8 +6,6 @@ $products = $produitController->getAllProducts();
 $lastThreeProducts = $produitController->getLastThreeProducts();
 
 ?>
-
-
 <section class="section_phare">
     <h3>Nos Nouveautés</h3>
     <article class="article_phare flex space-around carousel slide" data-ride="carousel">
@@ -42,13 +40,13 @@ $lastThreeProducts = $produitController->getLastThreeProducts();
         </a>
     </article>
 </section>
-<section class="section_categorie   flex column ">
+<section class="section_categorie flex column ">
     <h3 id="title_categorie" class="text-center">Catégorie</h3>
     <article class="flex flex-wrap article_categorie space-around">
-        <a href="#" class="card_categorie box_shadow flex-column">
+        <a href="categories.php?category=jeux_videos" class="card_categorie box_shadow flex-column">
             <img src="assets/images/jeux_videos.png" alt="Catégorie jeux video">
         </a>
-        <a href="#" class="card_categorie box_shadow flex-column">
+        <a href="categories.php?category=films_series" class="card_categorie box_shadow flex-column">
             <img src="assets/images/films_&_series.png" alt="Catégorie Films et Séries">
         </a>
     </article>

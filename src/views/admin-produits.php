@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../controllers/ProduitController.php';
 
 // Crée une instance de ProduitController
 $produitController = new ProduitController();

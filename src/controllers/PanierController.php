@@ -20,18 +20,21 @@ class PanierController
     }
 
     public function supprimerProduit($idProduit)
-{
-    return $this->modelPanier->supprimerProduitDuPanier($idProduit);
-}
-
-
-    public function mettreAJourQuantiteProduit($idProduit, $quantite)
     {
-        $this->modelPanier->mettreAJourQuantite($idProduit, $quantite);
+        return $this->modelPanier->supprimerProduitDuPanier($idProduit);
     }
+
 
     public function mettreAJourCheckedProduit($idProduit, $checked)
     {
         return $this->modelPanier->mettreAJourChecked($idProduit, $checked);
     }
+
+    public function mettreAJourQuantite($idProduit, $quantite)
+{
+    $quantiteMax = $this->modelPanier->getQuantiteDisponible($idProduit);
+    $quantiteAjustee = min($quantite, $quantiteMax);
+    return $this->modelPanier->mettreAJourQuantite($idProduit, $quantiteAjustee);
+}
+
 }

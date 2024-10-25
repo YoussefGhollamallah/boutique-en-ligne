@@ -4,13 +4,39 @@ session_start();
 $panierController = new PanierController();
 $panier = $panierController->afficherPanier();
 
-$totalPanier = 0; // Initialiser le total du panier
+$totalPanier = 0;
 if (!empty($panier)) {
-    // Calculer le total du panier
     foreach ($panier as $produit) {
         if (isset($produit['checked']) && $produit['checked']) {
             $totalPanier += $produit['prix'] * $produit['quantite'];
         }
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['action']) && $_POST['action'] == 'supprimerProduit') {
+        $idProduit = intval($_POST['id']);
+        $result = $panierController->supprimerProduit($idProduit);
+        if ($result) {
+            echo "Le produit a bien été retiré du panier";
+        } else {
+            echo "Erreur lors de la suppression du produit";
+        }
+        exit;
+    }
+
+    if (isset($_POST['action']) && $_POST['action'] == 'mettreAJourQuantite') {
+        $idProduit = intval($_POST['id']);
+        $quantite = intval($_POST['quantite']);
+        $panierController->mettreAJourQuantite($idProduit, $quantite);
+        exit;
+    }
+
+    if (isset($_POST['action']) && $_POST['action'] == 'mettreAJourChecked') {
+        $idProduit = intval($_POST['id']);
+        $checked = $_POST['checked'] === 'true';
+        $panierController->mettreAJourCheckedProduit($idProduit, $checked);
+        exit;
     }
 }
 ?>
@@ -29,115 +55,115 @@ if (!empty($panier)) {
                 <p><?php echo htmlspecialchars($produit['description']); ?></p>
                 <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?></span> €</p>
                 <p>Quantité :</p>
-                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" class="quantite-input" data-id="<?php echo htmlspecialchars($idProduit); ?>">
+                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" max="<?php echo intval($produit['quantite_max']); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($idProduit); ?>">
                 <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
-                <button class="btn-supprimer" data-id="<?= $produit['id']; ?>">Supprimer</button>
+                <button class="btn btn-supprimer" data-id="<?php echo intval($produit['id']); ?>">Supprimer</button>
             </div>
         <?php } ?>
+
         <h4>Total du panier : <span id="total-panier"><?php echo number_format($totalPanier, 2, ',', ' '); ?> €</span></h4>
-        <button class="btn-valider">Valider la commande</button>
+        <button class="btn btn-ajouter">Valider la commande</button>
     <?php } else { ?>
         <p>Votre panier est vide.</p>
     <?php } ?>
 </section>
 
+<div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: red; color: #e1664d; padding: 10px; border-radius: 20px;">
+    <p id="confirmation-message"></p>
+</div>
+
 <script>
-    // Fonction pour mettre à jour le total d'un produit
-    function updateTotalProduit(idProduit) {
-        const produitElement = document.getElementById('produit_' + idProduit);
-        const prix = parseFloat(produitElement.querySelector('.prix-produit').textContent);
-        const quantite = parseInt(produitElement.querySelector('.quantite-input').value);
+function updateTotalProduit(idProduit) {
+    const produitElement = document.getElementById('produit_' + idProduit);
+    const prix = parseFloat(produitElement.querySelector('.prix-produit').textContent);
+    const quantite = parseInt(produitElement.querySelector('.quantite-input').value);
 
-        if (!isNaN(prix) && !isNaN(quantite) && quantite > 0) {
-            const totalProduit = prix * quantite;
-            produitElement.querySelector('.produit-total').textContent = totalProduit.toFixed(2) + ' €';
+    if (!isNaN(prix) && !isNaN(quantite) && quantite > 0) {
+        const totalProduit = prix * quantite;
+        produitElement.querySelector('.produit-total').textContent = totalProduit.toFixed(2) + ' €';
+    }
+    updateTotalPanier();
+    saveQuantite(idProduit, quantite);
+}
+
+function updateTotalPanier() {
+    let total = 0;
+
+    document.querySelectorAll('.card_produit').forEach(produit => {
+        const checkbox = produit.querySelector('.produit-checkbox');
+        const prix = parseFloat(produit.querySelector('.prix-produit').textContent);
+        const quantite = parseInt(produit.querySelector('.quantite-input').value);
+
+        if (checkbox.checked && !isNaN(prix) && !isNaN(quantite) && quantite > 0) {
+            total += prix * quantite;
         }
-        updateTotalPanier(); // Mettez à jour le total du panier après chaque modification
-    }
-
-    // Fonction pour mettre à jour le total du panier
-    function updateTotalPanier() {
-        let total = 0;
-
-        document.querySelectorAll('.card_produit').forEach(produit => {
-            const checkbox = produit.querySelector('.produit-checkbox');
-            const prix = parseFloat(produit.querySelector('.prix-produit').textContent);
-            const quantite = parseInt(produit.querySelector('.quantite-input').value);
-
-            if (checkbox.checked && !isNaN(prix) && !isNaN(quantite) && quantite > 0) {
-                total += prix * quantite;
-            }
-        });
-
-        document.getElementById('total-panier').textContent = total.toFixed(2).replace('.', ',') + ' €'; // Remplacer le point par une virgule
-    }
-
-    // Fonction pour sauvegarder l'état des cases à cocher
-    function saveCheckboxState() {
-        const checkboxStates = {};
-
-        document.querySelectorAll('.produit-checkbox').forEach(checkbox => {
-            checkboxStates[checkbox.dataset.id] = checkbox.checked;
-        });
-
-        localStorage.setItem('checkboxStates', JSON.stringify(checkboxStates));
-    }
-
-    // Fonction pour charger l'état des cases à cocher
-    function loadCheckboxState() {
-        const checkboxStates = JSON.parse(localStorage.getItem('checkboxStates')) || {};
-
-        document.querySelectorAll('.produit-checkbox').forEach(checkbox => {
-            const produitId = checkbox.dataset.id;
-            checkbox.checked = checkboxStates[produitId] || false; // Met à jour l'état de la case à cocher
-        });
-    }
-
-    // Ajoutez des écouteurs d'événements pour chaque case à cocher et entrée de quantité
-    document.querySelectorAll('.produit-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            updateTotalPanier();
-            saveCheckboxState(); // Sauvegardez l'état lorsque la case est cochée ou décochée
-        });
     });
 
-    document.querySelectorAll('.quantite-input').forEach(input => {
-        input.addEventListener('input', function() {
-            updateTotalProduit(this.dataset.id);
-        });
-    });
+    document.getElementById('total-panier').textContent = total.toFixed(2).replace('.', ',') + ' €';
+}
 
-    // Chargez l'état des cases à cocher au chargement de la page
-    document.addEventListener('DOMContentLoaded', function() {
-        loadCheckboxState();
-        updateTotalPanier(); // Mettez également à jour le total du panier
+function saveQuantite(idProduit, quantite) {
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=mettreAJourQuantite&id=${idProduit}&quantite=${quantite}`
     });
+}
 
-    // Fonction pour supprimer un produit du panier
-    document.querySelectorAll('.btn-supprimer').forEach(button => {
+function saveCheckboxState(idProduit, checked) {
+    fetch('', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=mettreAJourChecked&id=${idProduit}&checked=${checked}`
+    });
+}
+
+document.querySelectorAll('.produit-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        updateTotalPanier();
+        saveCheckboxState(this.dataset.id, this.checked);
+    });
+});
+
+document.querySelectorAll('.quantite-input').forEach(input => {
+    input.addEventListener('input', function() {
+        updateTotalProduit(this.dataset.id);
+    });
+});
+
+document.querySelectorAll('.btn-supprimer').forEach(button => {
     button.addEventListener('click', function() {
         const idProduit = this.dataset.id;
-        fetch('index.php', {
+        fetch('', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify({
-                action: 'supprimerProduit',
-                id: idProduit,
-            }),
+            body: `action=supprimerProduit&id=${idProduit}`
         })
-        .then(response => response.json())
+        .then(response => response.text())
         .then(data => {
-            if (data.success) {
-                const produitElement = document.getElementById('produit_' + idProduit);
-                produitElement.remove(); // Retire le produit du DOM
-                updateTotalPanier(); // Mettez à jour le total après suppression
-            } else {
-                console.error('Erreur lors de la suppression du produit:', data.message);
+            document.getElementById('confirmation-message').textContent = data;
+            const popup = document.getElementById('confirmation-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3000);
+
+            const produitElement = document.getElementById('produit_' + idProduit);
+            if (produitElement) {
+                produitElement.remove();
             }
+            updateTotalPanier();
         })
         .catch(error => console.error('Erreur:', error));
     });
 });
+
+document.addEventListener('DOMContentLoaded', updateTotalPanier);
+
 </script>

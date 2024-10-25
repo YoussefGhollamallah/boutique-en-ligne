@@ -10,37 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action']) && $_POST['action'] == 'ajouterProduitAuPanier') {
         $panierController = new PanierController();
         $idProduit = intval($_POST['id']);
-        $quantite = intval($_POST['quantite']);
-        $panierController->ajouterProduitAuPanier($idProduit, $quantite);
-    }
-
-    if (isset($_POST['action']) && $_POST['action'] == 'supprimerProduit') {
-        $panierController = new PanierController();
-        $idProduit = intval($_POST['id']);
-        $panierController->supprimerProduit($idProduit);
-        // Vous pouvez envoyer une réponse ici si nécessaire
-        exit; // Sortir pour ne pas exécuter le reste du code
-    }
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
-
-    if (isset($data['action'])) {
-        $panierController = new PanierController();
-
-        if ($data['action'] === 'supprimerProduit' && isset($data['id'])) {
-            $idProduit = intval($data['id']);
-            $result = $panierController->supprimerProduit($idProduit);
-
-            if ($result) {
-                echo json_encode(['success' => true]);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Le produit n\'a pas pu être supprimé.']);
-            }
-            exit;
-        }
+        $panierController->ajouterProduitAuPanier($idProduit, 1); // Quantité fixée à 1
+        echo "Le produit a bien été ajouté au panier.";
+        exit;
     }
 }
 ?>
@@ -95,11 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($nomProduit); ?>">
                 <h4><?php echo htmlspecialchars($nomProduit); ?></h4>
                 <p><?php echo htmlspecialchars($produit['prix']); ?> €</p>
-                <form method="POST" action="index">
+                <form class="form-ajouter-panier" method="POST" action="">
                     <input type="hidden" name="id" value="<?php echo intval($produit['id']); ?>">
                     <input type="hidden" name="action" value="ajouterProduitAuPanier">
-                    <input type="number" name="quantite" value="1" min="1" style="width: 60px;">
-                    <input type="submit" value="Ajouter au panier">
+                    <button class="btn btn-ajouter" type="submit">Ajouter au panier</button>
                 </form>
             </div>
         <?php
@@ -107,3 +78,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
     </article>
 </section>
+
+<div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 20px;">
+    <p id="confirmation-message"></p>
+</div>
+
+<script>
+document.querySelectorAll('.form-ajouter-panier').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        fetch('', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('confirmation-message').textContent = data;
+            const popup = document.getElementById('confirmation-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3000);
+        })
+        .catch(error => console.error('Erreur:', error));
+    });
+});
+</script>

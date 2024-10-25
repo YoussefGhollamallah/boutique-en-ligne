@@ -59,7 +59,7 @@ class HomeController
     // Pour afficher la page detail
     public function showDetail()
     {
-        $title = 'Pixel Plush - Détails';
+        $title = 'Pixel Plush - Détails';           // Modifier le titre de l'onglet pour qu'il n'affiche plus Détails mais le nom du produit
         $myView = new View('detail');
         $myView->setVars(['title' => $title]);
         $myView->render();

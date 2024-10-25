@@ -1,4 +1,14 @@
 RewriteEngine On
+
+# Bloquer les accès directs aux fichiers `.php` dans le dossier `src`
+RewriteCond %{REQUEST_URI} ^/boutique-en-ligne/src/.*\.php$ [NC]
+RewriteRule ^.*$ index.php?r=page404 [L]
+
+# Rediriger les URLs de pages spécifiques vers leurs contrôleurs respectifs
 RewriteRule ^detail/([0-9]+)$ index.php?r=detail&id=$1 [QSA,L]
+RewriteRule ^(index|panier|categories|profil|connexion|admin-produits|admin-users|admin-sub-category)$ index.php?r=$1 [QSA,L]
+
+# Si l'URL ne correspond pas à un fichier ou un dossier existant, rediriger vers la page 404
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.+)$ index.php?r=$1 [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ index.php?r=page404 [L]

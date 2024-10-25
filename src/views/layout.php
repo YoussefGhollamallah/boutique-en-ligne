@@ -25,7 +25,7 @@
         <div class="off-screen-menu hide_desktop">
             <ul>
                 <li>
-                    <a class="#" href="panier">Panier
+                    <a class="#" href="<?php echo BASE_URL; ?>panier">Panier
                         <img class="hw-50px" src="<?php echo ASSETS; ?>/images/panier.png" alt="panier logo">
                     </a>
                 </li>
@@ -44,17 +44,17 @@
                 <span></span>
             </div>
         </nav>
-        <a href="index">
+        <a href="<?php echo BASE_URL; ?>">
             <img src="<?php echo ASSETS; ?>/images/logo.png" class="logo" alt="logo">
         </a>
         <h1 class="hide_mobile">Pixel Plush</h1>
         <nav class="flex space-center vertical-center gap">
             <input class="hide_mobile" type="text" placeholder="Rechercher">
-            <a class="hide_mobile" href="panier">
+            <a class="hide_mobile" href="<?php echo BASE_URL; ?>panier">
                 <img class="hw-50px" src="<?php echo ASSETS; ?>/images/panier.png" alt="panier logo">
                 Panier
             </a>
-            <a class="flex column vertical-center" href="connexion">
+            <a class="flex column vertical-center" href="<?php echo BASE_URL; ?>connexion">
                 <img class="hw-50px" src="<?php echo ASSETS; ?>/images/utilisateur.png" alt="utilisateur logo">
                 <?php
                 if (isset($_SESSION['user'])) {

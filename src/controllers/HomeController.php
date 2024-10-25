@@ -58,12 +58,26 @@ class HomeController
 
     // Pour afficher la page detail
     public function showDetail()
-    {
-        $title = 'Pixel Plush - Détails';           // Modifier le titre de l'onglet pour qu'il n'affiche plus Détails mais le nom du produit
-        $myView = new View('detail');
-        $myView->setVars(['title' => $title]);
-        $myView->render();
+{
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+        $produitController = new ProduitController();
+        $produit = $produitController->getProductById($_GET['id']);
+        
+        if ($produit) {
+            $view = new View('detail');
+            $view->setVars(['produit' => $produit]);
+            $view->render();
+        } else {
+            // Redirige vers la page 404 si le produit n'existe pas
+            header("Location: index.php?r=page404");
+            exit;
+        }
+    } else {
+        header("Location: index.php?r=page404");
+        exit;
     }
+}
+
 
     public function showAdminProduits()
     {

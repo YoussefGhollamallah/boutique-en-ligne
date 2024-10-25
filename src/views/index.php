@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="product-details">
-                    <img src="assets/images/placeholder.png" alt="Produit 1">
+                    <img src="<?php echo ASSETS;?>/images/placeholder.png" alt="Produit 1">
                     <div class="carousel-caption">
                         <h5>Produit 1</h5>
                         <p>Description du produit 1</p>
@@ -47,11 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <section class="section_categorie flex column">
     <h3 id="title_categorie" class="text-center">Catégorie</h3>
     <article class="flex flex-wrap article_categorie space-around">
-        <a href="#" class="card_categorie flex-column">
-            <img src="assets/images/jeux_videos.png" alt="Catégorie jeux vidéo">
+        <a href="<?php echo BASE_URL; ?>categories" class="card_categorie flex-column">
+            <img src="<?php echo ASSETS;?>/images/jeux_videos.png" alt="Catégorie jeux vidéo">
         </a>
-        <a href="#" class="card_categorie flex-column">
-            <img src="assets/images/films_&_series.png" alt="Catégorie Films et Séries">
+        <a href="<?php echo BASE_URL; ?>categories"  class="card_categorie flex-column">
+            <img src="<?php echo ASSETS;?>/images/films_&_series.png" alt="Catégorie Films et Séries">
         </a>
     </article>
 </section>
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
         ?>
             <div class="card_produit">
-                <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($nomProduit); ?>">
+            <a href="<?php echo BASE_URL;?>detail/<?php echo intval($produit['id']); ?>"> <img class="card_produit_img" src="<?php echo ASSETS;?>/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($nomProduit); ?>"></a>
                 <h4><?php echo htmlspecialchars($nomProduit); ?></h4>
                 <p><?php echo htmlspecialchars($produit['prix']); ?> €</p>
                 <form class="form-ajouter-panier" method="POST" action="">

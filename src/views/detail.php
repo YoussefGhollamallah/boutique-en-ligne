@@ -1,38 +1,24 @@
 <?php
-
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $produitController = new ProduitController();
     $idProduit = $_GET['id'];
-
     $produit = $produitController->getProductById($idProduit);
 
     if ($produit) {
         $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
+        $title = "Pixel Plush - " . $nomProduit; // Définit le titre de la page
     } else {
-        // Si le produit n'existe pas, on redirige vers la page d'accueil
         header('Location: ../index.php');
         exit();
     }
 } else {
-    // Si l'id n'est pas défini ou n'est pas un nombre, on redirige vers la page d'accueil
     header('Location: ../index.php');
     exit();
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail du produit</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-
-<body>
     <section class="section_detail flex ">
-        <img class="card_produit_img card_produit_img_detail box-shadow" src="../assets/images/<?php echo $produit['image']; ?>" alt="<?php echo $nomProduit; ?>" class="product_detail_img">
+        <img class="card_produit_img card_produit_img_detail box-shadow" src="<?php echo ASSETS;?>/images/<?php echo $produit['image']; ?>" alt="<?php echo $nomProduit; ?>" class="product_detail_img">
         <article class="article_detail flex column justify-between ">
             <div class="description">
                 <h3><?php echo $nomProduit; ?></h3>
@@ -55,7 +41,4 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             </div>
         </article>
     </section>
-    <script src="../assets/js/detail.js"></script>
-</body>
-
-</html>
+    <script src="<?php echo ASSETS;?>/js/detail.js"></script>

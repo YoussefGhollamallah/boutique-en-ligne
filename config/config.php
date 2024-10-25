@@ -12,6 +12,8 @@ class myAutoload
 
         define('HOST', 'http://' . $host . '/boutique-en-ligne/');
         define('ROOT', $root . '/boutique-en-ligne/');
+        define('BASE_URL', '/boutique-en-ligne/'); // Remplacez par votre URL de base correcte
+
 
         define('CONTROLLER', ROOT . 'src/controllers/');
         define('VIEW', ROOT . 'src/views/');

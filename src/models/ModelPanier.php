@@ -6,7 +6,7 @@ class ModelPanier
 
     public function __construct()
     {
-        $conn = new Connexion();
+        $conn = new Connexion;
         $this->connexion = $conn->connexionBDD();
         $this->connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }

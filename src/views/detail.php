@@ -1,26 +1,32 @@
 <?php
 session_start();
 
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+if (isset($_GET['id']) && is_numeric($_GET['id'])) 
+{
     $produitController = new ProduitController();
     $idProduit = $_GET['id'];
     $produit = $produitController->getProductById($idProduit);
 
-    if ($produit) {
+    if ($produit) 
+    {
         $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
         $title = "Pixel Plush - " . $nomProduit; // Définit le titre de la page
-    } else {
+    } else 
+    {
         header('Location: ../index.php');
         exit();
     }
-} else {
+} else 
+{
     header('Location: ../index.php');
     exit();
 }
 
 // Vérifie si un produit doit être ajouté au panier
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['action']) && $_POST['action'] == 'ajouterProduitAuPanier') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+{
+    if (isset($_POST['action']) && $_POST['action'] == 'ajouterProduitAuPanier') 
+    {
         $panierController = new PanierController();
         $idProduit = intval($_POST['id']);
         // Vérification que 'quantite' est bien dans $_POST

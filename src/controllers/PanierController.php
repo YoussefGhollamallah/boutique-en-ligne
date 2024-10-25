@@ -31,10 +31,10 @@ class PanierController
     }
 
     public function mettreAJourQuantite($idProduit, $quantite)
-{
-    $quantiteMax = $this->modelPanier->getQuantiteDisponible($idProduit);
-    $quantiteAjustee = min($quantite, $quantiteMax);
-    return $this->modelPanier->mettreAJourQuantite($idProduit, $quantiteAjustee);
+    {
+        $quantiteMax = $this->modelPanier->getQuantiteDisponible($idProduit);
+        $quantiteAjustee = min($quantite, $quantiteMax);
+        return $this->modelPanier->mettreAJourQuantite($idProduit, $quantiteAjustee);
+    }
 }
-
-}
+?>

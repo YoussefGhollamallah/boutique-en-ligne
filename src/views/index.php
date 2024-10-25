@@ -1,4 +1,5 @@
 <?php
+//  Path: src/views/index.php
 include 'src/controllers/ProduitController.php';
 
 $produitController = new ProduitController();
@@ -6,6 +7,8 @@ $products = $produitController->getAllProducts();
 $lastThreeProducts = $produitController->getLastThreeProducts();
 
 ?>
+
+
 <section class="section_phare">
     <h3>Nos Nouveautés</h3>
     <article class="article_phare flex space-around carousel slide" data-ride="carousel">

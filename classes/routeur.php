@@ -15,8 +15,8 @@ class Routeur
         "detail"     => ["controller" => 'HomeController', "method" => 'showDetail'],
         "admin-produits"     => ["controller" => 'HomeController', "method" => 'showAdminProduits'],
         "admin-users" => ["controller" => 'HomeController', "method" => 'showAdminUsers'],
-        "admin-sub-category"     => ["controller" => 'HomeController', "method" => 'showAdminCategory']
-    ];
+        "admin-sub-category"     => ["controller" => 'HomeController', "method" => 'showAdminCategory'],
+     ];
 
     public function __construct($request)
     {

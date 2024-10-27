@@ -11,6 +11,14 @@ class HomeController
         $myView->render(); // Passer les variables dans les parenthèse pour afficher les objets
     }
 
+    public function showInscription()
+    {
+        $title = 'Pixel Plush - Inscription';
+        $myView = new View('inscription');
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+
     // Pour afficher la page panier
     public function showPanier()
     {
@@ -46,6 +54,7 @@ class HomeController
         $myView->setVars(['title' => $title]);
         $myView->render();
     }
+
 
     // Pour afficher la page connexion
     public function showConnexion()
@@ -98,4 +107,6 @@ class HomeController
         $myView->setVars(['title' => $title]);
         $myView->render();
     }
+
+
 }

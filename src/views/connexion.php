@@ -5,6 +5,12 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 require_once __DIR__ . '/../controllers/UtilisateurController.php';
 
+// Inclure PHPMailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
+
 $user = new UtilisateurController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -18,9 +24,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         if (!empty($prenom) && !empty($nom) && !empty($email) && !empty($hashedPassword)) {
-            $user->addUser($prenom, $nom, $email, $hashedPassword);
-            header('Location: connexion');
-            exit();
+            // Générer un code de vérification sécurisé
+            $verification_code = random_int(100000, 999999);
+
+            // Configuration de PHPMailer
+            $mail = new PHPMailer(true);
+
+            try {
+                
+                $mail->isSMTP();
+                $mail->Host       = 'smtp.gmail.com'; 
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'anna.pixel.plush@gmail.com'; // Remplace par ton adresse Gmail
+                $mail->Password   = 'y q g l b j i y l o q z c o a w'; // Remplace par ton mot de passe ou mot de passe d'application
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port       = 587;
+                $mail->CharSet = 'UTF-8';
+                $mail->Encoding = 'base64';
+
+                // Destinataire
+                $mail->setFrom('ghollamallahyoussef@gmail.com', 'Pixel Plush'); 
+                $mail->addAddress($email);
+
+                // Contenu de l'email
+                $mail->isHTML(true);
+                $mail->Subject = 'Code de vérification';
+                $mail->Body    = "Bonjour ". $prenom . ' votre code de vérification est : ' . $verification_code . "<br> nous vous remercions de votre inscription sur notre site Pixel Plush";
+
+                // Envoi de l'email
+                $mail->send();
+
+                session_start();
+                // Stocker les informations utilisateur et le code de vérification dans la session
+                $_SESSION['prenom'] = $prenom;
+                $_SESSION['nom'] = $nom;
+                $_SESSION['email'] = $email;
+                $_SESSION['mot_de_passe'] = $hashedPassword;
+                $_SESSION['verification_code'] = $verification_code;
+                $_SESSION['attempts'] = 0; // Initialisation des tentatives
+
+                // Rediriger vers la page de vérification
+                header('Location: verification');
+                exit;
+
+            } catch (Exception $e) {
+                echo "Erreur lors de l'envoi de l'email. PHPMailer Erreur : {$mail->ErrorInfo}";
+            }
         } else {
             echo "Tous les champs sont obligatoires.";
         }

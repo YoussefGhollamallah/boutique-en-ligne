@@ -1,3 +1,22 @@
+<?php 
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+function deconnexion() {
+    session_unset();
+    session_destroy();
+    header('Location: index');
+    exit();
+}
+
+if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
+    deconnexion();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,22 +73,25 @@
                 <img class="hw-50px" src="<?php echo ASSETS; ?>/images/panier.png" alt="panier logo">
                 Panier
             </a>
-            <a class="flex column vertical-center" href="<?php echo BASE_URL; ?>connexion">
+            <div class="flex column vertical-center">
                 <img class="hw-50px" src="<?php echo ASSETS; ?>/images/utilisateur.png" alt="utilisateur logo">
-                <?php
-                if (isset($_SESSION['user'])) {
-                    echo "Bonjour" . $_SESSION['user']['prenom'];
-                } else {
-                    echo 'Connexion';
-                }
-                ?>
-            </a>
+                <?php if (isset($_SESSION['user'])): ?>
+                    <a href="<?php echo BASE_URL; ?>profil">Profil</a>
+                    <a href="?action=deconnexion">Déconnexion</a>
+                <?php else: ?>
+                    <a href="<?php echo BASE_URL; ?>connexion">Connexion</a>
+                <?php endif; ?>
+            </div>
         </nav>
     </header>
 
     <!-- BANDEAU -->
     <section class="section">
+        <?php if (isset($_SESSION['user'])): ?>
+            <h2>Bienvenue <?php echo $_SESSION['user']['prenom']; ?> Retrouve tes personnages préférés à câliner !</h2>
+        <?php else: ?>
         <h2>Retrouve tes personnages préférés à câliner !</h2>
+        <?php endif; ?>
     </section>
 
     <main>

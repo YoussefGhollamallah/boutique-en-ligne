@@ -12,6 +12,7 @@ class Routeur
         "categories" => ["controller" => 'HomeController', "method" => 'showCategories'],
         "profil"     => ["controller" => 'HomeController', "method" => 'showProfil'],
         "connexion"  => ["controller" => 'HomeController', "method" => 'showConnexion'],
+        "verification" => ["controller" => 'HomeController', "method" => 'showVerification'],
         "detail"     => ["controller" => 'HomeController', "method" => 'showDetail'],
         "admin-produits"     => ["controller" => 'HomeController', "method" => 'showAdminProduits'],
         "admin-users" => ["controller" => 'HomeController', "method" => 'showAdminUsers'],

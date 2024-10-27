@@ -24,12 +24,16 @@ class ModelUtilisateur
     public function userConnexion($email, $password)
     {
         try {
-            $requete = $this->connexion->prepare("SELECT * FROM Utilisateur WHERE email = :email AND mot_de_passe = :password");
+            $requete = $this->connexion->prepare("SELECT * FROM Utilisateur WHERE email = :email");
             $requete->bindParam(':email', $email);
-            $requete->bindParam(':password', $password);
             $requete->execute();
-            $result = $requete->fetch(PDO::FETCH_ASSOC);
-            return $result;
+            $user = $requete->fetch(PDO::FETCH_ASSOC);
+
+            if ($user && password_verify($password, $user['mot_de_passe'])) {
+                return $user;
+            } else {
+                return false;
+            }
         } catch (Exception $e) {
             throw new Exception("Erreur lors de la connexion de l'utilisateur : " . $e->getMessage());
         }

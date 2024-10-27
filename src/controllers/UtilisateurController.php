@@ -9,7 +9,8 @@ class UtilisateurController{
 
     public function addUser($prenom, $nom, $email, $password, $id_adresse = null, $role_id = 2)
     {
-        return $this->modelUtilisateur->addUser($prenom, $nom, $email, $password, $id_adresse, $role_id);
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        return $this->modelUtilisateur->addUser($prenom, $nom, $email, $hashedPassword, $id_adresse, $role_id);
     }
 
     public function userConnexion($email, $password)
@@ -26,6 +27,7 @@ class UtilisateurController{
     {
         return $this->modelUtilisateur->getRoles();
     }
+
     public function updateUser($userId, $nom, $prenom, $email, $role_id)
     {
         return $this->modelUtilisateur->updateUser($userId, $nom, $prenom, $email, $role_id);

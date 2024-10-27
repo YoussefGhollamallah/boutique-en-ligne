@@ -2,6 +2,21 @@
 require_once __DIR__ . '/../controllers/UtilisateurController.php';
 require_once __DIR__ . '/../controllers/AdresseController.php';
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user'])) {
+    header('Location: connexion');
+    exit;
+}
+
+if (isset($_SESSION["user"]["role_id"]) && $_SESSION["user"]["role_id"] != 1) {
+    header('Location: index');
+    exit;
+}
+
+
 $utilisateurController = new UtilisateurController();
 $adressesController = new AdresseController();
 $utilisateurs = $utilisateurController->getAllUsers();

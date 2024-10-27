@@ -11,6 +11,30 @@ class ModelUtilisateur
         $this->connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
+    public function addUser($prenom, $nom, $email, $password, $id_adresse = null, $role_id = 2)
+    {
+        try {
+            $requete = $this->connexion->prepare("INSERT INTO Utilisateur (id, prenom, nom, email, mot_de_passe, id_adresse, role_id) VALUES (null, ?, ?, ?, ?, ?, ?)");
+            $requete->execute([$prenom, $nom, $email, $password, $id_adresse, $role_id]);
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage());
+        }
+    }
+
+    public function userConnexion($email, $password)
+    {
+        try {
+            $requete = $this->connexion->prepare("SELECT * FROM Utilisateur WHERE email = :email AND mot_de_passe = :password");
+            $requete->bindParam(':email', $email);
+            $requete->bindParam(':password', $password);
+            $requete->execute();
+            $result = $requete->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la connexion de l'utilisateur : " . $e->getMessage());
+        }
+    }
+
     public function getAllUsers()
     {
         try{

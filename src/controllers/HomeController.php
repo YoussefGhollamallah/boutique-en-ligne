@@ -65,6 +65,14 @@ class HomeController
         $myView->render();
     }
 
+    public function showVerification()
+    {
+        $title = 'Pixel Plush - Vérification';
+        $myView = new View('verification');
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+    
     // Pour afficher la page detail
     public function showDetail()
 {
@@ -107,6 +115,5 @@ class HomeController
         $myView->setVars(['title' => $title]);
         $myView->render();
     }
-
 
 }

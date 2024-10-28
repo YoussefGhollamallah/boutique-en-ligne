@@ -65,13 +65,17 @@ if (isset($_GET['categorieId'])) {
 
 <section class="section_categorie flex column">
     <h3 id="title_categorie" class="text-center">Catégorie</h3>
-    <article class="flex flex-wrap article_categorie space-around ">
-        <button class="card_categorie box-shadow" onclick="filterProducts(1)">
+    <article class="flex align-center flex-wrap article_categorie space-around ">
+        <a class="card_categorie box-shadow" onclick="filterProducts(1)">
             <img src="<?php echo ASSETS ?>images/jeux_videos.png" alt="Jeux Vidéos">
-        </button>
-        <button class="card_categorie box-shadow" onclick="filterProducts(2)">
+        </a>
+        <a class="card_categorie box-shadow" onclick="filterProducts(2)">
             <img src="<?php echo ASSETS ?>images/films_&_series.png" alt="Films et Séries">
-        </button>
+        </a>
+        <section id="sous-categories-container" style="display:none;">
+            <div id="sous-categories-list" class="flex flex-wrap"></div>
+        </section>
+
     </article>
 </section>
 
@@ -83,18 +87,18 @@ if (isset($_GET['categorieId'])) {
         foreach ($products as $produit) {
             $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
         ?>
-            <div class="card_produit box-shadow">
-                <a href="<?php echo BASE_URL; ?>detail/<?php echo intval($produit['id']); ?>">
+            <a href="<?php echo BASE_URL; ?>detail/<?php echo intval($produit['id']); ?>">
+                <div class="card_produit box-shadow">
                     <img class="card_produit_img" src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($nomProduit); ?>">
-                </a>
-                <h4><?php echo htmlspecialchars($nomProduit); ?></h4>
-                <p><?php echo htmlspecialchars($produit['prix']); ?> €</p>
-                <form class="form-ajouter-panier" method="POST" action="">
-                    <input type="hidden" name="id" value="<?php echo intval($produit['id']); ?>">
-                    <input type="hidden" name="action" value="ajouterProduitAuPanier">
-                    <button class="btn btn-ajouter" type="submit">Ajouter au panier</button>
-                </form>
-            </div>
+                    <h4><?php echo htmlspecialchars($nomProduit); ?></h4>
+                    <p><?php echo htmlspecialchars($produit['prix']); ?> €</p>
+                    <form class="form-ajouter-panier" method="POST" action="">
+                        <input type="hidden" name="id" value="<?php echo intval($produit['id']); ?>">
+                        <input type="hidden" name="action" value="ajouterProduitAuPanier">
+                        <button class="btn btn-ajouter" type="submit">Ajouter au panier</button>
+                    </form>
+                </div>
+            </a>
         <?php
         }
         ?>
@@ -104,39 +108,12 @@ if (isset($_GET['categorieId'])) {
 <div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 20px;">
     <p id="confirmation-message"></p>
 </div>
-
 <script>
-    function filterProducts(categorieId) {
-        const productList = document.getElementById('product-list');
-        productList.innerHTML = ''; // Réinitialiser la liste des produits
-
-        fetch(`<?php echo $_SERVER['PHP_SELF']; ?>?categorieId=${categorieId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    data.forEach(produit => {
-                        const productCard = document.createElement('div');
-                        productCard.classList.add('card_produit');
-                        productCard.innerHTML = `
-                            <a href="<?php echo BASE_URL; ?>detail/${produit.id}">
-                                <img class="card_produit_img" src="<?php echo ASSETS; ?>/images/${produit.image}" alt="${produit.nom}">
-                            </a>
-                            <h4>${produit.nom}</h4>
-                            <p>${produit.prix} €</p>
-                            <form class="form-ajouter-panier" method="POST" action="">
-                                <input type="hidden" name="id" value="${produit.id}">
-                                <input type="hidden" name="action" value="ajouterProduitAuPanier">
-                                <button class="btn btn-ajouter" type="submit">Ajouter au panier</button>
-                            </form>
-                        `;
-                        productList.appendChild(productCard);
-                    });
-                } else {
-                    productList.innerHTML = '<p>Aucun produit trouvé dans cette catégorie.</p>';
-                }
-            })
-            .catch(error => console.error('Erreur lors de la récupération des produits:', error));
-    }
+    const BASE_URL = "<?php echo BASE_URL; ?>";
+    const ASSETS = "<?php echo ASSETS; ?>";
+    const pageURL = "<?php echo $_SERVER['PHP_SELF']; ?>";
 </script>
+<script src="<?php echo ASSETS; ?>js/filter.js"></script>
+
 
 <script src="<?php echo ASSETS; ?>js/carousel.js"></script>

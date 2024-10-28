@@ -38,4 +38,18 @@ class ModelCategorie
             throw new Exception("Erreur lors de la récupération des produits : " . $e->getMessage());
         }
     }
+
+    public function getSousCategoriesByCategory($categorieId)
+    {
+        try {
+            $stmt = $this->connexion->prepare('
+                SELECT * FROM SousCategorie
+                WHERE id_categorie = ?
+            ');
+            $stmt->execute([$categorieId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la récupération des sous-catégories : " . $e->getMessage());
+        }
+    }
 }

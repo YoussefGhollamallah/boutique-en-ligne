@@ -67,22 +67,22 @@ if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
             <img src="<?php echo ASSETS; ?>/images/logo.png" class="logo" alt="logo">
         </a>
         <h1 class="hide_mobile">Pixel Plush</h1>
-        <nav class="flex space-center vertical-center gap">
-            <input class="hide_mobile" type="text" placeholder="Rechercher">
-            <a class="hide_mobile" href="<?php echo BASE_URL; ?>panier">
-                <img class="hw-50px" src="<?php echo ASSETS; ?>/images/panier.png" alt="panier logo">
-                Panier
-            </a>
-            <div class="flex column vertical-center">
-                <img class="hw-50px" src="<?php echo ASSETS; ?>/images/utilisateur.png" alt="utilisateur logo">
-                <?php if (isset($_SESSION['user'])): ?>
-                    <a href="<?php echo BASE_URL; ?>profil">Profil</a>
-                    <a href="?action=deconnexion">Déconnexion</a>
-                <?php else: ?>
-                    <a href="<?php echo BASE_URL; ?>connexion">Connexion</a>
-                <?php endif; ?>
-            </div>
-        </nav>
+            <nav class="flex space-center vertical-center gap">
+                <!-- Champ de recherche avec l'identifiant `search` pour autocomplétion -->
+                <input id="search" class="hide_mobile" type="text" placeholder="Rechercher">
+                <!-- Conteneur pour les suggestions -->
+                <div id="suggestion" style="display: none; position: absolute; background: white; border: 1px solid #ccc; z-index: 1000;"></div>
+    
+                <a class="hide_mobile" href="<?php echo BASE_URL; ?>panier">
+                    <img class="hw-50px" src="<?php echo ASSETS; ?>/images/panier.png" alt="panier logo">
+                    Panier
+                </a>
+                <a class="flex column vertical-center" href="<?php echo BASE_URL; ?>connexion">
+                    <img class="hw-50px" src="<?php echo ASSETS; ?>/images/utilisateur.png" alt="utilisateur logo">
+                    <?php echo isset($_SESSION['user']) ? "Bonjour " . $_SESSION['user']['prenom'] : 'Connexion'; ?>
+                </a>
+            </nav>
+
     </header>
 
     <!-- BANDEAU -->
@@ -107,6 +107,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
     </footer>
     <script src="<?php echo ASSETS; ?>/js/burger.js"></script>
     <script src="<?php echo ASSETS; ?>/js/ancre.js"></script>
+    <script src="<?php echo ASSETS; ?>/js/autocompletion.js"></script>
 
 </body>
 

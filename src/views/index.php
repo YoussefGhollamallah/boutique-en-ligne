@@ -83,27 +83,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 20px;">
     <p id="confirmation-message"></p>
 </div>
-
-<script>
-document.querySelectorAll('.form-ajouter-panier').forEach(form => {
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-
-        fetch('', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('confirmation-message').textContent = data;
-            const popup = document.getElementById('confirmation-popup');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3000);
-        })
-        .catch(error => console.error('Erreur:', error));
-    });
-});
-</script>

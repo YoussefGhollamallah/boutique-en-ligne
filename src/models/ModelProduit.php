@@ -39,6 +39,8 @@ class ModelProduit
         }
     }
 
+
+    
     public function addProduct($nom, $description, $prix, $quantite, $image, $categorie, $sous_categorie)
     {
         try {

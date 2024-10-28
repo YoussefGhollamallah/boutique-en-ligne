@@ -1,5 +1,5 @@
 <?php
-
+// Path: src/controllers/HomeController.php
 class HomeController
 {
     // Pour afficher la page index
@@ -38,7 +38,7 @@ class HomeController
     }
 
     // Pour afficher la page categories
-    public function showCategories()
+    public function showCategories(): void
     {
         $title = 'Pixel Plush - Catégories';
         $myView = new View('categories');

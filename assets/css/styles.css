@@ -243,6 +243,7 @@ a {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    cursor: pointer;
 }
 
 .card_categorie img {
@@ -572,6 +573,7 @@ select:focus {
 
 .carousel-item.active {
     opacity: 1;
+    min-height: 400px;
 }
 
 .dropdown {

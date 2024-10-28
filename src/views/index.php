@@ -32,13 +32,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ?>
             <div class="carousel-item active">
                 <div class="product-details">
-                    <img src="<?php echo ASSETS;?>/images/placeholder.png" alt="Produit 1">
+                    <img src="<?php echo ASSETS;?>/images/<?php echo $nomProduit ?>.png" alt="<?php echo $nomProduit ?>">
                     <div class="carousel-caption">
-                        <h5>Produit 1</h5>
-                        <p>Description du produit 1</p>
+                        <h3><?php echo $nomProduit ?></h3>
+                        <p><?php echo $produit['prix'] ?> €</p>
+                        <form class="form-ajouter-panier" method="POST" action="">
+                            <input type="hidden" name="id" value="<?php echo intval($produit['id']); ?>">
+                            <input type="hidden" name="action" value="ajouterProduitAuPanier">
+                            <button class="btn btn-ajouter" type="submit">Ajouter au panier</button>
+                        </form>
                     </div>
                 </div>
             </div>
+            <?php
+        } ?>
             <!-- Ajoutez d'autres items de carousel si nécessaire -->
         </div>
         <a class="carousel-control-prev" href="#carouselPharePrev" role="button" data-slide="prev">
@@ -89,4 +96,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <p id="confirmation-message"></p>
 </div>
 
-<script src="<?php echo ASSETS; ?>/js/carousel.js"></script>
+<script src="<?php echo ASSETS;?>js/carousel.js"></script>

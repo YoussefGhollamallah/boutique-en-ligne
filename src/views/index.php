@@ -23,6 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h3>Nos Nouveautés</h3>
     <article class="article_phare flex space-around carousel slide" data-ride="carousel">
         <div class="carousel-inner">
+            <?php
+            $isActive = true;
+            foreach ($lastThreeProducts as $produit) {
+                $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
+                $activeClass = $isActive ? 'active' : '';
+                $isActive = false;
+            ?>
             <div class="carousel-item active">
                 <div class="product-details">
                     <img src="<?php echo ASSETS;?>/images/placeholder.png" alt="Produit 1">
@@ -42,9 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </a>
     </article>
 </section>
-
-<!-- Section des catégories -->
-<section class="section_categorie flex column">
+<section class="section_categorie flex column ">
     <h3 id="title_categorie" class="text-center">Catégorie</h3>
     <article class="flex flex-wrap article_categorie space-around">
         <a href="<?php echo BASE_URL; ?>categories" class="card_categorie flex-column">
@@ -84,26 +89,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <p id="confirmation-message"></p>
 </div>
 
-<script>
-document.querySelectorAll('.form-ajouter-panier').forEach(form => {
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-
-        fetch('', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('confirmation-message').textContent = data;
-            const popup = document.getElementById('confirmation-popup');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3000);
-        })
-        .catch(error => console.error('Erreur:', error));
-    });
-});
-</script>
+<script src="<?php echo ASSETS; ?>/js/carousel.js"></script>

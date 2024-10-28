@@ -1,62 +1,28 @@
-    <section class="dropdown">
-        <span>🔎</span>
-        <section class="dropdown-content box_shadow">
-            <a href="http://">License 🎟</a>
-            <a href="http://">Prix 💰</a>
-        </section>
-    </section>
+<?php
+// Path: src/views/categorie.php
 
-    <section class="container">
-        <section class="articles">
-            <img src="<?php echo ASSETS;?>/images/placeholder.png" alt="Article Image">
-            <ul>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-            </ul>
-        </section>
+include 'src/controllers/CategorieController.php';
 
-        <section class="articles">
-            <img src="<?php echo ASSETS;?>/images/placeholder.png" alt="Article Image">
-            <ul>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-            </ul>
-        </section>
+$categorieController = new CategorieController();
+$categories = $categorieController->getAllCategorie();
+?>
 
-        <section class="articles">
-            <img src="<?php echo ASSETS;?>/images/placeholder.png" alt="Article Image">
-            <ul>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-            </ul>
-        </section>
+<h1>Produits par Catégorie</h1>
 
-        <section class="articles">
-            <img src="<?php echo ASSETS;?>/images/placeholder.png" alt="Article Image">
-            <ul>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-            </ul>
-        </section>
+<div id="categorie-container">
+    <?php foreach ($categories as $categorie): ?>
+        <?php $nomCategorie = ucwords(str_replace('_', ' ', $categorie['nom_p'])); ?>
+        <div class="card_categorie box_shadow flex-column">
+            <button class="categorie-button" data-categorie-id="<?php echo $categorie['id_categorie']; ?>">
+                <?php echo $nomCategorie; ?>
+            </button>
+            <img src="assets/images/<?php echo ($categorie['nom_p'] == 'Films et Séries') ? 'films_&_series.png' : 'jeux_videos.png'; ?>" alt="Catégorie <?php echo $nomCategorie; ?>">
+        </div>
+    <?php endforeach; ?>
+</div>
 
-        <section class="articles">
-            <img src="<?php echo ASSETS;?>/images/placeholder.png" alt="Article Image">
-            <ul>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-                <li><a href="http://" target="_blank" rel="noopener noreferrer">🔲</a></li>
-            </ul>
-        </section>
-    </section>
+<div id="produit-container">
+    <!-- Les produits seront affichés ici selon la catégorie sélectionnée -->
+</div>
 
-    <section class="chapters">
-        <a href="http://">1</a>
-        <a href="http://">2</a>
-        <a href="http://">3</a>
-        <a href="#">...</a>
-    </section>
-
+<script src="assets/js/fetchProducts.js"></script>

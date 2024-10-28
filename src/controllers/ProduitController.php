@@ -1,5 +1,5 @@
 <?php
-
+// Path: src/controllers/ProduitController.php
 
 class ProduitController
 {

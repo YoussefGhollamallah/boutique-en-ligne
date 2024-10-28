@@ -1,10 +1,11 @@
-<?php 
+<?php
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-function deconnexion() {
+function deconnexion()
+{
     session_unset();
     session_destroy();
     header('Location: index');
@@ -67,30 +68,35 @@ if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
             <img src="<?php echo ASSETS; ?>/images/logo.png" class="logo" alt="logo">
         </a>
         <h1 class="hide_mobile">Pixel Plush</h1>
-            <nav class="flex space-center vertical-center gap">
-                <!-- Champ de recherche avec l'identifiant `search` pour autocomplétion -->
-                <input id="search" class="hide_mobile" type="text" placeholder="Rechercher">
-                <!-- Conteneur pour les suggestions -->
-                <div id="suggestion" style="display: none; position: absolute; background: white; border: 1px solid #ccc; z-index: 1000;"></div>
-    
-                <a class="hide_mobile" href="<?php echo BASE_URL; ?>panier">
-                    <img class="hw-50px" src="<?php echo ASSETS; ?>/images/panier.png" alt="panier logo">
-                    Panier
-                </a>
-                <a class="flex column vertical-center" href="<?php echo BASE_URL; ?>connexion">
-                    <img class="hw-50px" src="<?php echo ASSETS; ?>/images/utilisateur.png" alt="utilisateur logo">
-                    <?php echo isset($_SESSION['user']) ? "Bonjour " . $_SESSION['user']['prenom'] : 'Connexion'; ?>
-                </a>
-            </nav>
+        <nav class="flex space-center vertical-center gap">
+            <!-- Champ de recherche avec l'identifiant `search` pour autocomplétion -->
+            <div class="search-container">
+            <input class="hide_mobile" id="search" onkeydown="searchKeywords()" type="text" name="search" placeholder="Rechercher">
+            <div id="suggestion" class="suggestion-box"></div>
+        </div>
+            <a class="hide_mobile panier" href="<?php echo BASE_URL; ?>panier">
+                <img class="hw-50px" src="<?php echo ASSETS; ?>/images/panier.png" alt="panier logo">
+                Panier
+            </a>
+            <div class="flex column vertical-center">
+                <img class="hw-50px" src="<?php echo ASSETS; ?>/images/utilisateur.png" alt="utilisateur logo">
+                <?php if (isset($_SESSION['user'])): ?>
+                    <a href="<?php echo BASE_URL; ?>profil">Profil</a>
+                    <a href="?action=deconnexion">Déconnexion</a>
+                <?php else: ?>
+                    <a href="<?php echo BASE_URL; ?>connexion">Connexion</a>
+                <?php endif; ?>
+            </div>
+        </nav>
 
     </header>
 
     <!-- BANDEAU -->
     <section class="section">
         <?php if (isset($_SESSION['user'])): ?>
-            <h2>Bienvenue <?php echo $_SESSION['user']['prenom']; ?> Retrouve tes personnages préférés à câliner !</h2>
+            <h2>Bienvenue <?php echo $_SESSION['user']['prenom']; ?>, retrouve tes personnages préférés à câliner !</h2>
         <?php else: ?>
-        <h2>Retrouve tes personnages préférés à câliner !</h2>
+            <h2>Retrouve tes personnages préférés à câliner !</h2>
         <?php endif; ?>
     </section>
 

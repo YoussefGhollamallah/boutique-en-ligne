@@ -149,6 +149,11 @@ header {
     padding: 20px;
 }
 
+.panier {
+    display: flex;
+    flex-direction: column;
+}
+
 footer {
     background-color: var(--blue);
     padding: 20px 0;
@@ -215,13 +220,13 @@ footer {
     border-radius: 10px;
 }
 
-.form > div {
+.form>div {
     display: flex;
     flex-direction: column;
     margin: 10px 0;
 }
 
-form > div > input {
+form>div>input {
     width: 80%;
 }
 
@@ -324,6 +329,37 @@ a {
     width: 50px;
 }
 
+/* Autocompletion */
+
+#suggestion {
+    border: 1px solid #ccc;
+    width: 210px;
+    background-color: white;
+    position: absolute;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#suggestion div {
+    padding: 8px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+#suggestion div:hover {
+    background-color: #f1f1f1;
+}
+
+#search {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #333;
+    border-radius: 5px;
+}
+
 /* Formulaire */
 input[type="text"],
 input[type="email"],
@@ -342,14 +378,15 @@ select:focus {
     border: 2px solid #333;
 }
 
-.container-form{
+.container-form {
     width: 70%;
 }
+
 .form-container {
     width: 100%;
 }
 
-.form-button  {
+.form-button {
     margin: 10px;
 }
 
@@ -830,10 +867,12 @@ select:focus {
         width: 100%;
         border-radius: 0;
     }
+
     .article_categorie {
         margin: 20px 5px;
         gap: 10px;
     }
+
     .card_categorie img {
         height: 110px;
         width: 110px;
@@ -870,7 +909,12 @@ select:focus {
 
     /* Connexion */
 
-    .container-form{
+    .container-form {
         width: 90%;
+    }
+
+    /* Autocompletion */
+    #suggestion {
+        display: none;
     }
 }

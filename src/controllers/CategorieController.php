@@ -20,4 +20,8 @@ class CategorieController
         return $this->modelCategorie->getAllProductsBycategorie($categorieId);
     }
 
+    public function getSousCategoriesByCategory($categorieId)
+    {
+        return $this->modelCategorie->getSousCategoriesByCategory($categorieId);
+    }
 }

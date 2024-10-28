@@ -8,7 +8,7 @@ function deconnexion()
 {
     session_unset();
     session_destroy();
-    header('Location: index');
+    header('Location:'. BASE_URL . 'index');
     exit();
 }
 

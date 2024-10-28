@@ -7,7 +7,12 @@
     --grey: #D9D9D9;
     --red: #f7594f;
 }
-
+.bg-background {
+    background-color: var(--grey) !important;
+}
+.bg-yellow {
+    background-color: var(--yellow) !important;
+}
 /* Réinitialisation de base */
 body {
     margin: 0;

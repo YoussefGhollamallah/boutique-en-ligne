@@ -18,6 +18,13 @@ class UtilisateurController{
         return $this->modelUtilisateur->userConnexion($email, $password);
     }
 
+    public function emailExists($email)
+    {
+        return $this->modelUtilisateur->emailExists($email);
+    }
+
+
+
     public function getAllUsers()
     {
         return $this->modelUtilisateur->getAllUsers();

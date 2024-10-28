@@ -14,12 +14,19 @@ class ModelUtilisateur
     public function addUser($prenom, $nom, $email, $password, $id_adresse = null, $role_id = 2)
     {
         try {
+            // Vérification de l'existence de l'email
+            if ($this->emailExists($email)) {
+                throw new Exception("Cet email est déjà utilisé.");
+            }
+    
+            // Insertion de l'utilisateur
             $requete = $this->connexion->prepare("INSERT INTO Utilisateur (id, prenom, nom, email, mot_de_passe, id_adresse, role_id) VALUES (null, ?, ?, ?, ?, ?, ?)");
             $requete->execute([$prenom, $nom, $email, $password, $id_adresse, $role_id]);
         } catch (Exception $e) {
             throw new Exception("Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage());
         }
     }
+    
 
     public function userConnexion($email, $password)
     {
@@ -78,4 +85,19 @@ class ModelUtilisateur
             throw new Exception("Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage());
         }
     }
+
+    public function emailExists($email)
+{
+    try {
+        $requete = $this->connexion->prepare("SELECT COUNT(*) FROM Utilisateur WHERE email = :email");
+        $requete->bindParam(':email', $email);
+        $requete->execute();
+        $count = $requete->fetchColumn();
+        
+        return $count > 0;
+    } catch (Exception $e) {
+        throw new Exception("Erreur lors de la vérification de l'existence de l'email : " . $e->getMessage());
+    }
+}
+
 }

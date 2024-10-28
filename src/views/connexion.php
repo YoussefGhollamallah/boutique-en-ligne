@@ -137,6 +137,9 @@ if (isset($_SESSION['user'])) {
                 </div>
                 <button class="btn btn-ajouter" type="submit">Se connecter</button>
             </form>
+            <div style="margin-top: 10px;">
+                <a href="reset_request" class="btn btn-secondary">Mot de passe oublié ?</a>
+            </div>
         </div>
     </div>
 </main>

@@ -9,6 +9,10 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
+require_once __DIR__ . "/../controllers/AdresseController.php";
+
+$adresseController = new AdresseController();
+$adresse = $adresseController->getAdresse($_SESSION["user"]["id"])
 
 ?>
 
@@ -24,6 +28,20 @@ if (!isset($_SESSION['user'])) {
                     <p>Prénom : <?php echo $_SESSION['user']['prenom']; ?></p>
                     <p>Nom : <?php echo $_SESSION['user']['nom']; ?></p>
                     <p>Email : <?php echo $_SESSION['user']['email']; ?></p>
+                </div>
+            </div>
+        </section>
+        <section>
+        <div class="profil">
+                <div>
+                    <?php if ($adresse): ?>
+                        <p>Adresse : <?php echo $adresse['adresse']; ?></p>
+                        <p>Ville : <?php echo $adresse['ville']; ?></p>
+                        <p>Code Postal : <?php echo $adresse['code_postal']; ?></p>
+                        <p>Pays : <?php echo $adresse['pays']; ?></p>
+                    <?php else: ?>
+                        <p>Aucune adresse enregistrée.</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>

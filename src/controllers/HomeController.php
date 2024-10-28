@@ -120,4 +120,12 @@ class HomeController
         $myView->render();
     }
 
+    public function showConfirmation()
+    {
+        $title = 'Pixel Plush - Confirmation paiemet';
+        $myView = new View('confirmation');
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+
 }

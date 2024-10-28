@@ -17,6 +17,7 @@ class Routeur
         "admin-produits"     => ["controller" => 'HomeController', "method" => 'showAdminProduits'],
         "admin-users" => ["controller" => 'HomeController', "method" => 'showAdminUsers'],
         "admin-sub-category"     => ["controller" => 'HomeController', "method" => 'showAdminCategory'],
+        "confirmation"     => ["controller" => 'HomeController', "method" => 'showConfirmation']
      ];
 
     public function __construct($request)

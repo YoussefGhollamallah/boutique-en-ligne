@@ -13,6 +13,7 @@ if (!empty($panier)) {
     }
 }
 
+// Gestion des actions POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action']) && $_POST['action'] == 'supprimerProduit') {
         $idProduit = intval($_POST['id']);
@@ -62,7 +63,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php } ?>
 
         <h4>Total du panier : <span id="total-panier"><?php echo number_format($totalPanier, 2, ',', ' '); ?> €</span></h4>
-        <button class="btn btn-ajouter">Valider la commande</button>
+        
+        <!-- Formulaire de paiement PayPal -->
+        <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="your-sandbox-email@example.com"> <!-- Remplacez par votre email sandbox -->
+            <input type="hidden" name="item_name" value="Votre commande">
+            <input type="hidden" name="amount" value="<?php echo number_format($totalPanier, 2, '.', ''); ?>">
+            <input type="hidden" name="currency_code" value="EUR">
+            <input type="hidden" name="return" value="http://localhost/boutique-en-ligne/confirmation.php?status=success">
+            <input type="hidden" name="cancel_return" value="http://localhost/boutique-en-ligne/panier">
+            <button type="submit" class="btn btn-ajouter">Payer avec PayPal</button>
+        </form>
+        
     <?php } else { ?>
         <p>Votre panier est vide.</p>
     <?php } ?>

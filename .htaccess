@@ -1,5 +1,9 @@
 RewriteEngine On
 
+# Bloquer les accès directs aux fichiers `.php` dans le dossier `src/views`
+RewriteCond %{REQUEST_URI} ^/boutique-en-ligne/src/views/.*\.php$ [NC]
+RewriteRule ^.*$ index.php?r=page404 [L]
+
 # Bloquer les accès directs aux fichiers `.php` dans le dossier `src`
 RewriteCond %{REQUEST_URI} ^/src/.*\.php$ [NC]
 RewriteRule ^.*$ index.php?r=page404 [L]
@@ -11,6 +15,9 @@ RewriteRule ^(index|panier|categories|profil|connexion|admin-produits|admin-user
 # Autoriser l'accès aux ressources statiques comme CSS, JS, et images
 RewriteCond %{REQUEST_URI} !^/assets/ [NC]
 RewriteCond %{REQUEST_URI} !^/config/search\.php$ [NC]
+
+# Autoriser uniquement les URLs de la forme /boutique-en-ligne/nomdelaview
+RewriteCond %{REQUEST_URI} !^/boutique-en-ligne/([a-zA-Z0-9_-]+)$ [NC]
 
 # Rediriger les URLs inexistantes vers la page 404 si ce ne sont pas des fichiers ou dossiers existants
 RewriteCond %{REQUEST_FILENAME} !-f

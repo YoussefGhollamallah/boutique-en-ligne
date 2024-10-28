@@ -95,6 +95,28 @@ class HomeController
     }
 }
 
+    public function showResetPassword()
+    {
+        $title = "Pixel Plush - Reset Password";
+        $myView = new View("reset_password");
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+    public function showResetRequest()
+    {
+        $title = "Pixel Plush - Reset request";
+        $myView = new View("reset_request");
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+    public function showPasswordVerify()
+    {
+        $title = "Pixel Plush - VerifyPassword";
+        $myView = new View("verification_password");
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+
 
     public function showAdminProduits()
     {

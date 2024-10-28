@@ -103,11 +103,13 @@ class HomeController
         $myView->setVars(['title' => $title]);
         $myView->render();
     }
+    
     public function showAdminUsers()
     {
         $title = 'Pixel Plush - Admin Users';
         $myView = new View('admin-users');
     }
+
     public function showAdminCategory()
     {
         $title = 'Pixel Plush - Admin Catégories';

@@ -342,8 +342,11 @@ select:focus {
     border: 2px solid #333;
 }
 
+.container-form{
+    width: 70%;
+}
 .form-container {
-    width: 1200px;
+    width: 100%;
 }
 
 .form-button  {
@@ -863,5 +866,11 @@ select:focus {
 
     .article_detail {
         width: 100%;
+    }
+
+    /* Connexion */
+
+    .container-form{
+        width: 90%;
     }
 }

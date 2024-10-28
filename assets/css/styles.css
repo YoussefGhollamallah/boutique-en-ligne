@@ -573,7 +573,7 @@ select:focus {
 
 .carousel-item.active {
     opacity: 1;
-    min-height: 400px;
+    min-height: 410px;
 }
 
 .dropdown {

@@ -30,7 +30,7 @@ if (isset($_GET['categorieId'])) {
 <!-- Section des produits phares -->
 <section class="section_phare">
     <h3>Nos Nouveautés</h3>
-    <article class="article_phare flex space-around carousel slide" data-ride="carousel">
+    <article class="article_phare flex space-around carousel slide box-shadow" data-ride="carousel">
         <div class="carousel-inner">
             <?php
             $isActive = true;
@@ -39,7 +39,7 @@ if (isset($_GET['categorieId'])) {
                 $activeClass = $isActive ? 'active' : '';
                 $isActive = false;
             ?>
-                <a href="./detail/<?php echo $produit['id'] ?>">
+                <a class="box-shadow" href="./detail/<?php echo $produit['id'] ?>">
                     <div class="carousel-item <?php echo $activeClass; ?>">
                         <div class="product-details">
                             <img src="assets/images/<?php echo $produit['image']; ?>" alt="Peluche de <?php echo $nomProduit; ?>">
@@ -65,11 +65,11 @@ if (isset($_GET['categorieId'])) {
 
 <section class="section_categorie flex column">
     <h3 id="title_categorie" class="text-center">Catégorie</h3>
-    <article class="flex flex-wrap article_categorie space-around">
-        <button class="card_categorie" onclick="filterProducts(1)">
+    <article class="flex flex-wrap article_categorie space-around ">
+        <button class="card_categorie box-shadow" onclick="filterProducts(1)">
             <img src="<?php echo ASSETS ?>images/jeux_videos.png" alt="Jeux Vidéos">
         </button>
-        <button class="card_categorie" onclick="filterProducts(2)">
+        <button class="card_categorie box-shadow" onclick="filterProducts(2)">
             <img src="<?php echo ASSETS ?>images/films_&_series.png" alt="Films et Séries">
         </button>
     </article>
@@ -83,7 +83,7 @@ if (isset($_GET['categorieId'])) {
         foreach ($products as $produit) {
             $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
         ?>
-            <div class="card_produit">
+            <div class="card_produit box-shadow">
                 <a href="<?php echo BASE_URL; ?>detail/<?php echo intval($produit['id']); ?>">
                     <img class="card_produit_img" src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($nomProduit); ?>">
                 </a>

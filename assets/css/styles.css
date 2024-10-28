@@ -2,6 +2,7 @@
 :root {
     --background: #faf2e2;
     --yellow: #eac88e;
+    --dark_yellow: #b89d70;
     --blue: #8fc4f7;
     --grey: #D9D9D9;
     --red: #f7594f;
@@ -132,8 +133,8 @@ p {
 }
 
 .article_categorie {
+    padding: 10px;
     margin: 20px 10px;
-    gap: 20px;
 }
 
 .article_phare {
@@ -245,6 +246,10 @@ a {
     flex-direction: column;
     cursor: pointer;
 }
+.active-category,
+.card_categorie:hover {
+    border: #333 3px solid;
+}
 
 .card_categorie img {
     width: 250px;
@@ -299,6 +304,9 @@ a {
     justify-content: space-between;
 }
 
+.align-center {
+    align-items: center;
+}
 .justify-between {
     justify-content: space-between;
 }
@@ -868,11 +876,6 @@ select:focus {
         padding: 20px 0;
         width: 100%;
         border-radius: 0;
-    }
-
-    .article_categorie {
-        margin: 20px 5px;
-        gap: 10px;
     }
 
     .card_categorie img {

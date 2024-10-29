@@ -100,4 +100,17 @@ class ModelUtilisateur
     }
 }
 
+    public function resetPassword($email, $password)
+    {
+        try {
+            $requete = $this->connexion->prepare("UPDATE Utilisateur SET mot_de_passe = :password WHERE email = :email");
+            $requete->bindParam(':password', $password);
+            $requete->bindParam(':email', $email);
+            $result = $requete->execute();
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la réinitialisation du mot de passe : " . $e->getMessage());
+        }
+    }
+
 }

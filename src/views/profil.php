@@ -103,6 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="profil">
                 <div>
                     <p>Rôle : Administrateur</p>
+                    <a class="btn btn-ajouter" href="admin-users">Gestion User</a>
+                    <a class="btn btn-ajouter" href="admin-produits">Gestion Produit</a>
                 </div>
             </div>
         </section>

@@ -68,4 +68,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 <div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 20px;">
     <p id="confirmation-message"></p>
 </div>
-

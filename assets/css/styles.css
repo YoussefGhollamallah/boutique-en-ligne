@@ -961,7 +961,7 @@ select:focus {
         height: 50px;
         width: 50px;
         position: relative;
-        z-index: 1;
+        z-index: 3;
     }
 
     .ham-menu span {

@@ -10,6 +10,20 @@ class AdresseController
         $this->modelAdresses = new ModelAdresse();
     }
 
+    public function addAdresse($user_id, $adresse, $adresse_complement, $code_postal, $ville, $pays)
+    {
+        try {
+            if (empty($user_id) || !is_numeric($user_id)) {
+                throw new Exception("L'ID utilisateur fourni n'est pas valide.");
+            }
+
+            $this->modelAdresses->addAdresse($user_id, $adresse, $adresse_complement, $code_postal, $ville, $pays);
+
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de l'ajout de l'adresse : " . $e->getMessage());
+        }
+    }
+
     // Méthode pour récupérer une adresse à partir d'un identifiant utilisateur
     public function getAdresse($user_id)
     {

@@ -3,16 +3,18 @@ session_start();
 
 $panierController = new PanierController();
 $panier = $panierController->afficherPanier();
+$totalPanier = $panierController->calculerTotalPanier(); // Recalcul du total
 
-$totalPanier = 0;
-if (!empty($panier)) {
-    foreach ($panier as $produit) {
-        if (isset($produit['checked']) && $produit['checked']) {
-            $totalPanier += $produit['prix'] * $produit['quantite'];
-        }
+// Initialisation de $itemName pour passer des informations sur la commande à PayPal
+$itemName = "Commande de produits : ";
+foreach ($panier as $produit) {
+    if (isset($produit['checked']) && $produit['checked']) {
+        $itemName .= isset($produit['nom']) ? $produit['nom'] : "Produit inconnu" . ", ";
     }
 }
+$itemName = rtrim($itemName, ', ');
 
+// Gestion des actions POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action']) && $_POST['action'] == 'supprimerProduit') {
         $idProduit = intval($_POST['id']);
@@ -38,6 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $panierController->mettreAJourCheckedProduit($idProduit, $checked);
         exit;
     }
+
+    // Construction de $itemName à partir du panier
+    foreach ($panier as $produit) {
+        if (isset($produit['checked']) && $produit['checked']) {
+            $itemName .= isset($produit['nom']) ? $produit['nom'] : "Produit inconnu" . ", ";
+        }
+    }
+    $itemName = rtrim($itemName, ', '); // Enlève la dernière virgule
 }
 ?>
 
@@ -47,22 +57,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php foreach ($panier as $idProduit => $produit) {
             $checked = isset($produit['checked']) ? $produit['checked'] : false; ?>
             <div class="card_produit" id="produit_<?php echo htmlspecialchars($idProduit); ?>">
-                <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($produit['nom']); ?>">
+                <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars(isset($produit['image']) ? $produit['image'] : 'default.jpg'); ?>" alt="<?php echo htmlspecialchars(isset($produit['nom']) ? $produit['nom'] : 'Produit inconnu'); ?>">
                 <h4>
                     <input type="checkbox" class="produit-checkbox" data-id="<?php echo htmlspecialchars($idProduit); ?>" <?php echo $checked ? 'checked' : ''; ?>>
-                    <?php echo htmlspecialchars($produit['nom']); ?>
+                    <?php echo htmlspecialchars(isset($produit['nom']) ? $produit['nom'] : 'Produit inconnu'); ?>
                 </h4>
-                <p><?php echo htmlspecialchars($produit['description']); ?></p>
-                <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?></span> €</p>
+                <p><?php echo htmlspecialchars(isset($produit['description']) ? $produit['description'] : 'Aucune description disponible.'); ?></p>
+                <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars(isset($produit['prix']) ? $produit['prix'] : 0); ?></span> €</p>
                 <p>Quantité :</p>
-                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" max="<?php echo intval($produit['quantite_max']); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($idProduit); ?>">
-                <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
-                <button class="btn btn-supprimer" data-id="<?php echo intval($produit['id']); ?>">Supprimer</button>
+                <input type="number" value="<?php echo intval(isset($produit['quantite']) ? $produit['quantite'] : 1); ?>" min="1" max="<?php echo intval(isset($produit['quantite_max']) ? $produit['quantite_max'] : 1); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($idProduit); ?>">
+                <p>Total : <span class="produit-total"><?php echo htmlspecialchars((isset($produit['prix']) ? $produit['prix'] : 0) * (isset($produit['quantite']) ? $produit['quantite'] : 0)); ?> €</span></p>
+                <button class="btn btn-supprimer" data-id="<?php echo intval(isset($produit['id']) ? $produit['id'] : 0); ?>">Supprimer</button>
             </div>
         <?php } ?>
 
         <h4>Total du panier : <span id="total-panier"><?php echo number_format($totalPanier, 2, ',', ' '); ?> €</span></h4>
-        <button class="btn btn-ajouter">Valider la commande</button>
+        
+        <!-- Formulaire de paiement PayPal -->
+        <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="sb-ogdke33654309@business.example.com"> <!-- Remplacez par votre email sandbox -->
+            <input type="hidden" name="item_name" value="<?php echo htmlspecialchars($itemName); ?>">            
+            <input type="hidden" name="amount" id="paypal-amount" value="<?php echo number_format($totalPanier, 2, '.', ''); ?>">
+            <input type="hidden" name="currency_code" value="EUR">
+            <input type="hidden" name="return" value="http://localhost/boutique-en-ligne/confirmation">
+            <input type="hidden" name="cancel_return" value="http://localhost/boutique-en-ligne/panier">
+            <button type="submit" class="btn btn-ajouter">Payer avec PayPal</button>
+        </form>
+        
     <?php } else { ?>
         <p>Votre panier est vide.</p>
     <?php } ?>
@@ -73,97 +95,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </div>
 
 <script>
-function updateTotalProduit(idProduit) {
-    const produitElement = document.getElementById('produit_' + idProduit);
-    const prix = parseFloat(produitElement.querySelector('.prix-produit').textContent);
-    const quantite = parseInt(produitElement.querySelector('.quantite-input').value);
 
-    if (!isNaN(prix) && !isNaN(quantite) && quantite > 0) {
-        const totalProduit = prix * quantite;
-        produitElement.querySelector('.produit-total').textContent = totalProduit.toFixed(2) + ' €';
-    }
-    updateTotalPanier();
-    saveQuantite(idProduit, quantite);
-}
-
-function updateTotalPanier() {
+// Fonction pour recalculer le total du panier
+function updateTotal() {
     let total = 0;
 
+    // Parcourt chaque produit et calcule le total
     document.querySelectorAll('.card_produit').forEach(produit => {
         const checkbox = produit.querySelector('.produit-checkbox');
+        const quantiteInput = produit.querySelector('.quantite-input');
         const prix = parseFloat(produit.querySelector('.prix-produit').textContent);
-        const quantite = parseInt(produit.querySelector('.quantite-input').value);
+        const quantite = parseInt(quantiteInput.value);
 
-        if (checkbox.checked && !isNaN(prix) && !isNaN(quantite) && quantite > 0) {
+        // Si le produit est coché, ajoute son coût au total
+        if (checkbox.checked) {
             total += prix * quantite;
         }
     });
 
+    // Met à jour le total affiché
     document.getElementById('total-panier').textContent = total.toFixed(2).replace('.', ',') + ' €';
+    
+    // Met à jour le champ `amount` dans le formulaire PayPal
+    document.getElementById('paypal-amount').value = total.toFixed(2);
 }
 
-function saveQuantite(idProduit, quantite) {
-    fetch('', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `action=mettreAJourQuantite&id=${idProduit}&quantite=${quantite}`
-    });
-}
-
-function saveCheckboxState(idProduit, checked) {
-    fetch('', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `action=mettreAJourChecked&id=${idProduit}&checked=${checked}`
-    });
-}
-
-document.querySelectorAll('.produit-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        updateTotalPanier();
-        saveCheckboxState(this.dataset.id, this.checked);
-    });
+// Ajoute un écouteur d'événement sur les champs quantité et cases à cocher
+document.querySelectorAll('.quantite-input, .produit-checkbox').forEach(input => {
+    input.addEventListener('change', updateTotal);
 });
 
-document.querySelectorAll('.quantite-input').forEach(input => {
-    input.addEventListener('input', function() {
-        updateTotalProduit(this.dataset.id);
-    });
-});
-
-document.querySelectorAll('.btn-supprimer').forEach(button => {
-    button.addEventListener('click', function() {
-        const idProduit = this.dataset.id;
-        fetch('', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `action=supprimerProduit&id=${idProduit}`
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('confirmation-message').textContent = data;
-            const popup = document.getElementById('confirmation-popup');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3000);
-
-            const produitElement = document.getElementById('produit_' + idProduit);
-            if (produitElement) {
-                produitElement.remove();
-            }
-            updateTotalPanier();
-        })
-        .catch(error => console.error('Erreur:', error));
-    });
-});
-
-document.addEventListener('DOMContentLoaded', updateTotalPanier);
 
 </script>

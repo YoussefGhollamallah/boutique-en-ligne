@@ -24,7 +24,6 @@ class PanierController
         return $this->modelPanier->supprimerProduitDuPanier($idProduit);
     }
 
-
     public function mettreAJourCheckedProduit($idProduit, $checked)
     {
         return $this->modelPanier->mettreAJourChecked($idProduit, $checked);
@@ -35,6 +34,19 @@ class PanierController
         $quantiteMax = $this->modelPanier->getQuantiteDisponible($idProduit);
         $quantiteAjustee = min($quantite, $quantiteMax);
         return $this->modelPanier->mettreAJourQuantite($idProduit, $quantiteAjustee);
+    }
+
+    public function enregistrerCommande($userId, $statut = 'en cours', $dateCommande = null)
+    {
+        if (is_null($dateCommande)) {
+            $dateCommande = date('Y-m-d H:i:s'); // Date actuelle si non fournie
+        }
+        return $this->modelPanier->enregistrerCommande($userId, $statut, $dateCommande);
+    }
+
+    public function calculerTotalPanier()
+    {
+        return $this->modelPanier->calculerTotalPanier();
     }
 }
 ?>

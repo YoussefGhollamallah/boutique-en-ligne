@@ -4,14 +4,10 @@ session_start();
 $panierController = new PanierController();
 $panier = $panierController->afficherPanier();
 
-$totalPanier = 0;
-if (!empty($panier)) {
-    foreach ($panier as $produit) {
-        if (isset($produit['checked']) && $produit['checked']) {
-            $totalPanier += $produit['prix'] * $produit['quantite'];
-        }
-    }
-}
+$totalPanier = $panierController->calculerTotalPanier(); // Utilisez la méthode publique
+
+// Initialisation de $itemName
+$itemName = "Commande de produits : ";
 
 // Gestion des actions POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -39,6 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $panierController->mettreAJourCheckedProduit($idProduit, $checked);
         exit;
     }
+
+    // Construction de $itemName à partir du panier
+    foreach ($panier as $produit) {
+        if (isset($produit['checked']) && $produit['checked']) {
+            $itemName .= isset($produit['nom']) ? $produit['nom'] : "Produit inconnu" . ", ";
+        }
+    }
+    $itemName = rtrim($itemName, ', '); // Enlève la dernière virgule
 }
 ?>
 
@@ -48,17 +52,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php foreach ($panier as $idProduit => $produit) {
             $checked = isset($produit['checked']) ? $produit['checked'] : false; ?>
             <div class="card_produit" id="produit_<?php echo htmlspecialchars($idProduit); ?>">
-                <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($produit['nom']); ?>">
+                <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars(isset($produit['image']) ? $produit['image'] : 'default.jpg'); ?>" alt="<?php echo htmlspecialchars(isset($produit['nom']) ? $produit['nom'] : 'Produit inconnu'); ?>">
                 <h4>
                     <input type="checkbox" class="produit-checkbox" data-id="<?php echo htmlspecialchars($idProduit); ?>" <?php echo $checked ? 'checked' : ''; ?>>
-                    <?php echo htmlspecialchars($produit['nom']); ?>
+                    <?php echo htmlspecialchars(isset($produit['nom']) ? $produit['nom'] : 'Produit inconnu'); ?>
                 </h4>
-                <p><?php echo htmlspecialchars($produit['description']); ?></p>
-                <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?></span> €</p>
+                <p><?php echo htmlspecialchars(isset($produit['description']) ? $produit['description'] : 'Aucune description disponible.'); ?></p>
+                <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars(isset($produit['prix']) ? $produit['prix'] : 0); ?></span> €</p>
                 <p>Quantité :</p>
-                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" max="<?php echo intval($produit['quantite_max']); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($idProduit); ?>">
-                <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
-                <button class="btn btn-supprimer" data-id="<?php echo intval($produit['id']); ?>">Supprimer</button>
+                <input type="number" value="<?php echo intval(isset($produit['quantite']) ? $produit['quantite'] : 1); ?>" min="1" max="<?php echo intval(isset($produit['quantite_max']) ? $produit['quantite_max'] : 1); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($idProduit); ?>">
+                <p>Total : <span class="produit-total"><?php echo htmlspecialchars((isset($produit['prix']) ? $produit['prix'] : 0) * (isset($produit['quantite']) ? $produit['quantite'] : 0)); ?> €</span></p>
+                <button class="btn btn-supprimer" data-id="<?php echo intval(isset($produit['id']) ? $produit['id'] : 0); ?>">Supprimer</button>
             </div>
         <?php } ?>
 
@@ -67,11 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Formulaire de paiement PayPal -->
         <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
             <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="your-sandbox-email@example.com"> <!-- Remplacez par votre email sandbox -->
-            <input type="hidden" name="item_name" value="Votre commande">
+            <input type="hidden" name="business" value="sb-ogdke33654309@business.example.com"> <!-- Remplacez par votre email sandbox -->
+            <input type="hidden" name="item_name" value="<?php echo htmlspecialchars($itemName); ?>">            
             <input type="hidden" name="amount" value="<?php echo number_format($totalPanier, 2, '.', ''); ?>">
             <input type="hidden" name="currency_code" value="EUR">
-            <input type="hidden" name="return" value="http://localhost/boutique-en-ligne/confirmation.php?status=success">
+            <input type="hidden" name="return" value="http://localhost/boutique-en-ligne/confirmation">
             <input type="hidden" name="cancel_return" value="http://localhost/boutique-en-ligne/panier">
             <button type="submit" class="btn btn-ajouter">Payer avec PayPal</button>
         </form>

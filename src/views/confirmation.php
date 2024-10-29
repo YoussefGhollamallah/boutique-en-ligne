@@ -1,5 +1,14 @@
 <?php
-session_start();
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user'])) {
+    header('Location: connexion');
+    exit;
+}
+
 ?>
 
 <h2>Confirmation de Commande</h2>

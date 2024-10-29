@@ -52,5 +52,11 @@ class PanierController
     {
         return $this->modelPanier->calculerTotalPanier();
     }
+
+    public function stockerProduitsPayes($produits)
+    {
+        $_SESSION['produits_payes'] = implode(',', $produits);
+    }
+
 }
 ?>

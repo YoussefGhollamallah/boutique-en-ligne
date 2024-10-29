@@ -7,6 +7,7 @@ $totalPanier = $panierController->calculerTotalPanier(); // Recalcul du total
 
 // Initialisation de $itemName pour passer des informations sur la commande à PayPal
 $itemName = "Commande de produits : ";
+
 foreach ($panier as $produit) {
     if (isset($produit['checked']) && $produit['checked']) {
         $itemName .= isset($produit['nom']) ? $produit['nom'] : "Produit inconnu" . ", ";
@@ -80,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="hidden" name="item_name" value="<?php echo htmlspecialchars($itemName); ?>">            
             <input type="hidden" name="amount" id="paypal-amount" value="<?php echo number_format($totalPanier, 2, '.', ''); ?>">
             <input type="hidden" name="currency_code" value="EUR">
-            <input type="hidden" name="return" value="http://localhost/boutique-en-ligne/confirmation">
+            <input type="hidden" name="return" value="http://localhost/boutique-en-ligne/confirmation?status=success">
             <input type="hidden" name="cancel_return" value="http://localhost/boutique-en-ligne/panier">
             <button type="submit" class="btn btn-ajouter">Payer avec PayPal</button>
         </form>

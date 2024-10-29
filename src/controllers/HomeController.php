@@ -125,15 +125,27 @@ class HomeController
         $myView->setVars(['title' => $title]);
         $myView->render();
     }
+
     public function showAdminUsers()
     {
         $title = 'Pixel Plush - Admin Users';
         $myView = new View('admin-users');
+        $myView->setVars(['title' => $title]);
+        $myView->render();
     }
+
     public function showAdminCategory()
     {
         $title = 'Pixel Plush - Admin Catégories';
         $myView = new View('admin-sub-category');
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+
+    public function showConfirmation()
+    {
+        $title = 'Pixel Plush - Confirmation paiemet';
+        $myView = new View('confirmation');
         $myView->setVars(['title' => $title]);
         $myView->render();
     }

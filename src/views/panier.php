@@ -3,11 +3,16 @@ session_start();
 
 $panierController = new PanierController();
 $panier = $panierController->afficherPanier();
+$totalPanier = $panierController->calculerTotalPanier(); // Recalcul du total
 
-$totalPanier = $panierController->calculerTotalPanier(); // Utilisez la méthode publique
-
-// Initialisation de $itemName
+// Initialisation de $itemName pour passer des informations sur la commande à PayPal
 $itemName = "Commande de produits : ";
+foreach ($panier as $produit) {
+    if (isset($produit['checked']) && $produit['checked']) {
+        $itemName .= isset($produit['nom']) ? $produit['nom'] : "Produit inconnu" . ", ";
+    }
+}
+$itemName = rtrim($itemName, ', ');
 
 // Gestion des actions POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -73,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="hidden" name="cmd" value="_xclick">
             <input type="hidden" name="business" value="sb-ogdke33654309@business.example.com"> <!-- Remplacez par votre email sandbox -->
             <input type="hidden" name="item_name" value="<?php echo htmlspecialchars($itemName); ?>">            
-            <input type="hidden" name="amount" value="<?php echo number_format($totalPanier, 2, '.', ''); ?>">
+            <input type="hidden" name="amount" id="paypal-amount" value="<?php echo number_format($totalPanier, 2, '.', ''); ?>">
             <input type="hidden" name="currency_code" value="EUR">
             <input type="hidden" name="return" value="http://localhost/boutique-en-ligne/confirmation">
             <input type="hidden" name="cancel_return" value="http://localhost/boutique-en-ligne/panier">
@@ -88,3 +93,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: red; color: #e1664d; padding: 10px; border-radius: 20px;">
     <p id="confirmation-message"></p>
 </div>
+
+<script>
+
+// Fonction pour recalculer le total du panier
+function updateTotal() {
+    let total = 0;
+
+    // Parcourt chaque produit et calcule le total
+    document.querySelectorAll('.card_produit').forEach(produit => {
+        const checkbox = produit.querySelector('.produit-checkbox');
+        const quantiteInput = produit.querySelector('.quantite-input');
+        const prix = parseFloat(produit.querySelector('.prix-produit').textContent);
+        const quantite = parseInt(quantiteInput.value);
+
+        // Si le produit est coché, ajoute son coût au total
+        if (checkbox.checked) {
+            total += prix * quantite;
+        }
+    });
+
+    // Met à jour le total affiché
+    document.getElementById('total-panier').textContent = total.toFixed(2).replace('.', ',') + ' €';
+    
+    // Met à jour le champ `amount` dans le formulaire PayPal
+    document.getElementById('paypal-amount').value = total.toFixed(2);
+}
+
+// Ajoute un écouteur d'événement sur les champs quantité et cases à cocher
+document.querySelectorAll('.quantite-input, .produit-checkbox').forEach(input => {
+    input.addEventListener('change', updateTotal);
+});
+
+
+</script>

@@ -89,15 +89,17 @@ class ModelPanier
     }
 
     public function calculerTotalPanier()
-    {
-        $total = 0;
-        foreach ($this->getPanier() as $produit) {
-            if (isset($produit['checked']) && $produit['checked']) {
-                $total += $produit['prix'] * $produit['quantite'];
-            }
+{
+    $total = 0;
+    foreach ($this->getPanier() as $produit) {
+        if (isset($produit['checked']) && $produit['checked']) {
+            $total += $produit['prix'] * $produit['quantite'];
         }
-        return $total;
     }
+    $_SESSION['montant_total'] = $total; // Met à jour le total en session
+    return $total;
+}
+
 
     public function getQuantiteDisponible($id)
     {

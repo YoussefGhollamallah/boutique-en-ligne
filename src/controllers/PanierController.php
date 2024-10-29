@@ -30,11 +30,15 @@ class PanierController
     }
 
     public function mettreAJourQuantite($idProduit, $quantite)
-    {
-        $quantiteMax = $this->modelPanier->getQuantiteDisponible($idProduit);
-        $quantiteAjustee = min($quantite, $quantiteMax);
-        return $this->modelPanier->mettreAJourQuantite($idProduit, $quantiteAjustee);
-    }
+{
+    $quantiteMax = $this->modelPanier->getQuantiteDisponible($idProduit);
+    $quantiteAjustee = min($quantite, $quantiteMax);
+    $this->modelPanier->mettreAJourQuantite($idProduit, $quantiteAjustee);
+    
+    // Recalculez et stockez le total après chaque mise à jour
+    $_SESSION['montant_total'] = $this->calculerTotalPanier();
+}
+
 
     public function enregistrerCommande($userId, $statut = 'en cours', $dateCommande = null)
     {

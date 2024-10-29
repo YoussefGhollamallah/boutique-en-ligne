@@ -20,6 +20,21 @@ class ModelUtilisateur
             throw new Exception("Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage());
         }
     }
+    
+    public function resetPassword($email, $password)
+    {
+        try {
+            $requete = $this->connexion->prepare("UPDATE Utilisateur SET mot_de_passe = :password WHERE email = :email");
+            $requete->bindParam(':password', $password);
+            $requete->bindParam(':email', $email);
+            $requete->execute();
+    
+            // Vérifie si la requête a mis à jour une ligne
+            return $requete->rowCount() > 0; // Retourne true si la mise à jour a réussi, false sinon
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la réinitialisation du mot de passe : " . $e->getMessage());
+        }
+    }
 
     public function userConnexion($email, $password)
     {

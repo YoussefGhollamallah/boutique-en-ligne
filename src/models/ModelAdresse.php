@@ -30,7 +30,7 @@ class ModelAdresse
         }
     }
     
-    public function addAdress($user_id, $adresse, $adresse_complement, $code_postal, $ville, $pays)
+    public function addAdresse($user_id, $adresse, $adresse_complement, $code_postal, $ville, $pays)
     {
         $existAdresse = $this->getAdresse($user_id);
         if ($existAdresse) {

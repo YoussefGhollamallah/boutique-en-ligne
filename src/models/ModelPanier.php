@@ -13,19 +13,15 @@ class ModelPanier
 
     public function ajouterProduit($idProduit, $quantite = 1, $checked = false)
     {
-        if (!isset($_SESSION['panier'])) 
-        {
+        if (!isset($_SESSION['panier'])) {
             $_SESSION['panier'] = [];
         }
 
-        if (isset($_SESSION['panier'][$idProduit])) 
-        {
+        if (isset($_SESSION['panier'][$idProduit])) {
             $_SESSION['panier'][$idProduit]['quantite'] += $quantite;
-        } else 
-        {
+        } else {
             $produit = $this->getProduct($idProduit);
-            if ($produit) 
-            {
+            if ($produit) {
                 $quantiteDisponible = $this->getQuantiteDisponible($idProduit);
                 $_SESSION['panier'][$idProduit] = [
                     'nom' => $produit['nom'],
@@ -41,11 +37,9 @@ class ModelPanier
         }
     }
 
-
     public function mettreAJourChecked($idProduit, $checked)
     {
-        if (isset($_SESSION['panier'][$idProduit])) 
-        {
+        if (isset($_SESSION['panier'][$idProduit])) {
             $_SESSION['panier'][$idProduit]['checked'] = $checked;
             return true;
         }
@@ -54,21 +48,18 @@ class ModelPanier
 
     public function getProduct($id)
     {
-        try 
-        {
+        try {
             $requete = $this->connexion->prepare("SELECT * FROM Produit WHERE id = :id");
             $requete->execute(['id' => $id]);
             return $requete->fetch(PDO::FETCH_ASSOC);
-        } catch (Exception $e) 
-        {
+        } catch (Exception $e) {
             throw new Exception("Erreur lors de la récupération du produit : " . $e->getMessage());
         }
     }
 
     public function supprimerProduitDuPanier($idProduit)
     {
-        if (isset($_SESSION['panier'][$idProduit])) 
-        {
+        if (isset($_SESSION['panier'][$idProduit])) {
             unset($_SESSION['panier'][$idProduit]);
             return true;
         }
@@ -77,8 +68,7 @@ class ModelPanier
 
     public function mettreAJourQuantite($idProduit, $quantite)
     {
-        if (isset($_SESSION['panier'][$idProduit]) && $quantite > 0) 
-        {
+        if (isset($_SESSION['panier'][$idProduit]) && $quantite > 0) {
             $_SESSION['panier'][$idProduit]['quantite'] = $quantite;
             return true;
         }
@@ -87,7 +77,10 @@ class ModelPanier
 
     public function getPanier()
     {
-        return isset($_SESSION['panier']) ? $_SESSION['panier'] : [];
+        if (!isset($_SESSION['panier'])) {
+            $_SESSION['panier'] = []; // Initialiser le panier si non défini
+        }
+        return $_SESSION['panier'];
     }
 
     public function viderPanier()
@@ -96,30 +89,47 @@ class ModelPanier
     }
 
     public function calculerTotalPanier()
-    {
-        $total = 0;
-        foreach ($_SESSION['panier'] as $produit) {
-            if (isset($produit['checked']) && $produit['checked']) 
-            {
-                $total += $produit['prix'] * $produit['quantite'];
-            }
+{
+    $total = 0;
+    foreach ($this->getPanier() as $produit) {
+        if (isset($produit['checked']) && $produit['checked']) {
+            $total += $produit['prix'] * $produit['quantite'];
         }
-        return $total;
     }
+    $_SESSION['montant_total'] = $total; // Met à jour le total en session
+    return $total;
+}
+
 
     public function getQuantiteDisponible($id)
     {
-        try 
-        {
+        try {
             $requete = $this->connexion->prepare("SELECT quantite FROM Produit WHERE id = :id");
             $requete->execute(['id' => $id]);
             $resultat = $requete->fetch(PDO::FETCH_ASSOC);
             return $resultat['quantite'] ?? 0; // Renvoie 0 si aucune quantité n'est trouvée
-        } catch (Exception $e) 
-        {
+        } catch (Exception $e) {
             throw new Exception("Erreur lors de la récupération de la quantité disponible : " . $e->getMessage());
         }
     }
 
+    public function enregistrerCommande($userId, $statut = 'en cours', $dateCommande = null)
+    {
+        if (is_null($dateCommande)) {
+            $dateCommande = date('Y-m-d H:i:s'); // Date actuelle si non fournie
+        }
+
+        try {
+            $requete = $this->connexion->prepare("INSERT INTO Commandes (user_id, statut, date_commande) VALUES (:userId, :statut, :dateCommande)");
+            $requete->execute([
+                'userId' => $userId,
+                'statut' => $statut,
+                'dateCommande' => $dateCommande
+            ]);
+            return $this->connexion->lastInsertId(); // Renvoie l'ID de la commande créée
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de l'enregistrement de la commande : " . $e->getMessage());
+        }
+    }
 }
 ?>

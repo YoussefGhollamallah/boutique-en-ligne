@@ -23,7 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nom = htmlspecialchars(trim($_POST['nom']));
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        if (!empty($prenom) && !empty($nom) && !empty($email) && !empty($hashedPassword)) {
+        // Vérification de l'unicité de l'email
+        if ($user->emailExists($email)) {
+            $error = "Cet email est déjà utilisé.";
+        } else {
             // Générer un code de vérification sécurisé
             $verification_code = random_int(100000, 999999);
 
@@ -31,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail = new PHPMailer(true);
 
             try {
-                
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com'; 
                 $mail->SMTPAuth   = true;
@@ -49,12 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Contenu de l'email
                 $mail->isHTML(true);
                 $mail->Subject = 'Code de vérification';
-                $mail->Body    = "Bonjour ". $prenom . ' votre code de vérification est : ' . $verification_code . "<br> nous vous remercions de votre inscription sur notre site Pixel Plush";
+                $mail->Body    = "Bonjour ". $prenom . ', votre code de vérification est : ' . $verification_code . "<br> Nous vous remercions de votre inscription sur notre site Pixel Plush";
 
                 // Envoi de l'email
                 $mail->send();
 
-                session_start();
                 // Stocker les informations utilisateur et le code de vérification dans la session
                 $_SESSION['prenom'] = $prenom;
                 $_SESSION['nom'] = $nom;
@@ -70,8 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } catch (Exception $e) {
                 echo "Erreur lors de l'envoi de l'email. PHPMailer Erreur : {$mail->ErrorInfo}";
             }
-        } else {
-            echo "Tous les champs sont obligatoires.";
         }
     } elseif ($action === 'login') {
         if (!empty($email) && !empty($password)) {
@@ -81,10 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: profil');
                 exit();
             } else {
-                echo "Email ou mot de passe incorrect.";
+                $error = "Email ou mot de passe incorrect.";
             }
         } else {
-            echo "Tous les champs sont obligatoires.";
+            $error = "Tous les champs sont obligatoires.";
         }
     }
 }
@@ -100,6 +99,9 @@ if (isset($_SESSION['user'])) {
             <button class="btn btn-primary form-button" onclick="switchForm('login')">Déjà un compte? Connectez-vous</button>
             <h2>Inscription</h2>
             <form class="form" action="" method="post">
+                <?php if (isset($error) && $action === 'register'): ?>
+                    <p style="color:red;"><?php echo $error; ?></p>
+                <?php endif; ?>
                 <input type="hidden" name="action" value="register">
                 <div>
                     <label for="prenom">Prénom</label>
@@ -115,7 +117,6 @@ if (isset($_SESSION['user'])) {
                 </div>
                 <div>
                     <label for="password">Mot de passe</label>
-                    <br>
                     <input type="password" name="password" id="password" required>
                 </div>
                 <button class="btn btn-ajouter" type="submit">S'inscrire</button>
@@ -126,6 +127,9 @@ if (isset($_SESSION['user'])) {
             <button class="btn btn-primary form-button" onclick="switchForm('register')">Pas encore de compte? Inscrivez-vous</button>
             <h2>Connexion</h2>
             <form action="" class="form" method="post">
+                <?php if (isset($error) && $action === 'login'): ?>
+                    <p style="color:red;"><?php echo $error; ?></p>
+                <?php endif; ?>
                 <input type="hidden" name="action" value="login">
                 <div>
                     <label for="email">Email</label>
@@ -137,6 +141,9 @@ if (isset($_SESSION['user'])) {
                 </div>
                 <button class="btn btn-ajouter" type="submit">Se connecter</button>
             </form>
+            <div style="margin-top: 10px;">
+                <a href="reset_request" class="btn btn-secondary">Mot de passe oublié ?</a>
+            </div>
         </div>
     </div>
 </main>

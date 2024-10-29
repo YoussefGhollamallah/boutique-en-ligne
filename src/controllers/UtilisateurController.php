@@ -18,10 +18,30 @@ class UtilisateurController{
         return $this->modelUtilisateur->userConnexion($email, $password);
     }
 
+    public function emailExists($email)
+    {
+        return $this->modelUtilisateur->emailExists($email);
+    }
+
+
+
     public function getAllUsers()
     {
         return $this->modelUtilisateur->getAllUsers();
     }
+
+    public function resetPassword($email, $password)
+        {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $result = $this->modelUtilisateur->resetPassword($email, $hashedPassword);
+            
+            if ($result) {
+                return "Le mot de passe a été mis à jour avec succès.";
+            } else {
+                return "Aucune mise à jour effectuée. L'adresse e-mail est peut-être incorrecte.";
+            }
+        }
+    
 
     public function getRoles()
     {

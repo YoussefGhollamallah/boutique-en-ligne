@@ -10,6 +10,7 @@ class AdresseController
         $this->modelAdresses = new ModelAdresse();
     }
 
+
     // Méthode pour récupérer une adresse à partir d'un identifiant utilisateur
     public function getAdresse($user_id)
     {

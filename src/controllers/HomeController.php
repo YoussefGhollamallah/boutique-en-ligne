@@ -95,6 +95,28 @@ class HomeController
     }
 }
 
+    public function showResetPassword()
+    {
+        $title = "Pixel Plush - Reset Password";
+        $myView = new View("reset_password");
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+    public function showResetRequest()
+    {
+        $title = "Pixel Plush - Reset request";
+        $myView = new View("reset_request");
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+    public function showPasswordVerify()
+    {
+        $title = "Pixel Plush - VerifyPassword";
+        $myView = new View("verification_password");
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+
 
     public function showAdminProduits()
     {
@@ -103,15 +125,27 @@ class HomeController
         $myView->setVars(['title' => $title]);
         $myView->render();
     }
+
     public function showAdminUsers()
     {
         $title = 'Pixel Plush - Admin Users';
         $myView = new View('admin-users');
+        $myView->setVars(['title' => $title]);
+        $myView->render();
     }
+
     public function showAdminCategory()
     {
         $title = 'Pixel Plush - Admin Catégories';
         $myView = new View('admin-sub-category');
+        $myView->setVars(['title' => $title]);
+        $myView->render();
+    }
+
+    public function showConfirmation()
+    {
+        $title = 'Pixel Plush - Confirmation paiemet';
+        $myView = new View('confirmation');
         $myView->setVars(['title' => $title]);
         $myView->render();
     }

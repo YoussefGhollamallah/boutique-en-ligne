@@ -317,6 +317,10 @@ a {
     align-items: center;
 }
 
+.justify-center {
+    justify-content: center !important;
+}
+
 .justify-between {
     justify-content: space-between;
 }
@@ -331,6 +335,10 @@ a {
 
 .gap {
     gap: 20px;
+}
+
+.small-gap {
+    gap: 10px;
 }
 
 .box-shadow {
@@ -844,6 +852,7 @@ select:focus {
 .cart-item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background-color: var(--background);
     padding: 10px;
     margin-bottom: 10px;
@@ -875,7 +884,6 @@ select:focus {
     border-left: 2px solid var(--background);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     gap: 10px;
 }
 
@@ -1094,8 +1102,12 @@ select:focus {
     #nom_panier {
         display: none;
     }
-
+    
     .section_panier .btn {
         padding: 5px 10px;
+    }
+
+    .section_panier h4 {
+        font-size: 1rem;
     }
 }

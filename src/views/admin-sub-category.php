@@ -2,6 +2,21 @@
 // include('CatchThis.php');
 include('../controllers/AdminTreatments.php');
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user'])) {
+    header('Location: connexion');
+    exit;
+}
+
+if (isset($_SESSION["user"]["role_id"]) && $_SESSION["user"]["role_id"] != 1) {
+    header('Location: index');
+    exit;
+}
+
+
 ?>
 
 

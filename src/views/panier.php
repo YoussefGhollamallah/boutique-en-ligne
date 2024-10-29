@@ -7,6 +7,7 @@ $totalPanier = $panierController->calculerTotalPanier(); // Recalcul du total
 
 // Initialisation de $itemName pour passer des informations sur la commande à PayPal
 $itemName = "Commande de produits : ";
+
 foreach ($panier as $produit) {
     if (isset($produit['checked']) && $produit['checked']) {
         $itemName .= isset($produit['nom']) ? $produit['nom'] : "Produit inconnu" . ", ";

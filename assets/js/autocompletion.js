@@ -29,14 +29,20 @@ const searchKeywords = async () => {
             const json = await req.json();
             suggestionBox.innerHTML = '';
 
+            const formatProductName = (name) => {
+                return name
+                    .replace(/_/g, ' ') // Remplace les underscores par des espaces
+                    .replace(/\b\w/g, char => char.toUpperCase()); // Met en majuscule la première lettre de chaque mot
+            };
+
             if (json.length > 0) {
                 json.forEach((element) => {
                     const div = document.createElement("div");
                     div.classList.add("suggestion-item");
-                    div.textContent = element.nom;
+                    div.textContent = formatProductName(element.nom); // Applique la transformation
 
                     div.addEventListener('click', () => {
-                        document.getElementById('search').value = element.nom;
+                        document.getElementById('search').value = formatProductName(element.nom); // Applique aussi lors du clic
                         suggestionBox.innerHTML = '';
                         suggestionBox.style.display = 'none';
                         window.location.href = `${window.location.origin}/boutique-en-ligne/detail/${element.id}`;
@@ -55,7 +61,7 @@ const searchKeywords = async () => {
             suggestionBox.style.display = 'block';
         }
     }, 300);
-};
+}
 
 document.getElementById('search').addEventListener('input', searchKeywords);
 

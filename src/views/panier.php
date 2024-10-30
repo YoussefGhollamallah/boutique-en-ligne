@@ -53,20 +53,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h3>Votre Panier</h3>
     <?php if (!empty($panier)) : ?>
         <?php foreach ($panier as $produit) : ?>
-            <div class="card_produit" id="produit_<?php echo htmlspecialchars($produit['produit_id']); ?>">
-                <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($produit['nom']); ?>">
-                <h4>
-                    <input type="checkbox" class="produit-checkbox" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>" <?php echo $produit['checked'] ? 'checked' : ''; ?>>
-                    <?php echo htmlspecialchars($produit['nom']); ?>
-                </h4>
-                <p><?php echo htmlspecialchars($produit['description']); ?></p>
-                <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?></span> €</p>
-                <p>Quantité :</p>
-                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" class="quantite-input" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">
-                <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
-                <button class="btn btn-supprimer" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">Supprimer</button>
-            </div>
-        <?php endforeach; ?>
+    <div class="card_produit" id="produit_<?php echo htmlspecialchars($produit['produit_id']); ?>">
+        <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($produit['nom']); ?>">
+        <h4>
+            <input type="checkbox" class="produit-checkbox" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>" <?php echo $produit['checked'] ? 'checked' : ''; ?>>
+            <?php echo htmlspecialchars($produit['nom']); ?>
+        </h4>
+        <p><?php echo htmlspecialchars($produit['description']); ?></p>
+        <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?></span> €</p>
+        <p>Quantité :</p>
+        <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" max="<?php echo intval($produit['quantite_disponible']); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">
+        <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
+        <button class="btn btn-supprimer" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">Supprimer</button>
+    </div>
+<?php endforeach; ?>
 
         <h4>Total du panier : <span id="total-panier"><?php echo number_format($totalPanier, 2, ',', ' '); ?> €</span></h4>
         

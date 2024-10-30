@@ -11,9 +11,12 @@ class PanierController
 
     public function ajouterProduitAuPanier($idProduit, $quantite)
     {
-        $userId = $_SESSION['user_id'] ?? 0; // Assurez-vous d'avoir un système d'authentification
+    $userId = $_SESSION['user_id'] ?? 0; // Assurez-vous d'avoir un système d'authentification
+    if ($quantite > 0) { // Assurez-vous que la quantité est supérieure à zéro
         $this->modelPanier->ajouterProduit($userId, $idProduit, $quantite);
     }
+    }
+
 
     public function afficherPanier()
     {

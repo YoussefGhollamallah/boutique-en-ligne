@@ -27,15 +27,15 @@ class ModelPanier
     }
 
     public function getPanier($userId)
-    {
-        $stmt = $this->connexion->prepare("SELECT p.*, pr.nom, pr.prix, pr.image, pr.description 
-                                           FROM Panier p 
-                                           JOIN Produit pr ON p.produit_id = pr.id 
-                                           WHERE p.user_id = :user_id
-                                           ORDER BY p.date_ajout DESC");
-        $stmt->execute([':user_id' => $userId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+{
+    $stmt = $this->connexion->prepare("SELECT p.*, pr.nom, pr.prix, pr.image, pr.description, pr.quantite AS quantite_disponible
+                                       FROM Panier p
+                                       JOIN Produit pr ON p.produit_id = pr.id
+                                       WHERE p.user_id = :user_id
+                                       ORDER BY p.date_ajout DESC");
+    $stmt->execute([':user_id' => $userId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
     public function supprimerProduit($userId, $idProduit)
     {

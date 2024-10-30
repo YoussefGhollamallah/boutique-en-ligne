@@ -242,12 +242,13 @@ if ($message) {
                 <td><?php echo htmlspecialchars($product['quantite']); ?></td>
                 <td><?php echo htmlspecialchars($product['nom_p']); ?></td>
                 <td><?php echo htmlspecialchars($product['nom_sc']); ?></td>
-                <td>
-                    <button class="btn btn-ajouter" onclick="openEditModal(<?php echo $product['id']; ?>)">Modifier</button>
+                <td class="td-action">
+                    <button class="btn" id="btn-edit" onclick="openEditModal(<?php echo $product['id']; ?>)">Modifier</button>
+                    
                     <form action="" method="POST" style="display:inline;">
                         <input type="hidden" name="action" value="deleteProduct">
                         <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                        <button type="submit" class="btn btn-supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">Supprimer</button>
+                        <button type="submit" id="btn-supprimer" class="btn" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">Supprimer</button>
                     </form>
 
                 </td>

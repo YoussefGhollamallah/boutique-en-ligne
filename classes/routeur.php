@@ -19,8 +19,8 @@ class Routeur
         "admin-sub-category"     => ["controller" => 'HomeController', "method" => 'showAdminCategory'],
         "reset_password"     => ["controller" => 'HomeController', "method" => 'showResetPassword'],
         "reset_request" => ["controller" => "HomeController", "method" => "showResetRequest"],
-        "verification_password" => ["controller" => "HomeController", "method" => "showPasswordVerify"],
-     ];
+        "verification_password" => ["controller" => "HomeController", "method" => "showPasswordVerify"],   
+    ];
 
     public function __construct($request)
     {

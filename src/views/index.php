@@ -21,7 +21,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     exit; // Terminer le script après avoir traité la requête AJAX
 }
 ?>
-<!-- Code HTML ci-dessous reste le même, jusqu'au formulaire d'ajout au panier -->
+
+
+<!-- Section des produits phares -->
+<section class="section_phare">
+    <h3>Nos Nouveautés</h3>
+    <article class="article_phare flex space-around carousel slide box-shadow" data-ride="carousel">
+        <div class="carousel-inner">
+            <?php
+            $isActive = true;
+            foreach ($lastThreeProducts as $produit) {
+                $nomProduit = ucwords(str_replace('_', ' ', $produit['nom']));
+                $activeClass = $isActive ? 'active' : '';
+                $isActive = false;
+            ?>
+                <a class="box-shadow" href="./detail/<?php echo $produit['id'] ?>">
+                    <div class="carousel-item <?php echo $activeClass; ?>">
+                        <div class="product-details">
+                            <img src="assets/images/<?php echo $produit['image']; ?>" alt="Peluche de <?php echo $nomProduit; ?>">
+                            <div class="carousel-caption">
+                                <h5><?php echo $nomProduit; ?></h5>
+                                <p><?php echo $produit['description']; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            <?php
+            }
+            ?>
+        </div>
+        <a class="carousel-control-prev" href="#carouselPharePrev" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </a>
+        <a class="carousel-control-next" href="#carouselPhareNext" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
+    </article>
+</section>
+
+<section class="section_categorie flex column">
+    <h3 id="title_categorie" class="text-center">Catégorie</h3>
+    <article class="flex align-center flex-wrap article_categorie space-around ">
+        <a class="card_categorie box-shadow" onclick="filterProducts(1)">
+            <img src="<?php echo ASSETS ?>images/jeux_videos.png" alt="Jeux Vidéos">
+        </a>
+        <a class="card_categorie box-shadow" onclick="filterProducts(2)">
+            <img src="<?php echo ASSETS ?>images/films_&_series.png" alt="Films et Séries">
+        </a>
+        <section id="sous-categories-container" style="display:none;">
+            <div id="sous-categories-list" class="flex flex-wrap"></div>
+        </section>
+
+    </article>
+</section>
+
+
+<!-- Liste produits -->
 <section class="section_products">
     <h3 id="title_produits">Produits</h3>
     <article class="article_produit flex space-around flex-wrap" id="product-list">

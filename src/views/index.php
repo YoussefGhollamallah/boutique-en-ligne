@@ -5,7 +5,6 @@ session_start();
 $produitController = new ProduitController();
 $products = $produitController->getAllProducts();
 $lastThreeProducts = $produitController->getLastThreeProducts();
-$messageConfirmation = '';
 
 // Vérifie si un produit doit être ajouté au panier
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -13,7 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $panierController = new PanierController();
         $idProduit = intval($_POST['id']);
         $panierController->ajouterProduitAuPanier($idProduit, 1); // Quantité fixée à 1
-        $messageConfirmation = "Le produit a bien été ajouté au panier.";
+        echo "Le produit a bien été ajouté au panier.";
+        exit;
     }
 }
 
@@ -75,6 +75,7 @@ if (isset($_GET['categorieId'])) {
         <section id="sous-categories-container" style="display:none;">
             <div id="sous-categories-list" class="flex flex-wrap"></div>
         </section>
+
     </article>
 </section>
 
@@ -104,24 +105,15 @@ if (isset($_GET['categorieId'])) {
     </article>
 </section>
 
-<?php if ($messageConfirmation): ?>
-    <div id="confirmation-popup" style="display: block; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 20px;">
-        <p id="confirmation-message"><?php echo $messageConfirmation; ?></p>
-    </div>
-<?php endif; ?>
-
+<div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 20px;">
+    <p id="confirmation-message"></p>
+</div>
 <script>
     const BASE_URL = "<?php echo BASE_URL; ?>";
     const ASSETS = "<?php echo ASSETS; ?>";
     const pageURL = "<?php echo $_SERVER['PHP_SELF']; ?>";
-
-    // Masquer le popup de confirmation après quelques secondes
-    setTimeout(() => {
-        const popup = document.getElementById('confirmation-popup');
-        if (popup) {
-            popup.style.display = 'none';
-        }
-    }, 3000);
 </script>
 <script src="<?php echo ASSETS; ?>js/filter.js"></script>
+
+
 <script src="<?php echo ASSETS; ?>js/carousel.js"></script>

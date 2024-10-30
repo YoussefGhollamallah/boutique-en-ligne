@@ -9,34 +9,45 @@ class PanierController
         $this->modelPanier = new ModelPanier();
     }
 
-    public function afficherPanier()
+    public function ajouterProduitAuPanier($idProduit, $quantite)
     {
-        return $this->modelPanier->getPanier();
+        $userId = $_SESSION['user_id'] ?? 0; // Assurez-vous d'avoir un système d'authentification
+        $this->modelPanier->ajouterProduit($userId, $idProduit, $quantite);
     }
 
-    public function ajouterProduitAuPanier($idProduit, $quantite = 1, $checked = false)
+    public function afficherPanier()
     {
-        $this->modelPanier->ajouterProduit($idProduit, $quantite, $checked);
+        $userId = $_SESSION['user_id'] ?? 0;
+        return $this->modelPanier->getPanier($userId);
     }
 
     public function supprimerProduit($idProduit)
     {
-        return $this->modelPanier->supprimerProduitDuPanier($idProduit);
-    }
-
-    public function mettreAJourCheckedProduit($idProduit, $checked)
-    {
-        return $this->modelPanier->mettreAJourChecked($idProduit, $checked);
+        $userId = $_SESSION['user_id'] ?? 0;
+        return $this->modelPanier->supprimerProduit($userId, $idProduit);
     }
 
     public function mettreAJourQuantite($idProduit, $quantite)
     {
-        $this->modelPanier->mettreAJourQuantite($idProduit, $quantite);
+        $userId = $_SESSION['user_id'] ?? 0;
+        $this->modelPanier->mettreAJourQuantite($userId, $idProduit, $quantite);
+    }
+
+    public function mettreAJourCheckedProduit($idProduit, $checked)
+    {
+        $userId = $_SESSION['user_id'] ?? 0;
+        $this->modelPanier->mettreAJourChecked($userId, $idProduit, $checked);
     }
 
     public function calculerTotalPanier()
     {
-        return $this->modelPanier->calculerTotalPanier();
+        $userId = $_SESSION['user_id'] ?? 0;
+        return $this->modelPanier->calculerTotalPanier($userId);
+    }
+
+    public function supprimerProduitsCochesDuPanier()
+    {
+        $userId = $_SESSION['user_id'] ?? 0;
+        return $this->modelPanier->supprimerProduitsCochesPourUtilisateur($userId);
     }
 }
-?>

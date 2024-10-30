@@ -1,100 +1,93 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: index.php?r=connexion');
+    exit;
+}
 
 $panierController = new PanierController();
 $panier = $panierController->afficherPanier();
-$totalPanier = $panierController->calculerTotalPanier(); // Recalcul du total
+$totalPanier = $panierController->calculerTotalPanier();
 
+// Initialisation de $itemName pour PayPal
 $itemName = "Commande de produits : ";
-
 foreach ($panier as $produit) {
-    if (isset($produit['checked']) && $produit['checked']) {
-        $itemName .= isset($produit['nom']) ? $produit['nom'] : "Produit inconnu" . ", ";
+    if ($produit['checked']) {
+        $itemName .= $produit['nom'] . ", ";
     }
 }
 $itemName = rtrim($itemName, ', ');
 
-// Gestion des actions POST
+// Gestion des actions AJAX
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['action']) && $_POST['action'] == 'supprimerProduit') {
-        $idProduit = intval($_POST['id']);
-        $result = $panierController->supprimerProduit($idProduit);
-        echo $result ? "Le produit a bien été retiré du panier" : "Erreur lors de la suppression du produit";
-        exit;
+    $response = ['success' => false];
+    
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'supprimerProduit':
+                $idProduit = intval($_POST['id']);
+                $response['success'] = $panierController->supprimerProduit($idProduit);
+                break;
+            case 'mettreAJourQuantite':
+                $idProduit = intval($_POST['id']);
+                $quantite = intval($_POST['quantite']);
+                $panierController->mettreAJourQuantite($idProduit, $quantite);
+                $response['success'] = true;
+                break;
+            case 'mettreAJourChecked':
+                $idProduit = intval($_POST['id']);
+                $checked = $_POST['checked'] === 'true';
+                $panierController->mettreAJourCheckedProduit($idProduit, $checked);
+                $response['success'] = true;
+                break;
+        }
     }
-
-    if (isset($_POST['action']) && $_POST['action'] == 'mettreAJourQuantite') {
-        $idProduit = intval($_POST['id']);
-        $quantite = intval($_POST['quantite']);
-        $panierController->mettreAJourQuantite($idProduit, $quantite);
-        exit;
-    }
-
-    if (isset($_POST['action']) && $_POST['action'] == 'mettreAJourChecked') {
-        $idProduit = intval($_POST['id']);
-        $checked = $_POST['checked'] === 'true';
-        $panierController->mettreAJourCheckedProduit($idProduit, $checked);
-        exit;
-    }
+    
+    echo json_encode($response);
+    exit;
 }
 ?>
 
 <section class="section">
     <h3>Votre Panier</h3>
-    <?php if (!empty($panier)) { ?>
-        <?php foreach ($panier as $idProduit => $produit) { ?>
-            <div class="card_produit" id="produit_<?php echo htmlspecialchars($idProduit); ?>">
+    <?php if (!empty($panier)) : ?>
+        <?php foreach ($panier as $produit) : ?>
+            <div class="card_produit" id="produit_<?php echo htmlspecialchars($produit['produit_id']); ?>">
+                <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($produit['nom']); ?>">
                 <h4>
-                    <input type="checkbox" class="produit-checkbox" data-id="<?php echo htmlspecialchars($idProduit); ?>" <?php echo $produit['checked'] ? 'checked' : ''; ?>>
+                    <input type="checkbox" class="produit-checkbox" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>" <?php echo $produit['checked'] ? 'checked' : ''; ?>>
                     <?php echo htmlspecialchars($produit['nom']); ?>
                 </h4>
+                <p><?php echo htmlspecialchars($produit['description']); ?></p>
                 <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?></span> €</p>
                 <p>Quantité :</p>
-                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" class="quantite-input" data-id="<?php echo htmlspecialchars($idProduit); ?>">
-                <button class="btn btn-supprimer" data-id="<?php echo intval($produit['id']); ?>">Supprimer</button>
+                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" class="quantite-input" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">
+                <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
+                <button class="btn btn-supprimer" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">Supprimer</button>
             </div>
-        <?php } ?>
+        <?php endforeach; ?>
+
         <h4>Total du panier : <span id="total-panier"><?php echo number_format($totalPanier, 2, ',', ' '); ?> €</span></h4>
-    <?php } else { ?>
+        
+        <!-- Formulaire de paiement PayPal -->
+        <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="sb-ogdke33654309@business.example.com">
+            <input type="hidden" name="item_name" value="<?php echo htmlspecialchars($itemName); ?>">            
+            <input type="hidden" name="amount" id="paypal-amount" value="<?php echo number_format($totalPanier, 2, '.', ''); ?>">
+            <input type="hidden" name="currency_code" value="EUR">
+            <input type="hidden" name="return" value="http://localhost/boutique-en-ligne/index.php?r=confirmation&status=success">
+            <input type="hidden" name="cancel_return" value="http://localhost/boutique-en-ligne/index.php?r=panier">
+            <button type="submit" class="btn btn-ajouter">Payer avec PayPal</button>
+        </form>
+    <?php else : ?>
         <p>Votre panier est vide.</p>
-    <?php } ?>
+    <?php endif; ?>
 </section>
 
-<script>
-// Mettez à jour les fonctions JavaScript pour la gestion du panier si nécessaire
-</script>
-
-
-<div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: red; color: #e1664d; padding: 10px; border-radius: 20px;">
+<div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px;">
     <p id="confirmation-message"></p>
 </div>
 
-<script>
-    // Fonction pour recalculer le total du panier
-    function updateTotal() {
-        let total = 0;
-
-        // Parcourt chaque produit et calcule le total
-        document.querySelectorAll('.cart-item').forEach(produit => {
-            const checkbox = produit.querySelector('.produit-checkbox');
-            const quantiteInput = produit.querySelector('.quantite-input');
-            const prix = parseFloat(produit.querySelector('.prix-produit').textContent);
-            const quantite = parseInt(quantiteInput.value);
-
-            // Si le produit est coché, ajoute son coût au total
-            if (checkbox.checked) {
-                total += prix * quantite;
-            }
-        });
-
-        // Met à jour le total affiché
-        document.getElementById('total-panier').textContent = total.toFixed(2).replace('.', ',') + ' €';
-
-        // Met à jour le champ `amount` dans le formulaire PayPal
-        document.getElementById('paypal-amount').value = total.toFixed(2);
-    }
-
-    // Ajoute un écouteur d'événement sur les champs quantité et cases à cocher
-    document.querySelectorAll('.quantite-input, .produit-checkbox').forEach(input => {
-        input.addEventListener('change', updateTotal);
-    });
-</script>
+<script src="assets/js/panier.js"></script>

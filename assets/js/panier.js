@@ -1,116 +1,114 @@
-// Script pour la page panier :
-function updateTotalProduit(idProduit) {
-    const produitElement = document.getElementById('produit_' + idProduit);
-    const prix = parseFloat(produitElement.querySelector('.prix-produit').textContent);
-    const quantite = parseInt(produitElement.querySelector('.quantite-input').value);
+// panier.js
+
+// Fonction pour mettre à jour le total d'un produit et du panier
+function updateTotal(productElement) {
+    const checkbox = productElement.querySelector('.produit-checkbox');
+    const prix = parseFloat(productElement.querySelector('.prix-produit').textContent);
+    const quantite = parseInt(productElement.querySelector('.quantite-input').value);
+    const totalElement = productElement.querySelector('.produit-total');
 
     if (!isNaN(prix) && !isNaN(quantite) && quantite > 0) {
-        const totalProduit = prix * quantite;
-        produitElement.querySelector('.produit-total').textContent = totalProduit.toFixed(2) + ' €';
+        const total = prix * quantite;
+        totalElement.textContent = total.toFixed(2) + ' €';
+        
+        if (checkbox.checked) {
+            updatePanierTotal();
+        }
     }
-    updateTotalPanier();
-    saveQuantite(idProduit, quantite);
 }
 
-function updateTotalPanier() {
+// Fonction pour mettre à jour le total du panier
+function updatePanierTotal() {
     let total = 0;
-
     document.querySelectorAll('.card_produit').forEach(produit => {
         const checkbox = produit.querySelector('.produit-checkbox');
-        const prix = parseFloat(produit.querySelector('.prix-produit').textContent);
-        const quantite = parseInt(produit.querySelector('.quantite-input').value);
-
-        if (checkbox.checked && !isNaN(prix) && !isNaN(quantite) && quantite > 0) {
-            total += prix * quantite;
+        if (checkbox.checked) {
+            const prix = parseFloat(produit.querySelector('.prix-produit').textContent);
+            const quantite = parseInt(produit.querySelector('.quantite-input').value);
+            if (!isNaN(prix) && !isNaN(quantite) && quantite > 0) {
+                total += prix * quantite;
+            }
         }
     });
 
-    document.getElementById('total-panier').textContent = total.toFixed(2).replace('.', ',') + ' €';
+    const totalPanierElement = document.getElementById('total-panier');
+    const paypalAmountElement = document.getElementById('paypal-amount');
+    
+    if (totalPanierElement) {
+        totalPanierElement.textContent = total.toFixed(2).replace('.', ',') + ' €';
+    }
+    if (paypalAmountElement) {
+        paypalAmountElement.value = total.toFixed(2);
+    }
 }
 
-function saveQuantite(idProduit, quantite) {
-    fetch('', {
+// Fonction pour envoyer une requête AJAX
+function sendAjaxRequest(action, id, value) {
+    return fetch('index.php?r=panier&action=' + action, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `action=mettreAJourQuantite&id=${idProduit}&quantite=${quantite}`
-    });
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `id=${id}&${action === 'updateQuantity' ? 'quantite' : 'checked'}=${value}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            console.error(`Erreur lors de la mise à jour : ${action}`);
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
 }
 
-function saveCheckboxState(idProduit, checked) {
-    fetch('', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `action=mettreAJourChecked&id=${idProduit}&checked=${checked}`
-    });
-}
-
-document.querySelectorAll('.produit-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        updateTotalPanier();
-        saveCheckboxState(this.dataset.id, this.checked);
+// Gestionnaire d'événements pour les cases à cocher et les champs de quantité
+document.querySelectorAll('.produit-checkbox, .quantite-input').forEach(element => {
+    element.addEventListener('change', function() {
+        const productElement = this.closest('.card_produit');
+        const productId = this.dataset.id;
+        
+        if (this.classList.contains('produit-checkbox')) {
+            sendAjaxRequest('updateChecked', productId, this.checked);
+        } else {
+            sendAjaxRequest('updateQuantity', productId, this.value);
+        }
+        
+        updateTotal(productElement);
     });
 });
 
-document.querySelectorAll('.quantite-input').forEach(input => {
-    input.addEventListener('input', function() {
-        updateTotalProduit(this.dataset.id);
-    });
-});
-
+// Gestionnaire d'événements pour les boutons de suppression
 document.querySelectorAll('.btn-supprimer').forEach(button => {
     button.addEventListener('click', function() {
-        const idProduit = this.dataset.id;
-        fetch('', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `action=supprimerProduit&id=${idProduit}`
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('confirmation-message').textContent = data;
-            const popup = document.getElementById('confirmation-popup');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3000);
-
-            const produitElement = document.getElementById('produit_' + idProduit);
-            if (produitElement) {
-                produitElement.remove();
-            }
-            updateTotalPanier();
-        })
-        .catch(error => console.error('Erreur:', error));
+        const productId = this.dataset.id;
+        sendAjaxRequest('supprimerProduit', productId)
+            .then(() => {
+                const productElement = document.getElementById('produit_' + productId);
+                if (productElement) {
+                    productElement.remove();
+                    updatePanierTotal();
+                }
+            });
     });
 });
 
-document.addEventListener('DOMContentLoaded', updateTotalPanier);
+// Initialisation
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.card_produit').forEach(updateTotal);
+    updatePanierTotal();
+});
 
-
-// Pour index :
+// Pour la page index (ajout au panier)
 document.querySelectorAll('.form-ajouter-panier').forEach(form => {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        const formData = new FormData(this);
-
         fetch('', {
             method: 'POST',
-            body: formData
+            body: new FormData(this)
         })
         .then(response => response.text())
         .then(data => {
-            document.getElementById('confirmation-message').textContent = data;
             const popup = document.getElementById('confirmation-popup');
+            popup.querySelector('#confirmation-message').textContent = data;
             popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3000);
+            setTimeout(() => popup.style.display = 'none', 3000);
         })
         .catch(error => console.error('Erreur:', error));
     });

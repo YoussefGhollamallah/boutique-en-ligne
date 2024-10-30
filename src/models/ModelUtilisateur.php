@@ -29,22 +29,25 @@ class ModelUtilisateur
     
 
     public function userConnexion($email, $password)
-    {
-        try {
-            $requete = $this->connexion->prepare("SELECT * FROM Utilisateur WHERE email = :email");
-            $requete->bindParam(':email', $email);
-            $requete->execute();
-            $user = $requete->fetch(PDO::FETCH_ASSOC);
+{
+    try {
+        $requete = $this->connexion->prepare("SELECT * FROM Utilisateur WHERE email = :email");
+        $requete->bindParam(':email', $email);
+        $requete->execute();
+        $user = $requete->fetch(PDO::FETCH_ASSOC);
 
-            if ($user && password_verify($password, $user['mot_de_passe'])) {
-                return $user;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            throw new Exception("Erreur lors de la connexion de l'utilisateur : " . $e->getMessage());
+        if ($user && password_verify($password, $user['mot_de_passe'])) {
+            // Stocke l'identifiant de l'utilisateur dans la session
+            $_SESSION['user_id'] = $user['id'];
+            return $user;
+        } else {
+            return false;
         }
+    } catch (Exception $e) {
+        throw new Exception("Erreur lors de la connexion de l'utilisateur : " . $e->getMessage());
     }
+}
+
 
     public function getAllUsers()
     {

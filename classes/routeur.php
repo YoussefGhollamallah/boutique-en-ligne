@@ -5,7 +5,7 @@ class Routeur
     private $request;
     
     // Tableau de correspondance entre les routes et les controllers
-    private $routes = [ 
+    private $routes = [
         "index"      => ["controller" => 'HomeController', "method" => 'showHome'], 
         "panier"     => ["controller" => 'HomeController', "method" => 'showPanier'],
         "page404"    => ["controller" => 'HomeController', "method" => 'show404'],
@@ -20,7 +20,8 @@ class Routeur
         "reset_password"     => ["controller" => 'HomeController', "method" => 'showResetPassword'],
         "reset_request" => ["controller" => "HomeController", "method" => "showResetRequest"],
         "verification_password" => ["controller" => "HomeController", "method" => "showPasswordVerify"],
-     ];
+        "confirmation"     => ["controller" => 'HomeController', "method" => 'showConfirmation']
+    ];
 
     public function __construct($request)
     {

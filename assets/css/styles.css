@@ -56,6 +56,8 @@ h2 {
     font-weight: 400;
     font-style: normal;
     font-size: 1.5rem;
+    color: #333;
+
 }
 
 h3 {
@@ -134,7 +136,13 @@ p {
     background-color: #b4362d;
 }
 
+.btn-edit {
+    background-color: var(--green);
+}
 
+.btn-edit:hover {
+    background-color: #2d9b36;
+}
 
 .section_categorie {
     border-radius: 10px;
@@ -343,6 +351,14 @@ a {
 
 .box-shadow {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.m-t {
+    margin-top: 20px;
+}
+
+tr > td {
+    color: #333;
 }
 
 /* Images */

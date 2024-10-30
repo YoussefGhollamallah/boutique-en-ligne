@@ -144,7 +144,7 @@ class HomeController
 
     public function showConfirmation()
     {
-        $title = 'Pixel Plush - Confirmation paiemet';
+        $title = 'Pixel Plush - Confirmation paiement';
         $myView = new View('confirmation');
         $myView->setVars(['title' => $title]);
         $myView->render();

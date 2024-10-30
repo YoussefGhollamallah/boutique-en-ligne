@@ -1,5 +1,3 @@
-// panier.js
-
 // Fonction pour mettre à jour le total d'un produit et du panier
 function updateTotal(productElement) {
     const checkbox = productElement.querySelector('.produit-checkbox');
@@ -11,9 +9,7 @@ function updateTotal(productElement) {
         const total = prix * quantite;
         totalElement.textContent = total.toFixed(2) + ' €';
         
-        if (checkbox.checked) {
-            updatePanierTotal();
-        }
+        updatePanierTotal();
     }
 }
 
@@ -47,15 +43,19 @@ function sendAjaxRequest(action, id, value) {
     return fetch('index.php?r=panier&action=' + action, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `id=${id}&${action === 'updateQuantity' ? 'quantite' : 'checked'}=${value}`
+        body: `id=${id}&${action === 'mettreAJourQuantite' ? 'quantite' : 'checked'}=${value}`
     })
     .then(response => response.json())
     .then(data => {
         if (!data.success) {
             console.error(`Erreur lors de la mise à jour : ${action}`);
         }
+        return data.success;
     })
-    .catch(error => console.error('Erreur:', error));
+    .catch(error => {
+        console.error('Erreur:', error);
+        return false;
+    });
 }
 
 // Gestionnaire d'événements pour les cases à cocher et les champs de quantité
@@ -65,9 +65,9 @@ document.querySelectorAll('.produit-checkbox, .quantite-input').forEach(element 
         const productId = this.dataset.id;
         
         if (this.classList.contains('produit-checkbox')) {
-            sendAjaxRequest('updateChecked', productId, this.checked);
+            sendAjaxRequest('mettreAJourChecked', productId, this.checked);
         } else {
-            sendAjaxRequest('updateQuantity', productId, this.value);
+            sendAjaxRequest('mettreAJourQuantite', productId, this.value);
         }
         
         updateTotal(productElement);
@@ -79,11 +79,17 @@ document.querySelectorAll('.btn-supprimer').forEach(button => {
     button.addEventListener('click', function() {
         const productId = this.dataset.id;
         sendAjaxRequest('supprimerProduit', productId)
-            .then(() => {
-                const productElement = document.getElementById('produit_' + productId);
-                if (productElement) {
-                    productElement.remove();
-                    updatePanierTotal();
+            .then(success => {
+                if (success) {
+                    const productElement = document.getElementById('produit_' + productId);
+                    if (productElement) {
+                        productElement.remove();
+                        updatePanierTotal();
+                    }
+                    const popup = document.getElementById('confirmation-popup');
+                    popup.querySelector('#confirmation-message').textContent = "Le produit a été retiré du panier.";
+                    popup.style.display = 'block';
+                    setTimeout(() => popup.style.display = 'none', 3000);
                 }
             });
     });
@@ -93,23 +99,4 @@ document.querySelectorAll('.btn-supprimer').forEach(button => {
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.card_produit').forEach(updateTotal);
     updatePanierTotal();
-});
-
-// Pour la page index (ajout au panier)
-document.querySelectorAll('.form-ajouter-panier').forEach(form => {
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        fetch('', {
-            method: 'POST',
-            body: new FormData(this)
-        })
-        .then(response => response.text())
-        .then(data => {
-            const popup = document.getElementById('confirmation-popup');
-            popup.querySelector('#confirmation-message').textContent = data;
-            popup.style.display = 'block';
-            setTimeout(() => popup.style.display = 'none', 3000);
-        })
-        .catch(error => console.error('Erreur:', error));
-    });
 });

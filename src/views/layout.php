@@ -116,6 +116,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
     <script src="<?php echo ASSETS; ?>/js/autocompletion.js"></script>
     <script src="<?php echo ASSETS;?>/js/detail.js"></script>
     <script src="<?php echo ASSETS;?>/js/panier.js"></script>
+    <script src="<?php echo ASSETS; ?>js/filter.js"></script>
+    <script src="<?php echo ASSETS; ?>js/carousel.js"></script>
+    <script src="<?php echo ASSETS; ?>js/panier.js"></script>
 </body>
 
 </html>

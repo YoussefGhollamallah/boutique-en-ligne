@@ -90,4 +90,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <p id="confirmation-message"></p>
 </div>
 
-<script src="assets/js/panier.js"></script>
+<script src="<?php echo ASSETS;?>/js/panier.js"></script>

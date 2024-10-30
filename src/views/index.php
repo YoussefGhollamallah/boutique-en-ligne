@@ -7,14 +7,18 @@ $products = $produitController->getAllProducts();
 $lastThreeProducts = $produitController->getLastThreeProducts();
 
 // Vérifie si un produit doit être ajouté au panier
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['action']) && $_POST['action'] == 'ajouterProduitAuPanier') {
-        $panierController = new PanierController();
-        $idProduit = intval($_POST['id']);
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'ajouterProduitAuPanier') {
+    $panierController = new PanierController();
+    $idProduit = intval($_POST['id']);
+    
+    // Vérifiez si l'ID du produit est valide (non nul et supérieur à zéro)
+    if ($idProduit > 0) {
         $panierController->ajouterProduitAuPanier($idProduit, 1); // Quantité fixée à 1
-        echo "Le produit a bien été ajouté au panier.";
-        exit;
+        echo json_encode(['success' => true, 'message' => "Le produit a bien été ajouté au panier."]);
+    } else {
+        echo json_encode(['success' => false, 'message' => "Erreur : ID produit invalide."]);
     }
+    exit; // Terminer le script après avoir traité la requête AJAX
 }
 
 // Gérer la requête AJAX pour récupérer les produits par catégorie
@@ -75,7 +79,6 @@ if (isset($_GET['categorieId'])) {
         <section id="sous-categories-container" style="display:none;">
             <div id="sous-categories-list" class="flex flex-wrap"></div>
         </section>
-
     </article>
 </section>
 
@@ -91,11 +94,11 @@ if (isset($_GET['categorieId'])) {
                 <div class="card_produit box-shadow">
                     <img class="card_produit_img" src="<?php echo ASSETS; ?>/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($nomProduit); ?>">
                     <h4><?php echo htmlspecialchars($nomProduit); ?></h4>
-                    <p><?php echo htmlspecialchars($produit['prix']); ?> €</p>
+                    <p class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?> €</p>
                     <form class="form-ajouter-panier" method="POST" action="">
                         <input type="hidden" name="id" value="<?php echo intval($produit['id']); ?>">
                         <input type="hidden" name="action" value="ajouterProduitAuPanier">
-                        <button class="btn btn-ajouter" type="submit">Ajouter au panier</button>
+                        <button class="btn btn-ajouter" type="submit" onclick="ajouterAuPanier(event, <?php echo intval($produit['id']); ?>)">Ajouter au panier</button>
                     </form>
                 </div>
             </a>
@@ -108,12 +111,44 @@ if (isset($_GET['categorieId'])) {
 <div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 20px;">
     <p id="confirmation-message"></p>
 </div>
+
 <script>
     const BASE_URL = "<?php echo BASE_URL; ?>";
     const ASSETS = "<?php echo ASSETS; ?>";
     const pageURL = "<?php echo $_SERVER['PHP_SELF']; ?>";
+
+    function ajouterAuPanier(event, productId) {
+        event.preventDefault(); // Empêcher la soumission normale du formulaire
+
+        // Vérifier si l'ID du produit est valide (non nul et supérieur à zéro)
+        if (productId <= 0) {
+            alert("Erreur : ID produit invalide.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('id', productId);
+        formData.append('action', 'ajouterProduitAuPanier');
+
+        fetch(pageURL, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            const popup = document.getElementById('confirmation-popup');
+            const messageElement = document.getElementById('confirmation-message');
+            messageElement.innerText = data.message; // Utiliser le message renvoyé par le serveur
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3000); // Masquer le message après 3 secondes
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+        });
+    }
 </script>
+
 <script src="<?php echo ASSETS; ?>js/filter.js"></script>
-
-
 <script src="<?php echo ASSETS; ?>js/carousel.js"></script>

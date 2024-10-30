@@ -107,8 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 </div>
 
 <script>
+
+    const BASE_URL = "<?php echo BASE_URL; ?>";
+    const ASSETS = "<?php echo ASSETS; ?>";
     const pageURL = "<?php echo $_SERVER['PHP_SELF']; ?>";
 
+        // POUR L'AJOUT AU PANIER
     function ajouterAuPanier(event, productId) {
         event.preventDefault(); // Empêcher la soumission normale du formulaire
 
@@ -141,5 +145,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     }
 </script>
 
-<script src="<?php echo ASSETS; ?>js/filter.js"></script>
-<script src="<?php echo ASSETS; ?>js/carousel.js"></script>

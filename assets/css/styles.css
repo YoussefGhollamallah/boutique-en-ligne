@@ -6,6 +6,7 @@
     --blue: #8fc4f7;
     --grey: #D9D9D9;
     --red: #f7594f;
+    --green: #2ecc71;
 }
 
 .bg-background {
@@ -121,7 +122,7 @@ p {
     transition: background-color 0.2s ease-in-out;
 }
 
-.btn-supprimer {
+#btn-supprimer {
     background-color: var(--red);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background-color 0.2s ease-in-out;
@@ -132,15 +133,15 @@ p {
 
 }
 
-.btn-supprimer:hover {
+#btn-supprimer:hover {
     background-color: #b4362d;
 }
 
-.btn-edit {
+#btn-edit {
     background-color: var(--green);
 }
 
-.btn-edit:hover {
+#btn-edit:hover {
     background-color: #2d9b36;
 }
 
@@ -359,6 +360,15 @@ a {
 
 tr > td {
     color: #333;
+}
+
+.td-action {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    height: 100%;
+    align-content: center;
+    
 }
 
 /* Images */

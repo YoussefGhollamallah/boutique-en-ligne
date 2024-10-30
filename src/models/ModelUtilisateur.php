@@ -113,4 +113,15 @@ class ModelUtilisateur
         }
     }
 
+    public function deleteUserById($id)
+    {
+        try {
+            $requete = $this->connexion->prepare("DELETE FROM Utilisateur WHERE id = :id");
+            $requete->bindParam(':id', $id, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la suppression de l'utilisateur : " . $e->getMessage());
+        }
+    }
+
 }

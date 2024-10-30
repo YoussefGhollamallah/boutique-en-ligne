@@ -12,7 +12,7 @@ function updateTotal(productElement) {
         if (!isNaN(prix) && !isNaN(quantite) && quantite > 0) {
             const total = prix * quantite;
             totalElement.textContent = total.toFixed(2) + ' €';
-            updateCartTotal(); // Met à jour le total global du panier
+            updateCartTotal();
         }
     }
 }
@@ -36,65 +36,74 @@ function updateCartTotal() {
     if (totalPanierElement) {
         totalPanierElement.textContent = total.toFixed(2).replace('.', ',') + ' €';
     }
+
+    // Mise à jour du montant PayPal
+    const paypalAmountElement = document.getElementById('paypal-amount');
+    if (paypalAmountElement) {
+        paypalAmountElement.value = total.toFixed(2);
+    }
 }
 
 // Fonction pour envoyer une requête AJAX
 function sendAjaxRequest(action, id, value) {
-    return fetch(`index.php?r=panier&action=${action}`, {
+    return fetch('index.php?r=panier', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `id=${id}&${action === 'mettreAJourQuantite' ? 'quantite' : 'checked'}=${value}`
+        body: `action=${action}&id=${id}&${action === 'mettreAJourQuantite' ? 'quantite' : 'checked'}=${value}`
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json(); // On attend une réponse JSON
-    })
-    .then(data => {
-        if (!data.success) {
-            console.error(`Erreur lors de la mise à jour : ${action}`);
-        }
-        return data.success;
-    })
+    .then(response => response.json())
     .catch(error => {
         console.error('Erreur:', error);
     });
 }
 
-// Gestionnaire d'événements pour les modifications de quantité et de sélection
-document.querySelectorAll('.produit-checkbox, .quantite-input').forEach(element => {
-    element.addEventListener('change', function() {
-        const productElement = this.closest('.card_produit');
-        const productId = this.dataset.id;
+// Fonction pour supprimer un produit
+function supprimerProduit(productId) {
+    sendAjaxRequest('supprimerProduit', productId)
+        .then(data => {
+            if (data.success) {
+                const productElement = document.getElementById('produit_' + productId);
+                if (productElement) {
+                    productElement.remove();
+                    updateCartTotal();
+                }
+                showConfirmation("Le produit a bien été retiré du panier.");
+            } else {
+                showConfirmation("Erreur lors de la suppression du produit.", true);
+            }
+        });
+}
 
-        if (this.classList.contains('produit-checkbox')) {
-            sendAjaxRequest('mettreAJourChecked', productId, this.checked);
-        } else {
-            sendAjaxRequest('mettreAJourQuantite', productId, this.value);
-        }
+// Fonction pour afficher une confirmation
+function showConfirmation(message, isError = false) {
+    const popup = document.getElementById('confirmation-popup');
+    const messageElement = document.getElementById('confirmation-message');
+    messageElement.textContent = message;
+    popup.style.backgroundColor = isError ? '#e1664d' : '#4CAF50';
+    popup.style.display = 'block';
+    setTimeout(() => popup.style.display = 'none', 3000);
+}
 
-        updateTotal(productElement); // Met à jour le total du produit
-    });
-});
-
-
-// Gestionnaire d'événements pour les modifications de quantité et de sélection
-document.querySelectorAll('.quantite-input').forEach(input => {
+// Écouteurs d'événements pour les changements de quantité et les cases à cocher
+document.querySelectorAll('.quantite-input, .produit-checkbox').forEach(input => {
     input.addEventListener('change', function() {
-        const maxQuantite = parseInt(this.max);
-        const quantite = parseInt(this.value);
+        const productElement = this.closest('.card_produit');
+        const productId = this.getAttribute('data-id');
+        const action = this.type === 'checkbox' ? 'mettreAJourChecked' : 'mettreAJourQuantite';
+        const value = this.type === 'checkbox' ? this.checked : this.value;
         
-        if (quantite > maxQuantite) {
-            this.value = maxQuantite; // Limite la quantité à max si elle dépasse
-        }
-        
-        const productId = this.dataset.id;
-        sendAjaxRequest('mettreAJourQuantite', productId, this.value);
-        updateTotal(this.closest('.card_produit'));
+        updateTotal(productElement);
+        sendAjaxRequest(action, productId, value);
     });
 });
 
+// Écouteurs d'événements pour les boutons de suppression
+document.querySelectorAll('.btn-supprimer').forEach(button => {
+    button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-id');
+        supprimerProduit(productId);
+    });
+});
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {

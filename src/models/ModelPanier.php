@@ -27,15 +27,15 @@ class ModelPanier
     }
 
     public function getPanier($userId)
-{
-    $stmt = $this->connexion->prepare("SELECT p.*, pr.nom, pr.prix, pr.image, pr.description, pr.quantite AS quantite_disponible
-                                       FROM Panier p
-                                       JOIN Produit pr ON p.produit_id = pr.id
-                                       WHERE p.user_id = :user_id
-                                       ORDER BY p.date_ajout DESC");
-    $stmt->execute([':user_id' => $userId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    {
+        $stmt = $this->connexion->prepare("SELECT p.*, pr.nom, pr.prix, pr.image, pr.description, pr.quantite AS quantite_disponible
+                                           FROM Panier p
+                                           JOIN Produit pr ON p.produit_id = pr.id
+                                           WHERE p.user_id = :user_id
+                                           ORDER BY p.date_ajout DESC");
+        $stmt->execute([':user_id' => $userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public function supprimerProduit($userId, $idProduit)
     {
@@ -44,16 +44,20 @@ class ModelPanier
     }
 
     public function mettreAJourQuantite($userId, $idProduit, $quantite)
-    {
-        $stmt = $this->connexion->prepare("UPDATE Panier SET quantite = :quantite WHERE user_id = :user_id AND produit_id = :produit_id");
-        $stmt->execute([':quantite' => $quantite, ':user_id' => $userId, ':produit_id' => $idProduit]);
+{
+    $stmt = $this->connexion->prepare("UPDATE Panier SET quantite = :quantite WHERE user_id = :user_id AND produit_id = :produit_id");
+    if (!$stmt->execute([':quantite' => $quantite, ':user_id' => $userId, ':produit_id' => $idProduit])) {
+        error_log(print_r($stmt->errorInfo(), true)); // Log des erreurs
     }
+}
 
-    public function mettreAJourChecked($userId, $idProduit, $checked)
-    {
-        $stmt = $this->connexion->prepare("UPDATE Panier SET checked = :checked WHERE user_id = :user_id AND produit_id = :produit_id");
-        $stmt->execute([':checked' => $checked, ':user_id' => $userId, ':produit_id' => $idProduit]);
+public function mettreAJourChecked($userId, $idProduit, $checked)
+{
+    $stmt = $this->connexion->prepare("UPDATE Panier SET checked = :checked WHERE user_id = :user_id AND produit_id = :produit_id");
+    if (!$stmt->execute([':checked' => $checked, ':user_id' => $userId, ':produit_id' => $idProduit])) {
+        error_log(print_r($stmt->errorInfo(), true)); // Log des erreurs
     }
+}
 
     public function calculerTotalPanier($userId)
     {

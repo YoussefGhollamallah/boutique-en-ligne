@@ -21,25 +21,24 @@ $itemName = rtrim($itemName, ', ');
 
 // Gestion des actions AJAX
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $response = ['success' => false];
+    $response = ['success' => false, 'message' => ''];
     
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'supprimerProduit':
                 $idProduit = intval($_POST['id']);
                 $response['success'] = $panierController->supprimerProduit($idProduit);
+                $response['message'] = $response['success'] ? "Le produit a bien été retiré du panier" : "Erreur lors de la suppression du produit";
                 break;
             case 'mettreAJourQuantite':
                 $idProduit = intval($_POST['id']);
                 $quantite = intval($_POST['quantite']);
-                $panierController->mettreAJourQuantite($idProduit, $quantite);
-                $response['success'] = true;
+                $response['success'] = $panierController->mettreAJourQuantite($idProduit, $quantite);
                 break;
             case 'mettreAJourChecked':
                 $idProduit = intval($_POST['id']);
                 $checked = $_POST['checked'] === 'true';
-                $panierController->mettreAJourCheckedProduit($idProduit, $checked);
-                $response['success'] = true;
+                $response['success'] = $panierController->mettreAJourCheckedProduit($idProduit, $checked);
                 break;
         }
     }
@@ -53,20 +52,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h3>Votre Panier</h3>
     <?php if (!empty($panier)) : ?>
         <?php foreach ($panier as $produit) : ?>
-    <div class="card_produit" id="produit_<?php echo htmlspecialchars($produit['produit_id']); ?>">
-        <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($produit['nom']); ?>">
-        <h4>
-            <input type="checkbox" class="produit-checkbox" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>" <?php echo $produit['checked'] ? 'checked' : ''; ?>>
-            <?php echo htmlspecialchars($produit['nom']); ?>
-        </h4>
-        <p><?php echo htmlspecialchars($produit['description']); ?></p>
-        <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?></span> €</p>
-        <p>Quantité :</p>
-        <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" max="<?php echo intval($produit['quantite_disponible']); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">
-        <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
-        <button class="btn btn-supprimer" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">Supprimer</button>
-    </div>
-<?php endforeach; ?>
+            <div class="card_produit" id="produit_<?php echo htmlspecialchars($produit['produit_id']); ?>">
+                <img class="card_produit_img" src="assets/images/<?php echo htmlspecialchars($produit['image']); ?>" alt="<?php echo htmlspecialchars($produit['nom']); ?>">
+                <h4>
+                    <input type="checkbox" class="produit-checkbox" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>" <?php echo $produit['checked'] ? 'checked' : ''; ?>>
+                    <?php echo htmlspecialchars($produit['nom']); ?>
+                </h4>
+                <p><?php echo htmlspecialchars($produit['description']); ?></p>
+                <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?></span> €</p>
+                <p>Quantité :</p>
+                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" max="<?php echo intval($produit['quantite_disponible']); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">
+                <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
+                <button class="btn btn-supprimer" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">Supprimer</button>
+            </div>
+        <?php endforeach; ?>
 
         <h4>Total du panier : <span id="total-panier"><?php echo number_format($totalPanier, 2, ',', ' '); ?> €</span></h4>
         
@@ -86,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php endif; ?>
 </section>
 
-<div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px;">
+<div id="confirmation-popup" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px; border-radius: 20px; z-index: 100;">
     <p id="confirmation-message"></p>
 </div>
 

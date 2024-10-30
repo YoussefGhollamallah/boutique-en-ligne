@@ -22,39 +22,20 @@ $adressesController = new AdresseController();
 $utilisateurs = $utilisateurController->getAllUsers();
 $roles = $utilisateurController->getRoles();
 
-$utilisateurDelete = new ModelUtilisateur();
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['userId'])) {
         $userId = $_POST['userId'];
 
         // Suppression de l'utilisateur
+        $utilisateurDelete = new ModelUtilisateur();
         $utilisateurDelete->deleteUserById($userId);
 
-        // Redirection après suppression
-        header('Location: admin-users');
+        $_SESSION['message'] = "Utilisateur supprimé avec succès"; // Stockez le message dans la session
+        header("Location: admin-users"); // Corrigez la redirection
         exit;
+    } else {
+        $_SESSION['message'] = "Utilisateur non trouvé"; // Message d'erreur
     }
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userId = $_POST['userId'];
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $email = $_POST['email'];
-    $adresse = $_POST['adresse'];
-    $adresse_complement = $_POST['adresse_complement'];
-    $code_postal = $_POST['code_postal'];
-    $ville = $_POST['ville'];
-    $pays = $_POST['pays'];
-    $role_id = $_POST['nom_role'];
-
-    // Mettre à jour l'utilisateur
-    $utilisateurController->updateUser($userId, $nom, $prenom, $email, $role_id);
-
-    // Mettre à jour l'adresse
-    $adressesController->updateAdresse($userId, $adresse, $adresse_complement, $code_postal, $ville, $pays);
 }
 ?>
 <link rel="stylesheet" href="assets/css/admin-users.css">
@@ -62,6 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main>
     <section class="section">
         <h1 class="section-title">Gestion des Utilisateurs</h1>
+
+        <?php 
+        // Affichez le message si défini
+        if (isset($_SESSION['message'])) {
+            echo $_SESSION['message'];
+            unset($_SESSION['message']); // Effacez le message après affichage
+        }
+        ?>
 
         <?php if (!empty($utilisateurs)): ?>
             <table class="user-table">
@@ -94,11 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </td>
                         <td><?php echo htmlspecialchars($utilisateur['nom_role']); ?></td>
                         <td>
-                            
-                        <form action="" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
-                            <input type="hidden" name="userId" value="<?php echo $utilisateur['id']; ?>">
-                            <button type="submit" class="btn-delete btn">Supprimer</button>
-                        </form>
+                            <form action="" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                                <input type="hidden" name="userId" value="<?php echo $utilisateur['id']; ?>">
+                                <button type="submit" class="btn-delete btn">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -110,5 +98,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </main>
 
 <script>
-
+    // Votre code JavaScript ici
 </script>

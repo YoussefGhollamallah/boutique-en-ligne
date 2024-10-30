@@ -24,5 +24,15 @@ class ProduitController
     {
         return $this->modelProduit->getLastThreeProducts();
     }
+
+    public function addProduct($nom, $description,  $prix, $quantite,$image, $categorie, $sousCategorie)
+    {
+        $this->modelProduit->addProduct($nom, $description, $prix, $quantite,$image, $categorie, $sousCategorie);
+    }
+
+    public function deleteProduct($id)
+    {
+        $this->modelProduit->deleteProduct($id);
+    }
 }
 ?>

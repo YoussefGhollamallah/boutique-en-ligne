@@ -97,4 +97,14 @@ class ModelProduit
             throw new Exception("Erreur lors de la récupération des derniers produits : " . $e->getMessage());
         }
     }
+
+    public function deleteProduct($id)
+    {
+        try {
+            $requete = $this->connexion->prepare("DELETE FROM Produit WHERE id = :id");
+            $requete->execute(['id' => $id]);
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la suppression du produit : " . $e->getMessage());
+        }
+    }
 }

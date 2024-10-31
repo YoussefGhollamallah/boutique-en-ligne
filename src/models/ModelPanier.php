@@ -11,125 +11,68 @@ class ModelPanier
         $this->connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function ajouterProduit($idProduit, $quantite = 1, $checked = false)
+    public function ajouterProduit($userId, $idProduit, $quantite = 1, $checked = false)
     {
-        if (!isset($_SESSION['panier'])) {
-            $_SESSION['panier'] = [];
-        }
-
-        if (isset($_SESSION['panier'][$idProduit])) {
-            $_SESSION['panier'][$idProduit]['quantite'] += $quantite;
-        } else {
-            $produit = $this->getProduct($idProduit);
-            if ($produit) {
-                $quantiteDisponible = $this->getQuantiteDisponible($idProduit);
-                $_SESSION['panier'][$idProduit] = [
-                    'nom' => $produit['nom'],
-                    'description' => $produit['description'],
-                    'prix' => $produit['prix'],
-                    'image' => $produit['image'],
-                    'quantite' => min($quantite, $quantiteDisponible),
-                    'quantite_max' => $quantiteDisponible,
-                    'checked' => $checked,
-                    'id' => $produit['id']
-                ];
-            }
-        }
+        $stmt = $this->connexion->prepare("INSERT INTO Panier (user_id, produit_id, quantite, checked, date_ajout) 
+                                           VALUES (:user_id, :produit_id, :quantite, :checked, CURRENT_TIMESTAMP)
+                                           ON DUPLICATE KEY UPDATE 
+                                           quantite = quantite + :quantite,
+                                           date_ajout = CURRENT_TIMESTAMP");
+        $stmt->execute([
+            ':user_id' => $userId,
+            ':produit_id' => $idProduit,
+            ':quantite' => $quantite,
+            ':checked' => $checked
+        ]);
     }
 
-    public function mettreAJourChecked($idProduit, $checked)
+    public function getPanier($userId)
     {
-        if (isset($_SESSION['panier'][$idProduit])) {
-            $_SESSION['panier'][$idProduit]['checked'] = $checked;
-            return true;
-        }
-        return false;
+        $stmt = $this->connexion->prepare("SELECT p.*, pr.nom, pr.prix, pr.image, pr.description, pr.quantite AS quantite_disponible
+                                           FROM Panier p
+                                           JOIN Produit pr ON p.produit_id = pr.id
+                                           WHERE p.user_id = :user_id
+                                           ORDER BY p.date_ajout DESC");
+        $stmt->execute([':user_id' => $userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getProduct($id)
+    public function supprimerProduit($userId, $idProduit)
     {
-        try {
-            $requete = $this->connexion->prepare("SELECT * FROM Produit WHERE id = :id");
-            $requete->execute(['id' => $id]);
-            return $requete->fetch(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            throw new Exception("Erreur lors de la récupération du produit : " . $e->getMessage());
-        }
+        $stmt = $this->connexion->prepare("DELETE FROM Panier WHERE user_id = :user_id AND produit_id = :produit_id");
+        return $stmt->execute([':user_id' => $userId, ':produit_id' => $idProduit]);
     }
 
-    public function supprimerProduitDuPanier($idProduit)
-    {
-        if (isset($_SESSION['panier'][$idProduit])) {
-            unset($_SESSION['panier'][$idProduit]);
-            return true;
-        }
-        return false;
-    }
-
-    public function mettreAJourQuantite($idProduit, $quantite)
-    {
-        if (isset($_SESSION['panier'][$idProduit]) && $quantite > 0) {
-            $_SESSION['panier'][$idProduit]['quantite'] = $quantite;
-            return true;
-        }
-        return false;
-    }
-
-    public function getPanier()
-    {
-        if (!isset($_SESSION['panier'])) {
-            $_SESSION['panier'] = []; // Initialiser le panier si non défini
-        }
-        return $_SESSION['panier'];
-    }
-
-    public function viderPanier()
-    {
-        $_SESSION['panier'] = [];
-    }
-
-    public function calculerTotalPanier()
+    public function mettreAJourQuantite($userId, $idProduit, $quantite)
 {
-    $total = 0;
-    foreach ($this->getPanier() as $produit) {
-        if (isset($produit['checked']) && $produit['checked']) {
-            $total += $produit['prix'] * $produit['quantite'];
-        }
-    }
-    $_SESSION['montant_total'] = $total; // Met à jour le total en session
-    return $total;
-}
-
-
-    public function getQuantiteDisponible($id)
-    {
-        try {
-            $requete = $this->connexion->prepare("SELECT quantite FROM Produit WHERE id = :id");
-            $requete->execute(['id' => $id]);
-            $resultat = $requete->fetch(PDO::FETCH_ASSOC);
-            return $resultat['quantite'] ?? 0; // Renvoie 0 si aucune quantité n'est trouvée
-        } catch (Exception $e) {
-            throw new Exception("Erreur lors de la récupération de la quantité disponible : " . $e->getMessage());
-        }
-    }
-
-    public function enregistrerCommande($userId, $statut = 'en cours', $dateCommande = null)
-    {
-        if (is_null($dateCommande)) {
-            $dateCommande = date('Y-m-d H:i:s'); // Date actuelle si non fournie
-        }
-
-        try {
-            $requete = $this->connexion->prepare("INSERT INTO Commandes (user_id, statut, date_commande) VALUES (:userId, :statut, :dateCommande)");
-            $requete->execute([
-                'userId' => $userId,
-                'statut' => $statut,
-                'dateCommande' => $dateCommande
-            ]);
-            return $this->connexion->lastInsertId(); // Renvoie l'ID de la commande créée
-        } catch (Exception $e) {
-            throw new Exception("Erreur lors de l'enregistrement de la commande : " . $e->getMessage());
-        }
+    $stmt = $this->connexion->prepare("UPDATE Panier SET quantite = :quantite WHERE user_id = :user_id AND produit_id = :produit_id");
+    if (!$stmt->execute([':quantite' => $quantite, ':user_id' => $userId, ':produit_id' => $idProduit])) {
+        error_log(print_r($stmt->errorInfo(), true)); // Log des erreurs
     }
 }
-?>
+
+public function mettreAJourChecked($userId, $idProduit, $checked)
+{
+    $stmt = $this->connexion->prepare("UPDATE Panier SET checked = :checked WHERE user_id = :user_id AND produit_id = :produit_id");
+    if (!$stmt->execute([':checked' => $checked, ':user_id' => $userId, ':produit_id' => $idProduit])) {
+        error_log(print_r($stmt->errorInfo(), true)); // Log des erreurs
+    }
+}
+
+    public function calculerTotalPanier($userId)
+    {
+        $stmt = $this->connexion->prepare("SELECT SUM(p.quantite * pr.prix) as total 
+                                           FROM Panier p 
+                                           JOIN Produit pr ON p.produit_id = pr.id 
+                                           WHERE p.user_id = :user_id AND p.checked = 1");
+        $stmt->execute([':user_id' => $userId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
+
+    public function supprimerProduitsCochesPourUtilisateur($userId)
+    {
+        $stmt = $this->connexion->prepare("DELETE FROM Panier WHERE user_id = :user_id AND checked = 1");
+        return $stmt->execute([':user_id' => $userId]);
+    }
+}

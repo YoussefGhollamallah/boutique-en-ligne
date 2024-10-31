@@ -97,4 +97,27 @@ class ModelProduit
             throw new Exception("Erreur lors de la récupération des derniers produits : " . $e->getMessage());
         }
     }
+
+    public function deleteProduct($id)
+    {
+        try {
+            $requete = $this->connexion->prepare("DELETE FROM Produit WHERE id = :id");
+            $requete->execute(['id' => $id]);
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la suppression du produit : " . $e->getMessage());
+        }
+    }
+
+    public function getProductsByCategory($categorieId)
+    {
+        try {
+            $requete = $this->connexion->prepare("SELECT id, nom, prix, image FROM Produit WHERE id_categorie = :categorieId ORDER BY id ASC");
+            $requete->execute(['categorieId' => $categorieId]);
+            return $requete->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la récupération des produits : " . $e->getMessage());
+        }
+    }
+    
+
 }

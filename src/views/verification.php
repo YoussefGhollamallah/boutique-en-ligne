@@ -14,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($entered_code == $_SESSION['verification_code']) {
         // Complete the registration process
-        $prenom = $_SESSION['prenom'];
-        $nom = $_SESSION['nom'];
-        $email = $_SESSION['email'];
+        $prenom = strtolower($_SESSION['prenom']);
+        $nom = strtolower($_SESSION['nom']);
+        $email = strtolower($_SESSION['email']);
         $hashedPassword = $_SESSION['mot_de_passe'];
 
         $user->addUser($prenom, $nom, $email, $hashedPassword);

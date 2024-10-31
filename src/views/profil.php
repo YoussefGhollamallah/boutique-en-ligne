@@ -33,11 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<main>
+<main class="main-Profil">
     <?php if (isset($_SESSION["user"]["role_id"]) && $_SESSION["user"]["role_id"] == 2) : ?>
-        <section>
-            <h2>Mon Profil</h2>
-        </section>
+
         <section>
             <h3>Mes informations</h3>
             <div class="profil">
@@ -58,52 +56,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p>Ville : <?php echo $adresse['ville']; ?></p>
                         <p>Code Postal : <?php echo $adresse['code_postal']; ?></p>
                         <p>Pays : <?php echo $adresse['pays']; ?></p>
-                        <button onclick="openModal()">Modifier Adresse</button>
+                        <button class="btn btn-ajouter" onclick="openModal()">Modifier Adresse</button>
                     <?php else: ?>
                         <p>Aucune adresse enregistrée.</p>
-                        <button onclick="openModal()">Ajouter Adresse</button>
+                        <button class="btn btn-ajouter" onclick="openModal()">Ajouter Adresse</button>
                     <?php endif; ?>
                 </div>
             </div>
         </section>
     <?php elseif (isset($_SESSION["user"]["role_id"]) && $_SESSION["user"]["role_id"] == 1) : ?>
         <section>
-            <h2>Mon Profil</h2>
-        </section>
-        <section>
-            <h3>Mes informations</h3>
+            <h4>Mes informations</h4>
             <div class="profil">
-                <div>
-                    <p>Prénom : <?php echo $_SESSION['user']['prenom']; ?></p>
-                    <p>Nom : <?php echo $_SESSION['user']['nom']; ?></p>
-                    <p>Email : <?php echo $_SESSION['user']['email']; ?></p>
-                </div>
+                <p>Prénom : <?php echo $_SESSION['user']['prenom']; ?></p>
+                <p>Nom : <?php echo $_SESSION['user']['nom']; ?></p>
+                <p>Email : <?php echo $_SESSION['user']['email']; ?></p>
             </div>
         </section>
         <section>
-            <h3>Mon Adresse</h3>
+            <h4>Mon Adresse</h4>
             <div class="profil">
-                <div>
-                    <?php if ($adresse): ?>
-                        <p>Adresse : <?php echo $adresse['adresse']; ?></p>
-                        <p>Adresse Complémentaire : <?php echo $adresse["adresse_complement"]; ?></p>
-                        <p>Ville : <?php echo $adresse['ville']; ?></p>
-                        <p>Code Postal : <?php echo $adresse['code_postal']; ?></p>
-                        <p>Pays : <?php echo $adresse['pays']; ?></p>
-                        <button onclick="openModal()">Modifier Adresse</button>
-                    <?php else: ?>
-                        <p>Aucune adresse enregistrée.</p>
-                        <button onclick="openModal()">Ajouter Adresse</button>
-                    <?php endif; ?>
-                </div>
+                <?php if ($adresse): ?>
+                    <p>Adresse : <?php echo $adresse['adresse']; ?></p>
+                    <p>Adresse Complémentaire : <?php echo $adresse["adresse_complement"]; ?></p>
+                    <p>Ville : <?php echo $adresse['ville']; ?></p>
+                    <p>Code Postal : <?php echo $adresse['code_postal']; ?></p>
+                    <p>Pays : <?php echo $adresse['pays']; ?></p>
+                    <button class="btn btn-ajouter" onclick="openModal()">Modifier Adresse</button>
+                <?php else: ?>
+                    <p>Aucune adresse enregistrée.</p>
+                    <button class="btn btn-ajouter" onclick="openModal()">Ajouter Adresse</button>
+                <?php endif; ?>
             </div>
         </section>
         <section>
-            <h3>Mon rôle</h3>
+            <h4>Administrateur</h4>
             <div class="profil">
-                <div>
-                    <p>Rôle : Administrateur</p>
-                </div>
+                <a class="btn btn-ajouter" href="admin-users">Gestion User</a>
+                <a class="btn btn-ajouter" href="admin-produits">Gestion Produit</a>
             </div>
         </section>
     <?php endif; ?>
@@ -140,71 +130,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </main>
 
-<script src="<?php echo ASSETS;?>js/modal.js"></script>
+<script src="<?php echo ASSETS; ?>js/modal.js"></script>
 
-<style>
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4);
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 10% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 50%;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        border-radius: 10px;
-    }
-
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .modal-content form div {
-        margin-bottom: 15px;
-    }
-
-    .modal-content form label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .modal-content form input {
-        width: 80%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    .modal-content form button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #007BFF;
-        color: #fff;
-        cursor: pointer;
-    }
-
-    .modal-content form button:hover {
-        background-color: #0056b3;
-    }
-</style>

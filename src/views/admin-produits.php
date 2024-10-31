@@ -181,8 +181,8 @@ if ($message) {
         <div id="addProductModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('addProductModal')">&times;</span>
-                <h2>Ajouter un nouveau produit</h2>
-                <form id="addProductForm" action="" method="POST" enctype="multipart/form-data">
+                <h3>Ajouter un nouveau produit</h3>
+                <form id="addProductForm" class="flex column vertical-center " action="" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="addProduct">
                     <label for="productName">Nom du produit :</label>
                     <input type="text" name="nom" required>
@@ -191,10 +191,10 @@ if ($message) {
                     <textarea name="description" required></textarea>
                     
                     <label for="productPrice">Prix :</label>
-                    <input type="number" name="prix" step="0.01" required>
+                    <input type="number" id="prix" name="prix" step="0.01" required>
                     
                     <label for="productQuantity">Quantité :</label>
-                    <input type="number" name="quantite" required>
+                    <input type="number" id="quantite" name="quantite" required>
                     
                     <label for="productImage">Image :</label>
                     <input type="file" name="image" required accept=".jpg,.jpeg,.png,.webp">
@@ -213,7 +213,7 @@ if ($message) {
                         <?php endforeach; ?>
                     </select>
 
-                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                    <button type="submit" class="btn btn-primary submit">Ajouter</button>
                 </form>
             </div>
         </div>

@@ -40,7 +40,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
     <a id="top"></a>
 
     <!-- HEADER -->
-    <header class="flex space-between center vertical-center">
+    <header class="flex space-around center vertical-center">
 
         <div class="off-screen-menu hide_desktop">
             <ul>
@@ -78,15 +78,19 @@ if (isset($_GET['action']) && $_GET['action'] === 'deconnexion') {
                 <img class="hw-50px" src="<?php echo ASSETS; ?>/images/panier.png" alt="panier logo">
                 Panier
             </a>
-            <div class="flex column vertical-center">
-                <img class="hw-50px" src="<?php echo ASSETS; ?>/images/utilisateur.png" alt="utilisateur logo">
-                <?php if (isset($_SESSION['user'])): ?>
-                    <a href="<?php echo BASE_URL; ?>profil">Profil</a>
-                    <a href="?action=deconnexion">Déconnexion</a>
-                <?php else: ?>
-                    <a href="<?php echo BASE_URL; ?>connexion">Connexion</a>
-                <?php endif; ?>
+            <div class="flex column vertical-center profil-container">
+                <img class="hw-50px profil-img" src="<?php echo ASSETS; ?>/images/utilisateur.png" alt="utilisateur logo">
+                <div class="profil-menu">
+                    <?php if (isset($_SESSION['user'])): ?>
+                        <a href="<?php echo BASE_URL; ?>profil">Profil</a>
+                        <a href="?action=deconnexion">Déconnexion</a>
+                    <?php else: ?>
+                        <a href="<?php echo BASE_URL; ?>connexion">Connexion</a>
+                    <?php endif; ?>
+                </div>
             </div>
+
+
         </nav>
 
     </header>

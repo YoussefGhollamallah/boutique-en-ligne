@@ -408,6 +408,52 @@ tr > td {
     width: 50px;
 }
 
+/* Hover pour l'icône Profil*/
+
+.profil-container {
+    position: relative;
+}
+
+.profil-img:hover + .profil-menu,
+.profil-container:hover .profil-menu {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+}
+
+.profil-menu {
+    display: block;
+    opacity: 0;
+    position: absolute;
+    top: 60px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    z-index: 10;
+    min-width: 100px;
+    transition: opacity 0.5s ease-in 1s; /* Délai de 1 seconde avant de disparaître */
+}
+
+.profil-container:hover .profil-menu {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.profil-menu a {
+    display: block;
+    padding: 8px 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.profil-menu a:hover {
+    background-color: #f2f2f2;
+}
+
+
 /* MODAL PROFIL */
 
 .modal {

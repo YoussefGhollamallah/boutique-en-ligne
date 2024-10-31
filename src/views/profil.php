@@ -9,7 +9,6 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-require_once __DIR__ . "/../controllers/AdresseController.php";
 
 $adresseController = new AdresseController();
 $adresse = $adresseController->getAdresse($_SESSION["user"]["id"]);
@@ -30,6 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: profil');
     exit();
 }
+
+$commandeController = new ControllerCommande();
+$commandes = $commandeController->afficherCommandesUtilisateur($_SESSION["user"]["id"]);
 
 ?>
 
@@ -97,6 +99,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </section>
     <?php endif; ?>
+
+                    <!--HISTORIQUE DE COMMANDE-->
+
+                    <section>
+    <h3>Historique de mes commandes</h3>
+    <?php if ($commandes): ?>
+        <ul>
+        <?php foreach ($commandes as $commandeId => $commande): ?>
+    <div>
+        <p>Commande #<?php echo $commandeId; ?> :</p>
+        <p>Date : <?php echo $commande['date_commande']; ?></p>
+        <p>Status : <?php echo $commande['status']; ?></p>
+        
+        <p>Produits : 
+            <?php 
+            $produits = [];
+            foreach ($commande['produits'] as $produit) {
+                $produits[] = $produit['nom'] . ' x ' . $produit['quantite'];
+            }
+            echo implode(', ', $produits);
+            ?>
+        </p>
+    </div>
+    <hr>
+<?php endforeach; ?>
+
+        </ul>
+    <?php else: ?>
+        <p>Aucune commande passée.</p>
+    <?php endif; ?>
+</section>
 
     <!-- Modal -->
     <div id="modal" class="modal">

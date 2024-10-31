@@ -23,40 +23,46 @@
 .other-lines {
     background-color: var(--background);
 }
+/* Affichage minimal : uniquement ID, Nom et Action */
+.user-table th:nth-child(3),
+.user-table td:nth-child(3),
+.user-table th:nth-child(4),
+.user-table td:nth-child(4),
+.user-table th:nth-child(5),
+.user-table td:nth-child(5),
+.user-table th:nth-child(6),
+.user-table td:nth-child(6) {
+    display: none;
+}
 
-/* Version Mobile - 3 colonnes */
-@media (max-width: 768px) {
-    /* Cache toutes les colonnes sauf ID, Nom et Email */
-    .user-table tr th:nth-child(4),
-    .user-table tr td:nth-child(4),
-    .user-table tr th:nth-child(5),
-    .user-table tr td:nth-child(5),
-    .user-table tr th:nth-child(6),
-    .user-table tr td:nth-child(6) {
-        display: none;
+@media (min-width: 470px) {
+    /* Ajoute la colonne Rôle */
+    .user-table th:nth-child(6),
+    .user-table td:nth-child(6) {
+        display: table-cell;
     }
 }
 
-/* Style pour les boutons d'action */
-.user-table button {
-    background-color: var(--blue);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
+@media (min-width: 550px) {
+    /* Ajoute la colonne Prénom */
+    .user-table th:nth-child(3),
+    .user-table td:nth-child(3) {
+        display: table-cell;
+    }
 }
 
-.user-table button:hover {
-    background-color: var(--yellow);
+@media (min-width: 800px) {
+    /* Ajoute la colonne Email */
+    .user-table th:nth-child(4),
+    .user-table td:nth-child(4) {
+        display: table-cell;
+    }
 }
 
-.user-table .editable input,
-.user-table .editable textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+@media (min-width: 1000px) {
+    /* Ajoute la colonne Adresse */
+    .user-table th:nth-child(5),
+    .user-table td:nth-child(5) {
+        display: table-cell;
+    }
 }
-

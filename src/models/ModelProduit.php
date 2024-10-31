@@ -107,4 +107,20 @@ class ModelProduit
             throw new Exception("Erreur lors de la suppression du produit : " . $e->getMessage());
         }
     }
+
+    public function getProductsByCategory($categorieId)
+{
+    try {
+        $requete = $this->connexion->prepare("
+            SELECT * FROM Produit
+            WHERE id_categorie = :id_categorie
+            ORDER BY id ASC
+        ");
+        $requete->execute(['id_categorie' => $categorieId]);
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        throw new Exception("Erreur lors de la récupération des produits par catégorie : " . $e->getMessage());
+    }
+}
+
 }

@@ -20,6 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     }
     exit; // Terminer le script après avoir traité la requête AJAX
 }
+
+// Vérifie si un filtre de catégorie est appliqué
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['categorieId'])) {
+    $categorieId = intval($_GET['categorieId']);
+    $produitController = new ProduitController();
+    $filteredProducts = $produitController->getProductsByCategory($categorieId);
+    echo json_encode($filteredProducts); // Retourne le JSON pour JavaScript
+    exit;
+}
+
 ?>
 
 

@@ -34,5 +34,12 @@ class ProduitController
     {
         $this->modelProduit->deleteProduct($id);
     }
+
+    public function getProductsByCategory($categorieId)
+{
+    $modelProduit = new ModelProduit();
+    return $modelProduit->getProductsByCategory($categorieId);
+}
+
 }
 ?>

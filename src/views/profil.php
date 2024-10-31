@@ -33,11 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<main>
+<main class="main-Profil">
     <?php if (isset($_SESSION["user"]["role_id"]) && $_SESSION["user"]["role_id"] == 2) : ?>
-        <section>
-            <h2>Mon Profil</h2>
-        </section>
+
         <section>
             <h3>Mes informations</h3>
             <div class="profil">
@@ -58,19 +56,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p>Ville : <?php echo $adresse['ville']; ?></p>
                         <p>Code Postal : <?php echo $adresse['code_postal']; ?></p>
                         <p>Pays : <?php echo $adresse['pays']; ?></p>
-                        <button onclick="openModal()">Modifier Adresse</button>
+                        <button class="btn btn-ajouter" onclick="openModal()">Modifier Adresse</button>
                     <?php else: ?>
                         <p>Aucune adresse enregistrée.</p>
-                        <button onclick="openModal()">Ajouter Adresse</button>
+                        <button class="btn btn-ajouter" onclick="openModal()">Ajouter Adresse</button>
                     <?php endif; ?>
                 </div>
             </div>
         </section>
     <?php elseif (isset($_SESSION["user"]["role_id"]) && $_SESSION["user"]["role_id"] == 1) : ?>
         <section>
-            <h2>Mon Profil</h2>
-        </section>
-        <section>
             <h3>Mes informations</h3>
             <div class="profil">
                 <div>
@@ -90,10 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p>Ville : <?php echo $adresse['ville']; ?></p>
                         <p>Code Postal : <?php echo $adresse['code_postal']; ?></p>
                         <p>Pays : <?php echo $adresse['pays']; ?></p>
-                        <button onclick="openModal()">Modifier Adresse</button>
+                        <button class="btn btn-ajouter" onclick="openModal()">Modifier Adresse</button>
                     <?php else: ?>
                         <p>Aucune adresse enregistrée.</p>
-                        <button onclick="openModal()">Ajouter Adresse</button>
+                        <button class="btn btn-ajouter" onclick="openModal()">Ajouter Adresse</button>
                     <?php endif; ?>
                 </div>
             </div>

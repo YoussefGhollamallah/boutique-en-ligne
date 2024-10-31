@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="hidden" name="amount" id="paypal-amount" value="<?php echo number_format($totalPanier, 2, '.', ''); ?>">
             <input type="hidden" name="currency_code" value="EUR">
             <input type="hidden" name="return" value="http://localhost/boutique-en-ligne/index.php?r=confirmation&status=success">
-            <input type="hidden" name="cancel_return" value="http://localhost/boutique-en-ligne/index.php?r=panier">
+            <input type="hidden" name="cancel_return" value="http://localhost/boutique-en-ligne/panier">
             <button type="submit" class="btn btn-ajouter">Payer avec PayPal</button>
         </form>
     <?php else : ?>

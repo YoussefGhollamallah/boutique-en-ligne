@@ -21,13 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     exit; // Terminer le script après avoir traité la requête AJAX
 }
 
-
-// Vérifiez si une catégorie a été sélectionnée pour filtrer les produits
-if (isset($_GET['categorieId'])) {
+// Vérifie si un filtre de catégorie est appliqué
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['categorieId'])) {
     $categorieId = intval($_GET['categorieId']);
-    $products = $produitController->getProductsByCategory($categorieId);
-    echo json_encode($products);
-    exit; // Assurez-vous de terminer le script ici pour éviter l'affichage de HTML additionnel
+    $produitController = new ProduitController();
+    $filteredProducts = $produitController->getProductsByCategory($categorieId);
+    echo json_encode($filteredProducts); // Retourne le JSON pour JavaScript
+    exit;
 }
 
 ?>
@@ -86,8 +86,7 @@ if (isset($_GET['categorieId'])) {
 </section>
 
 
-
-<!-- Liste des produits -->
+<!-- Liste produits -->
 <section class="section_products">
     <h3 id="title_produits">Produits</h3>
     <article class="article_produit flex space-around flex-wrap" id="product-list">
@@ -118,10 +117,12 @@ if (isset($_GET['categorieId'])) {
 </div>
 
 <script>
+
     const BASE_URL = "<?php echo BASE_URL; ?>";
     const ASSETS = "<?php echo ASSETS; ?>";
     const pageURL = "<?php echo $_SERVER['PHP_SELF']; ?>";
 
+        // POUR L'AJOUT AU PANIER
     function ajouterAuPanier(event, productId) {
         event.preventDefault(); // Empêcher la soumission normale du formulaire
 
@@ -154,5 +155,3 @@ if (isset($_GET['categorieId'])) {
     }
 </script>
 
-<script src="<?php echo ASSETS; ?>js/filter.js"></script>
-<script src="<?php echo ASSETS; ?>js/carousel.js"></script>

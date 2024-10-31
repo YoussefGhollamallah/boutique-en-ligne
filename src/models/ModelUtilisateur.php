@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/connexion.php';
+require_once "ModelAdresse.php";
 
 class ModelUtilisateur 
 {
@@ -115,5 +116,31 @@ class ModelUtilisateur
             throw new Exception("Erreur lors de la réinitialisation du mot de passe : " . $e->getMessage());
         }
     }
+
+    public function deleteUserById(int $id):void
+    {
+        try {
+            $this->deleteAdressesByUserId($id);
+
+            $requete = $this->connexion->prepare("DELETE FROM Utilisateur WHERE id = :id");
+            $requete->bindParam(':id', $id, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la suppression de l'utilisateur : " . $e->getMessage());
+        }
+    }
+
+    
+    public function deleteAdressesByUserId(int $userId): void
+    {
+        try {
+            $requete = $this->connexion->prepare("DELETE FROM Adresse WHERE id_utilisateur = :id_utilisateur");
+            $requete->bindParam(':id_utilisateur', $userId, PDO::PARAM_INT);
+            $requete->execute();
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la suppression des adresses : " . $e->getMessage());
+        }
+    }
+
 
 }

@@ -105,3 +105,9 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+#addProductForm > input,
+#addProductForm > textarea,
+#addProductForm > select {
+    width: 80%;
+}

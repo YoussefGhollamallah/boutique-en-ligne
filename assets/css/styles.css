@@ -317,7 +317,8 @@ a {
     object-fit: contain;
 }
 
-.card_produit {
+.section_phare .card_produit,
+.section_products .card_produit {
     background-color: var(--blue);
     width: 300px;
     border-radius: 10px;
@@ -992,7 +993,12 @@ select:focus {
 .cart-item span {
     flex: 1;
 }
-
+.price {
+    margin-left: auto;
+}
+.prix-produit {
+    font-weight: bold;
+}
 .quantity {
     width: 40px;
     padding: 5px;
@@ -1144,7 +1150,8 @@ select:focus {
         gap: 0;
     }
 
-    .card_produit {
+    .section_phare .card_produit,
+    .section_products .card_produit {
         margin: 15px 0;
         padding: 20px 0;
         width: 100%;

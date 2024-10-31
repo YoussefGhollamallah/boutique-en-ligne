@@ -24,5 +24,14 @@ class ProduitController
     {
         return $this->modelProduit->getLastThreeProducts();
     }
+
+    public function getProductsByCategory($categorieId)
+{
+    $modelProduit = new ModelProduit();
+    return $modelProduit->getProductsByCategory($categorieId);
+}
+
+
+    
 }
 ?>

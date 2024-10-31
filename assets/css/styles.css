@@ -994,8 +994,10 @@ select:focus {
     flex: 1;
 }
 .price {
-    font-weight: bold;
     margin-left: auto;
+}
+.prix-produit {
+    font-weight: bold;
 }
 .quantity {
     width: 40px;

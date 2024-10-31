@@ -488,6 +488,7 @@ tr>td {
 .modal-content {
     background-color: #fefefe;
     margin: 10% auto;
+    width: 50%;
     padding: 20px;
     border: 1px solid #888;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -1240,6 +1241,10 @@ select:focus {
 
     .main-Profil>section:nth-child(3) {
         order: 1;
+    }
+    .modal-content {
+        width: 80%;
+
     }
 }
 

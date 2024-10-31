@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <p><?php echo htmlspecialchars($produit['description']); ?></p>
                 <p>Prix unitaire : <span class="prix-produit"><?php echo htmlspecialchars($produit['prix']); ?></span> €</p>
                 <p>Quantité :</p>
-                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="1" max="<?php echo intval($produit['quantite_disponible']); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">
+                <input type="number" value="<?php echo intval($produit['quantite']); ?>" min="<?php echo 1;?>" max="<?php echo intval($produit['quantite_disponible']); ?>" class="quantite-input" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">
                 <p>Total : <span class="produit-total"><?php echo htmlspecialchars($produit['prix'] * $produit['quantite']); ?> €</span></p>
                 <button class="btn btn-supprimer" data-id="<?php echo htmlspecialchars($produit['produit_id']); ?>">Supprimer</button>
             </div>

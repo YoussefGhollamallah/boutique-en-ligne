@@ -53,4 +53,11 @@ class PanierController
         $userId = $_SESSION['user_id'] ?? 0;
         return $this->modelPanier->supprimerProduitsCochesPourUtilisateur($userId);
     }
+
+    public function validerCommande($userId, $status = 'en attente')
+    {
+        $this->modelPanier->validerCommande($userId, $status);
+    }
+
+
 }

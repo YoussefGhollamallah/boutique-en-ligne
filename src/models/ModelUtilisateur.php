@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . '/../../config/connexion.php';
-require_once "ModelAdresse.php";
 
 class ModelUtilisateur 
 {

@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <td>
                             <form action="" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
                                 <input type="hidden" name="userId" value="<?php echo $utilisateur['id']; ?>">
-                                <button type="submit" class="btn-delete btn">Supprimer</button>
+                                <button type="submit" class="btn-supprimer btn">Supprimer</button>
                             </form>
                         </td>
                     </tr>

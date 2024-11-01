@@ -1,3 +1,4 @@
 /config/connexion.php
 .htaccess
 /vendor
+/config/search.php
